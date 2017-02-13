@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+    {% block "title" %}
+        林木苗圃
+    {% endblock %}
+</title>
+{% block "style" %}
+{% endblock %}
+<link href="/static/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="header">
+  <p><img src="/static/image/logo.jpg" /></p>
+  <ol>
+    <li><a href="#">设为首页</a></li>
+    <li><a href="#">加入收藏</a></li>
+    <li><a href="#">联系我们</a></li>
+  </ol>
+  <div class="nav">
+    <ul>
+      <li><a href="index.html">网站首页</a></li>
+      <li><a href="jianjie.html">苗圃简介</a></li>
+      <li><a href="new.html">新闻动态</a></li>
+      <li><a href="show.html">苗木展示</a></li>
+      <li><a href="#">参考报价</a></li>
+      <li><a href="order.html">在线订购</a></li>
+      <li class="last"><a href="phone.html">联系我们</a></li>
+    </ul>
+  </div>
+</div>
+<div class="banner"><img src="/static/image/banner.jpg" /></div>
+<div class="content">
+    {% block "contentLeft" %}
+  <div class="left">
+    <div class="left1"> <img src="/static/image/left-1-bg1.jpg" />
+      <div class="left1-1"><img src="/static/image/left-1-1.jpg" />
+        <ol>
+          <li class="two"><a class="cl1" href="gyl.html">广玉兰</a></li>
+          <li class="two">白玉兰</li>
+          <li class="three"><a class="cl1" href="xs.html">雪松</a></li>
+          <li class="two">风扬</li>
+          <li class="two">紫玉兰</li>
+          <li class="three">龙波</li>
+          <li class="two">鹅掌楸</li>
+          <li class="two">红枫</li>
+          <li class="three">樱花</li>
+          <li class="two">泡桐</li>
+          <li class="two">塔柏</li>
+          <li class="three">紫禁</li>
+          <li class="two">马尾松</li>
+          <li class="two">速生杨</li>
+          <li class="three">怡养</li>
+          <li class="two">垂柳</li>
+          <li class="two">桂花</li>
+          <li class="three">凤翔</li>
+        </ol>
+      </div>
+      <img src="/static/image/left-1-bg2.jpg" /> </div>
+    <div class="left2"> <img src="/static/image/left-1-bg1.jpg" />
+      <div class="left2-1"><img src="/static/image/phone.jpg" />
+        <ul>
+          <li>厂长：王先生</li>
+          <li>手机：13466321872</li>
+          <li>联系电话：0571-12345678</li>
+          <li>地址：杭州某某区林场口</li>
+          <li>联系QQ：798454001</li>
+          <li>邮箱：aotemhu@126.com</li>
+        </ul>
+      </div>
+      <img src="/static/image/left-1-bg2.jpg" /> </div>
+  </div>
+    {% endblock %}
+    {% block "contentRight" %}
+
+    {% endblock %}
+  <div class="clear"></div>
+</div>
+<div class="xian"></div>
+<div class="clear"></div>
+<div class="footer">
+  <div class="foot"> <a href="#">关于我们</a><a href="#">联系方式</a><a href="#">客户留言</a><a href="#">招聘信息</a><a href="#">在线订购</a><a href="#" class="last3">友情链接</a><br  />
+    <p>版权所有&nbsp;Copyright(C)2009-2010&nbsp;杭州某某林木</p>
+  </div>
+</div>
+</body>
+</html>

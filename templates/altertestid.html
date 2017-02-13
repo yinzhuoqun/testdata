@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            修改数据
+        </title>
+    </head>
+    <body>
+            <h3>修改的数据</h3>
+            <table>
+                <tr>
+                    <th>账号</th>
+                    <th>密码</th>
+                    <th>备注</th>
+                    <th>网络</th>
+
+                </tr>
+
+                {% for user_alter_info in users_alter_info %}
+                <tr>
+                    <td>{{ user_alter_info.user_id }}</td>
+                    <td>{{ user_alter_info.user_password }}</td>
+                    <td>{{ user_alter_info.user_note }}</td>
+                    <td>{{ user_alter_info.user_flag }}</td>
+                </tr>
+                {% endfor %}
+
+
+    </body>
+</html>

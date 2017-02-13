@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 适应手机 -->
+	<meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <title>
+        测试账号 | TestData
+    </title>
+    <style>
+        table{
+            font-size: 12px;
+            font-family: 微软雅黑;
+            text-align: left;
+            border: 0px;
+
+        }
+         a:link,a:visited{
+            text-decoration:none;  /*超链接无下划线*/
+            color: darkgreen;
+          }
+        a:hover{
+            text-decoration:underline;  /*鼠标放上去有下划线*/
+            color: #0000FF;
+        }
+        .trme{
+            font-size: 15px;
+        }
+
+        th,td{
+            background-color: #ffffff ;
+        }
+
+    </style>
+</head>
+<body>
+<a href="/">< 返回首页</a>
+<table cellspacing="5">
+    <a id="in" href="#out" title="点击跳转外网账号"><h3 style="width: 100px">→内网账号</h3></a></li>
+    <tr class="trme">
+        <th>id</th>
+        <th>账号</th>
+        <th>密码</th>
+        <th>备注</th>
+        <th>环境</th>
+        <th>创建时间</th>
+    </tr>
+    {% for d in data %}
+    <div class="trbg">
+    <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.user_id }}</td>
+        <td>{{ d.user_password }}</td>
+        <td>{{ d.user_note }}</td>
+        <td>内网</td>
+        <td>{{ d.user_data_joined }}</td>
+    </tr>
+    </div>
+    {% endfor %}
+    </table>
+    <p></p>
+<table cellspacing="5">
+    <a id="out" href="#in" title="点击跳转内网账号"><h3 style="width: 100px">→外网账号</h3></a></li>
+    <tr class="trme">
+        <th>id</th>
+        <th>账号</th>
+        <th>密码</th>
+        <th>备注</th>
+        <th>环境</th>
+        <th>创建时间</th>
+    </tr>
+    {% for d1 in data1 %}
+    <div class="trbg">
+    <tr>
+        <td>{{ d1.id }}</td>
+        <td>{{ d1.user_id }}</td>
+        <td>{{ d1.user_password }}</td>
+        <td>{{ d1.user_note }}</td>
+        <td>外网</td>
+        <td>{{ d1.user_data_joined }}</td>
+    </tr>
+    </div>
+    {% endfor %}
+</table>
+<p></p>
+
+<script>
+
+{#    var lis = document.getElementsByTagName("tr");#}
+{#    var lis = document.getElementsByClassName("trbg");#}
+{#    alert(lis.length)#}
+{#    for(var i=0;i<lis.length;i++){#}
+{#        if(i%2==0){#}
+{#            lis[i].style.backgroundColor="#F5F5F5";#}
+{#        }#}
+{#    }#}
+
+</script>
+</body>
+</html>

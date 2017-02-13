@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+Android:
+<ol>
+    {% for report in test_report_info_android %}
+        <li><a href="{{ report.test_platform }}/{{ report.test_version }}">{{ report.test_platform }} {{ report.test_version }}</a></li>
+    {% endfor %}
+
+</ol>
+
+iOS:
+<ol>
+    {% for report in test_report_info_ios %}
+        <li><a href="{{ report.test_platform }}/{{ report.test_version }}">{{ report.test_platform }} {{ report.test_version }}</a></li>
+    {% endfor %}
+
+</ol>
+
+</body>
+</html>

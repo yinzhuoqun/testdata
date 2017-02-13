@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+        <title>
+            Home | TestData
+        </title>
+        <style>
+            html{
+                height:100%;
+            }
+
+{#            body{#}
+{#                background-image: linear-gradient(#808080, #C0C0C0);#}
+{#			    background-repeat: no-repeat;#}
+{#            }#}
+
+            a{
+                font-weight: bolder;
+                color: #006400;
+                text-shadow: 1px 1px 1px green;
+                /*text-shadow 文本阴影*/
+            }
+
+            a:link,a:visited{
+                /*background-color: ; */
+                text-decoration:none;  /*超链接无下划线*/
+            }
+            a:hover{
+                /*hover 悬浮*/
+                color: #0000FF;
+                /*color: #fff;			*/
+                text-decoration:underline;  /*鼠标放上去有下划线*/
+            }
+
+            .box{
+                position: relative;
+                width: 100%;
+                word-wrap: break-word;
+                word-break: normal;
+                overflow: hidden;
+                text-align: center;
+
+            }
+
+            table{
+                font-size: 12px;
+                font-family: 微软雅黑;
+                text-align: left;
+                border: 0px;
+
+             }
+            .nav,.download,.manage,.report{
+                text-align: left;
+                padding-left: 30%;
+                padding-top: 30px;
+
+            }
+
+
+        </style>
+    </head>
+    <body>
+    <div class="box">
+        <div hidden class="insertdata">
+        <img width="100%" src="/static/images/gg.gif" alt="图片加载失败">
+            <h3>插入数据</h3>
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>age</th>
+                    <th>password</th>
+                </tr>
+{#            {% for i in u %}#}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.age }}</td>
+                    <td>{{ u.password }}</td>
+                </tr>
+{#            {% endfor %}#}
+            </table>
+            {{ data1.id }}
+            {{ data1.name }}
+            {{ data1.age }}
+            {{ data1.password }}
+            </div>
+
+            <div class="nav">
+{#                <h1 style="color: #f9f9f9">测试数据</h1>#}
+                <a href="/app">文件下载（临时安装包）</a><p></p>
+                <a href="/sid">测试账号（内网/外网）</a><p></p>
+                <a href="/static/images/cea.jpg">切换环境（ Android ）</a><p></p>
+                <a href="/static/images/ceio.png">切换环境（ iOS 外网 ）</a><p></p>
+                <a href="/static/images/ceii.png">切换环境（ iOS 内网）</a><p></p>
+            </div>
+
+{#            <div class="report">#}
+{##}
+{#            </div>#}
+
+            <div class="download">
+                 <p><a href="http://192.168.2.131/bedigest/">床上 Android 测试包下载</a></p>
+                 <p><a href="http://apps.l99.com/ad_hoc/com.l99.newchuangshang.html">床上 iOS 测试包下载</a></p>
+                 <p><a href="http://apps.l99.com/ad_hoc/com.l99.chuangliaoHK.html">床聊 iOS 测试包下载</a></p>
+            </div>
+
+            <div class="manage">
+                <p><a href="/testreport">测试报告( Android / iOS)</a></p>
+                <a href="/admin">账号管理（编辑测试数据）</a><p></p>
+            </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+</head>
+<body>
+{{ test_platform }}
+<ol>
+    {% for report in test_report_info %}
+        <li><a href="{{ test_platform }}/{{ report.test_version }}">{{ report.test_version }}</a></li>
+    {% endfor %}
+
+</ol>
+</body>
+</html>

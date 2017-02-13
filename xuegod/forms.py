@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+__author__ = 'yinzhuoqun'
+
+from django import forms
+import re
+
+
+class Login(forms.Form):
+    user_name = forms.CharField(max_length=32,label="您的名称")
+    user_password = forms.CharField(max_length=32,label="您的密码")
+    user_email = forms.EmailField(max_length=32,label="您的邮箱")
+
+    def clean_user_name(self):
+        # print( self.cleaned_data)
+        # print(type(self.cleaned_data))
+        user_name = self.cleaned_data["user_name"]
+        if len(user_name) < 6:
+            raise forms.ValidationError("您的名称长度不够 6 位")
+        return user_name
+
+    def clean_user_password(self):
+        user_password = self.cleaned_data["user_password"]
+
+        reg_s = re.compile(r'(?=.*?[a-zA-Z])(?=.*?[0-9])[a-zA-Z0-9~!@#$%&*_+-]{6,16}$')
+        user_password_re = re.findall(reg_s, user_password)
+        if len(user_password_re) == 0 :
+            raise forms.ValidationError("密码首位必须为字母，至少字母和数字组合，6-16个字符")
+
+        # if len(user_password ) < 6:
+        #     raise forms.ValidationError("您的密码长度不够 6 位")
+
+        return user_password
+
+    # def clean_user_email(self):
+    #     user_email = self.cleaned_data["user_email"]
+    #     if len(user_email) < 6:
+    #         raise forms.ValidationError("您的邮箱长度不够 6 位")
+    #     return user_email
+
