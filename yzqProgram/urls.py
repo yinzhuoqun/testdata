@@ -14,7 +14,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from xuegod.views import *
+from xuegod.views import *  # 导入app下views
+from testfly.views import *
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,8 +27,11 @@ urlpatterns = [
     url(r'^sid/', show_testid),
     url(r'^aid/', alter_testid),
     url(r'^app/', app_list),
-    url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
-    url(r'^testreport/(Android|iOS)', test_report_platform),
     url(r'^testreport/', test_report),
+    url(r'^testreport/(Android|iOS)', test_report_platform),
+    url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
 
+
+    url(r'^polls/', include('polls.urls', namespace="polls")),
+    url(r'^report/', include('testfly.urls', namespace="testfly")),
 ]

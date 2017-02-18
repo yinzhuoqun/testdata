@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+
+    <title>List | TestReport</title>
+</head>
+<body>
+Android:
+<ol>
+    {% for report in test_report_list %}
+        {% if report.test_platform == "1" %}
+        <li><a href="Android/{{ report.test_version }}">Android {{ report.test_version }}</a></li>
+         {% endif %}
+    {% endfor %}
+
+</ol>
+
+iOS:
+<ol>
+    {% for report in test_report_list %}
+        {% if report.test_platform == "2" %}
+        <li><a href="iOS/{{ report.test_version }}">iOS {{ report.test_version }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+</ol>
+
+other:
+<ol>
+    {% for report in test_report_list %}
+        {% if report.test_platform == "0" %}
+        <li><a href="other/{{ report.test_version }}">other {{ report.test_version }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+</ol>
+
+</body>
+</html>

@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'polls',  # appname
     'xuegod',
+    'testfly',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,10 +88,10 @@ def json_load():
     pw_name = "alimysqlpw"
     with open(r"alimysql.pw", 'r') as f:
         pw_info = json.load(f)
-        print(pw_info)
+
         if pw_name in pw_info.keys():
             alimysqlpw = pw_info[pw_name]  # 导出变量值
-            print(alimysqlpw)
+
             return alimysqlpw
         else:
             print("%s 不存在" % pw_info)
@@ -102,28 +103,21 @@ if json_load():
     alimysqlpw = json_load().encode()
 
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.mysql",
-    #     "NAME": "bdm232505473_db",
-    #     "USER": "bdm232505473",
-    #     "PASSWORD": base64.b64decode(alimysqlpw).decode(),
-    #     "HOST": 'bdm232505473.my3w.com',
-    # },
 
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 
-    'mysql': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'yzqdb',  # 库名
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '192.168.235.145',
-        # 'CHARSET':'utf-8',
-
-    },
+    # 'mysql': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'yzqdb',  # 库名
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '192.168.235.145',
+    #     # 'CHARSET':'utf-8',
+    #
+    # },
 
     "alimysql": {
         "ENGINE": "django.db.backends.mysql",

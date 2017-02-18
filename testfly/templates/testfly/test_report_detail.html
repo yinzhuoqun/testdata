@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">#}
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>{{ title }}</title>
+    <style type="text/css">
+      a:link,a:visited{
+          text-decoration:none;  /*超链接无下划线*/
+          }
+{#      a:hover{#}
+{#          text-decoration:underline;  鼠标放上去有下划线#}
+{#       }#}
+        .test-2{
+            height: 100px;
+        }
+        .test-1{
+            height: 40px;
+        }
+        th{
+            width: 120px;
+            height: 40px;
+        }
+        td{
+            width: auto;
+        }
+
+        .box{
+            position: relative;
+            float: left;
+            width: 100%;
+            word-wrap: break-word;/*允许浏览器在单词内进行断句*/
+            word-break: normal;/*正常断句，标明怎么样进行单词内的断句*/
+            overflow: hidden;/*hidden超出隐藏，auto滚动条*/
+
+        }
+    </style>
+
+
+
+    <a href="/index">返回首页</a></p>
+</head>
+<body>
+<div class="box">
+
+    <!-- <h1 align="center">档案</h1>
+    <h5 align="center">档案编号 xsjy-20161608</h5> -->
+{#    <p align="center"><b><font size="7">系统测试报告</font></br><font size="2">文件编号: testReport-20161608</font></b></p>#}
+
+    {{ test_report_detail }}
+{#    {% for report in test_report_detail  %}#}
+    <table align="center" border="1" width="800" cellspacing="0" cellpadding="0">
+            <caption align="center">
+                <h1>系统测试报告</h1>
+            </caption>
+            <thead>      
+              <!-- 表头、表体、表尾不能纵向 向下向右合并 -->
+            </thead>
+
+            <tbody>
+
+                <tr bgcolor="#fff">
+                    <th align="center" >项目名称</th>
+{#                    {% for test in test_report_detail %}#}
+                    <td align="center" colspan="2">{{ test_report.project_name }}</td>
+{#                    {% endfor %}#}
+                    <th align="center">测试平台 </th>
+                    <td align="center" colspan="2">{{ test_report_other.test_platform }}</td>
+
+                </tr>
+                <tr>
+                    <th align="center">测试版本 </th>
+                    <td align="center" colspan="2">{{ test_report.test_version }}</td>
+
+                    <th align="center" >制表日期</th>
+                    <td align="center" colspan="2">{{ test_report.test_report_create_time }}</td>
+                </tr>
+
+                <tr class="test-2">
+                    <th align="center">参考文档</th>
+                    <td align="left" colspan='5' >
+                        <ol>
+                            {% for doc in test_report_other.test_docs %}
+                                <li>{{ doc }}</li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
+{#                    <th rowspan="3" width="100">#}
+{#                         <!-- <form action="Upload.ashx" method="post" enctype="multipart/form-data"> -->#}
+{#                        选择要上传的头像：#}
+{#                        <input type="file" name="fileUp">#}
+{#                        <input type="submit" value="上传">#}
+{#                    </th>#}
+                <tr class="test-2">
+                    <th align="center">测试要点</th>
+                    <td align="left" colspan='5' >
+                        <ol>
+                            {% for point in test_report_other.test_points %}
+                                <li>{{ point }}</li>
+                            {% endfor %}
+{#                                {{test_report_info.test_points|linebreaks }}#}
+                        </ol>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th align="center" >测试方法</th>
+                    <td align="center" colspan='5'>{{ test_report.test_way }}</td>
+                </tr>
+
+                <tr>
+                    <th align="center" >提测时间</th>
+                    <td align="center" colspan="2">{{ test_report.test_start_time }}</td>
+
+                    <th align="center" >测试结束时间</th>
+                    <td align="center" colspan="2">{{ test_report.test_end_time }}</td>
+                </tr>
+
+                <tr>
+                    <th align="center" >参与人员</th>
+                    <td align="left" colspan='5' >
+                        <ol>
+                            {% for participant in test_participants %}
+                                <li>{{ participant }}</li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
+
+                 <tr>
+                    <th align="center" >测试用例与执行</th>
+                    <td align="left" style="padding-left: 15px;" colspan='5'><a href="{{ test_report.test_cases }}">{{ test_report.test_cases }}</a></td>
+
+                </tr>
+
+                 <tr class="test-1">
+                     <th align="center"  rowspan="2">Bug 统计</th>
+                     <td align="left" style="padding-left: 15px;">总计 {{ bug_total }}</td>
+                     <td align="left" style="padding-left: 15px;">紧急 {{ test_bug_info.bug_block }}</td>
+                     <td align="left" style="padding-left: 15px;">高 {{ test_bug_info.bug_major }}</td>
+                     <td align="left" style="padding-left: 15px;">中 {{ test_bug_info.bug_normal }}</td>
+                     <td align="left" style="padding-left: 15px;">低&nbsp;{{test_bug_info.bug_trivial }}</td>
+
+                </tr>
+
+                 <tr class="test-1">
+{#                    <th align="center"  height="40" rowspan="1">Bug 情况</th>#}
+                     <td align="left" style="padding-left: 15px;">遗留 {{ bug_surplus_total }}</td>
+                     <td align="left" style="padding-left: 15px;">低&nbsp;{{ test_bug_surplus_info.bug_surplus_trivial }}</td>
+                     <td align="left" style="padding-left: 15px;">中 {{ test_bug_surplus_info.bug_surplus_normal }}</td>
+                     <td align="left" style="padding-left: 15px;">高 {{ test_bug_surplus_info.bug_surplus_major }}</td>
+                     <td align="left" style="padding-left: 15px;">紧急 {{ test_bug_surplus_info.bug_surplus_block }}</td>
+
+                </tr>
+
+                <tr class="test-2">
+                    <th align="center">测试风险</th>
+                    <td align="left" colspan='5' >
+                        <ol>
+                            {% for risk in test_report_other.test_risks %}
+                                <li>{{ risk }}</li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
+
+                <tr class="test-2">
+                    <th align="center" >测试结论和建议</th>
+                    <td align="center" colspan='5'><h3>{{ test_report.test_conclusion }}</h3></td>
+                </tr>
+
+            </tbody>
+           <!--  <tfoot>
+                <tr>
+                    <td colspan="4" bgcolor="#abcdef" align="right">当前第1/10页 一共10页</td>
+                </tr>
+            </tfoot> -->
+        </table>
+        </br>
+{#{% endfor %}#}
+
+{#    <p></p><a href="#top">返回顶部</a>#}
+</div>
+</body>
+</html>

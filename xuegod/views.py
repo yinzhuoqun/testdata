@@ -302,16 +302,7 @@ def test_report_platform_version(request, platform, version):
 
     test_participants = [test_participants_info.test_participant1,
                          ]
-    if test_participants_info.test_participant2 != "":
-        test_participants.append(test_participants_info.test_participant2)
-    if test_participants_info.test_participant3 != "":
-        test_participants.append(test_participants_info.test_participant3)
-    if test_participants_info.test_participant4 != "":
-        test_participants.append(test_participants_info.test_participant4)
-    if test_participants_info.test_participant5 != "":
-        test_participants.append(test_participants_info.test_participant5)
-    if test_participants_info.test_participant6 != "":
-        test_participants.append(test_participants_info.test_participant6)
+
 
     return render(request, 'test_report_platform_version.html', locals())
 
@@ -319,21 +310,7 @@ def test_report_platform_version(request, platform, version):
 def test_report_platform(request, platform):
     test_platform = platform
     test_report_info = TestReport.objects.filter(test_platform=platform)
-    # bug_info = BugInfo.objects.get(test_platform=platform, test_version=version)
-    # bug_surplus_info = BugSurplusInfo.objects.get(test_platform=platform, test_version=version)
-    # test_participants_info = TestParticipants.objects.get(test_platform=platform, test_version=version)
-    # test_participants = [test_participants_info.test_participant1,
-    #                      ]
-    # if test_participants_info.test_participant2 != "":
-    #     test_participants.append(test_participants_info.test_participant2)
-    # if test_participants_info.test_participant3 != "":
-    #     test_participants.append(test_participants_info.test_participant3)
-    # if test_participants_info.test_participant4 != "":
-    #     test_participants.append(test_participants_info.test_participant4)
-    # if test_participants_info.test_participant5 != "":
-    #     test_participants.append(test_participants_info.test_participant5)
-    # if test_participants_info.test_participant6 != "":
-    #     test_participants.append(test_participants_info.test_participant6)
+
 
     return render(request, 'test_report_platform.html', locals())
 

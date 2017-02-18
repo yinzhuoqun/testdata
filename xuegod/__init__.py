@@ -1,1 +1,1 @@
-default_app_config = 'xuegod.admin.XuegodConfig'
+# default_app_config = 'xuegod.admin.XuegodConfig'
