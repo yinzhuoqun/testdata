@@ -160,11 +160,11 @@ class UploadFileForm(forms.Form):
 
 def app_list(request):
     # print(os.getcwd())
-    app_path = os.path.join(os.getcwd(), 'media/app'.replace('/', '\\'))
-    # app_path = os.path.join(os.getcwd(), 'static/app'.replace('/', '\\'))
+    app_path = os.path.join(os.getcwd(), 'media/app'.replace('\\', '/'))
+    # app_path = os.path.join(os.getcwd(), 'static/app'.replace('\\', '/'))
     # print(app_path)
     if socket.gethostbyname(socket.gethostname()) != "192.168.66.55":
-        img_save_path = os.path.join(os.getcwd(), 'media/upload'.replace('/', '\\'))
+        img_save_path = os.path.join(os.getcwd(), 'media/upload'.replace('\\', '/'))
     else:
         img_save_path = r"I:/91UserData/ScreenCapture" # 192.168.66.55
     app_save_path = app_path
