@@ -14,7 +14,7 @@ from django.http import StreamingHttpResponse
 
 from django import forms
 
-import os, time
+import os, time, socket
 import collections  # 有序字典
 import faker
 
@@ -159,13 +159,18 @@ class UploadFileForm(forms.Form):
 
 
 def app_list(request):
-    # app_path = os.path.join(os.path.abspath("static"), 'app') # 只能 django-debug 用
-    # app_path = 'static/app' # 只能 django-debug 用
-    app_path = r"I:/yzq/MyPythonTest/yzqProgram/static/app"  # django-debug 和 Apache-django 用
-    img_save_path = r"I:/91UserData/ScreenCapture"
+    # print(os.getcwd())
+    app_path = os.path.join(os.getcwd(), 'media/app'.replace('/', '\\'))
+    # app_path = os.path.join(os.getcwd(), 'static/app'.replace('/', '\\'))
+    # print(app_path)
+    if socket.gethostbyname(socket.gethostname()) != "192.168.66.55":
+        img_save_path = os.path.join(os.getcwd(), 'media/upload'.replace('/', '\\'))
+    else:
+        img_save_path = r"I:/91UserData/ScreenCapture" # 192.168.66.55
     app_save_path = app_path
+    # print(app_save_path)
+    # print(img_save_path)
     app_list = os.listdir(app_path)
-    # print(app_list)
     app_dict = {}
 
     for app in app_list:
@@ -184,20 +189,8 @@ def app_list(request):
         app_info_dict["app_create_time"] = app_create_time
         app_dict[app] = app_info_dict
 
-    # print(app_list)
-    # print(app_dict)
-    # print(sorted(app_dict.items(), key=lambda item: item[1]["app_create_time"], reverse=True))
-    app_dict = sorted(app_dict.items(), key=lambda item: item[1]["app_create_time"], reverse=True)  # 按时间倒序排列
-    # print(app_dict)
-    # for app in app_list:
-    #     app_size = os.path.getsize(os.path.join(app_path, app))
-    #     if app_size > 1024*1024:
-    #         app_dict[app] = "%.2f MB"%(app_size / 1024 / 1024)
-    #     else:
-    #         app_dict[app] = "%.2f KB"%(app_size / 1024)
-    # print(app_dict)
-
-    # sorted
+    # 按时间倒序排列
+    app_dict = sorted(app_dict.items(), key=lambda item: item[1]["app_create_time"], reverse=True)
 
     if request.method == "POST":
         file = request.FILES.get("file", None)

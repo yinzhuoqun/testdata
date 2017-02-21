@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os, base64
+import os, base64, socket
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,11 +27,11 @@ SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 DEBUG = True  # django 自己处理静态网页
 # DEBUG = False  # nginx 、Apache 处理静态网页
 
-
-# ALLOWED_HOSTS = [
-#     "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
-
-ALLOWED_HOSTS = ['*']
+if socket.gethostbyname(socket.gethostname()) == "192.168.66.55":
+    ALLOWED_HOSTS = [
+        "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
+else:
+    ALLOWED_HOSTS = ['python3.cc']
 
 # Application definition
 
@@ -94,7 +94,7 @@ def json_load():
 
             return alimysqlpw
         else:
-            print("%s 不存在" % pw_info)
+            print("%s don't exists" % pw_info)
 
             return None
 
