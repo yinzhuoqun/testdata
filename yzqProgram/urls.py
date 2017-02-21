@@ -16,6 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from xuegod.views import *  # 导入app下views
 from testfly.views import *
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -31,7 +32,9 @@ urlpatterns = [
     url(r'^testreport/(Android|iOS)', test_report_platform),
     url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
 
-
     url(r'^polls/', include('polls.urls', namespace="polls")),
     url(r'^report/', include('testfly.urls', namespace="testfly")),
+
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+
 ]
