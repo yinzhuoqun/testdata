@@ -49,6 +49,8 @@
                 font-family: 微软雅黑;
                 text-align: left;
                 border: 0px;
+                font-size: medium;
+                margin-top: 20px;
 
              }
             .nav,.download,.manage,.report{
@@ -88,31 +90,21 @@
             {{ data1.password }}
             </div>
 
-            <div class="nav">
-{#                <h1 style="color: #f9f9f9">测试数据</h1>#}
-                <a href="/app">文件下载（临时安装包）</a><p></p>
-                <a href="/sid">测试账号（内网/外网）</a><p></p>
-                <a href="/static/images/cea.jpg">切换环境（ Android ）</a><p></p>
-                <a href="/static/images/ceio.png">切换环境（ iOS 外网 ）</a><p></p>
-                <a href="/static/images/ceii.png">切换环境（ iOS 内网 ）</a><p></p>
-                <a href="/static/images/ceii.png">切换环境（ iOS 内网 ）</a><p></p>
-            </div>
+        <table align="center">
+            <tbody>
+                <tr><th align='left' ><a href="/app">文件下载（临时安装包）</a></th></tr>
+                <tr><th align='left' ><a href="/report">测试报告( Android / iOS)</a></th></tr>
+                <tr><th align='left' ><a href="/sid">测试账号（内网/外网）</a></p></th></tr>
+                <tr><th align='left' ><a href="/test_change_env">切换环境（内网/外网）</a></p></th></tr>
+                <tr><th align='left' ><a href="http://192.168.2.131/bedigest/">床上 Android 测试包下载</a></th></tr>
+                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.newchuangshang.html">床上 iOS 测试包下载（ 外网 ）</a></th></tr>
+                <tr><th align='left' ><a href="https://kongming.l99.com/ad_hoc/onbed.html">床上 iOS 测试包下载（ 内网 ）</a></th></tr>
+                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.chuangliaoHK.html">床聊 iOS 测试包下载</a></p></th></tr>
+                <tr><th align='left' ><a href="/admin">后台管理（编辑测试数据）</a></p></th></tr>
 
-{#            <div class="report">#}
-{##}
-{#            </div>#}
+        	</tbody>
+	    </table>
 
-            <div class="download">
-                 <p><a href="http://192.168.2.131/bedigest/">床上 Android 测试包下载</a></p>
-                 <p><a href="http://apps.l99.com/ad_hoc/com.l99.newchuangshang.html">床上 iOS 测试包下载（ 外网 ）</a></p>
-                 <p><a href="https://kongming.l99.com/ad_hoc/onbed.html">床上 iOS 测试包下载（ 内网 ）</a></p>
-                 <p><a href="http://apps.l99.com/ad_hoc/com.l99.chuangliaoHK.html">床聊 iOS 测试包下载</a></p>
-            </div>
-
-            <div class="manage">
-                <p><a href="/report">测试报告( Android / iOS)</a></p>
-                <a href="/admin">后台管理（编辑测试数据）</a><p></p>
-            </div>
     </div>
     </body>
 </html>

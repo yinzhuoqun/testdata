@@ -107,7 +107,7 @@
 
     {% for key,value in app_dict %}
 
-        <li><a href="/static/app/{{ key }}">{{ key }}
+        <li><a href="/{{ show_path }}/{{ key }}">{{ key }}
                 <span class="appInfo">
                 {% for key1,value1 in value.items %}
                    {{ value1 }}

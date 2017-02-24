@@ -20,20 +20,28 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^page/(\d{1,2})', new_page),
     url(r'^index/', index),
     url(r'^$', index),
+
+    url(r'^page/(\d{1,2})', new_page),
+
     url(r'^login/', login),
     url(r'^id/', testid),
     url(r'^sid/', show_testid),
     url(r'^aid/', alter_testid),
+    url(r'^test_change_env/', test_change_env),
+
     url(r'^app/', app_list),
+
+    url(r'^report/', include('testfly.urls', namespace="testfly")),
+
     url(r'^testreport/', test_report),
     url(r'^testreport/(Android|iOS)', test_report_platform),
     url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
 
     url(r'^polls/', include('polls.urls', namespace="polls")),
-    url(r'^report/', include('testfly.urls', namespace="testfly")),
+
+    url(r'resume/', resume),
 
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 

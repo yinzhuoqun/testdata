@@ -180,9 +180,3 @@ STATICFILES_DIRS = [
 # upload folder
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
-
-# APP_URL = "/file/"
-# APP_ROOT = [
-#     os.path.join(STATICFILES_DIRS[0], "app").replace('\\', '/')
-# ]
-# print(os.path.join(STATICFILES_DIRS[0], "app").replace('\\', '/'))

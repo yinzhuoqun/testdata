@@ -136,7 +136,7 @@ def alter_testid(request):
 
         users_alter_info.append(user_alter_info)
 
-        user_alter_info.save(using='alimysql')  # 保存到指定数据库
+        # user_alter_info.save(using='alimysql')  # 保存到指定数据库
 
     # print(len(users_alter_info),users_alter_info)
     # 增加数据
@@ -160,7 +160,9 @@ class UploadFileForm(forms.Form):
 
 def app_list(request):
     # print(os.getcwd())
-    app_path = os.path.join(os.getcwd(), 'media/app'.replace('\\', '/'))
+    show_path = 'media/app'.replace('\\', '/')
+    app_path = os.path.join(os.getcwd(),  show_path)
+
     # app_path = os.path.join(os.getcwd(), 'static/app'.replace('\\', '/'))
     # print(app_path)
     if socket.gethostbyname(socket.gethostname()) != "192.168.66.55":
@@ -207,6 +209,10 @@ def app_list(request):
             uploadfile_mes = "上传成功"
 
     return render(request, "app.html", locals())
+
+
+def test_change_env(request):
+    return render(request, "test_change_env.html",locals())
 
 
 def test_report_platform_version(request, platform, version):
@@ -314,3 +320,7 @@ def test_report(request):
     test_report_info_ios = TestReport.objects.filter(test_platform="iOS")
 
     return render(request, 'test_report.html', locals())
+
+
+def resume(request):
+    return render(request, 'resume_yzq.html', locals())

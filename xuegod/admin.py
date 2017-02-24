@@ -72,9 +72,9 @@ class BugInfoInline(admin.TabularInline):
     extra = 1  # 默认数量
 
 class TestReportAdmin(admin.ModelAdmin):
-    list_display = ('project_name', 'test_version', 'test_platform')
+    list_display = ('project_name', 'test_version', 'test_platform')  # 展示的列
     list_filter = ['test_platform']  # 过滤
-    search_fields = ['test_version']
+    search_fields = ['test_version']  # 搜索
     # fieldsets = [
     #     ("BUG 信息", {'fields': [""]}),
     #     ("参与人员", {'fields:['']'})
@@ -92,7 +92,7 @@ class TestReportAdmin(admin.ModelAdmin):
 #     name = "xuegod"
 #     verbose_name = "测试数据"
 
-#默认方式
+# 默认方式
 # admin.site.register(TestId)
 # admin.site.register()
 
