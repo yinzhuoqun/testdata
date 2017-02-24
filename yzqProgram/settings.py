@@ -24,14 +24,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # django 自己处理静态网页
-# DEBUG = False  # nginx 、Apache 处理静态网页
+# DEBUG = True  # django 自己处理静态网页
+DEBUG = False  # nginx 、Apache 处理静态网页
 
 if socket.gethostbyname(socket.gethostname()) == "192.168.66.55":
     ALLOWED_HOSTS = [
         "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
 else:
-    ALLOWED_HOSTS = ['python3.cc']
+    ALLOWED_HOSTS = ['python3.cc', 'kiwiproxychecker.sioru.com', '23.83.230.235']
 
 # Application definition
 
