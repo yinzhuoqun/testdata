@@ -13,7 +13,9 @@ class IndexView(generic.ListView):
 
     test_platform_choice = {
         "Android": "1",
+        "android": "1",
         'iOS': "2",
+        'ios': "2",
         'other': "0",
     }
     # if platform in test_platform_choice.keys():
@@ -30,7 +32,9 @@ def Platform(request, platform):
     title = "%s | TestReport" % platform
     test_platform_choice = {
         "Android": "1",
+        "android": "1",
         'iOS': "2",
+        'ios': "2",
         'other': "0",
     }
     if platform in test_platform_choice.keys():
@@ -46,7 +50,9 @@ def Detail(request, platform, version):
     title = "%s %s | TestReport" % (platform, version)
     test_platform_choice = {
         "Android": "1",
+        "android": "1",
         'iOS': "2",
+        'ios': "2",
         'other': "0",
     }
     if platform in test_platform_choice.keys():

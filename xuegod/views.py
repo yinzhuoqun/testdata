@@ -34,7 +34,8 @@ def index(request):
     u = User(name="你们太牛了！", age="25", password="老子不跟你们玩了。。。")
     # u.save(using='mysql')  # using='mysql'settings database alias (name)
     # u.save(using='alimysql')  # using='mysql'settings database alias (name)
-    print(locals())
+    # print(locals())
+
     return render_to_response("index.html", locals())
 
 
@@ -160,16 +161,21 @@ class UploadFileForm(forms.Form):
 
 def app_list(request):
     # print(os.getcwd())
-    show_path = 'media/app'.replace('\\', '/')
-    app_path = os.path.join(os.getcwd(), show_path)
+    show_path = r'media/app'
+    # print(os.path.abspath("."))
 
-    # app_path = os.path.join(os.getcwd(), 'static/app'.replace('\\', '/'))
+    # os.getcwd() 拿到的是 Apache 下 http.conf 里的 ServerRoot 路径
+    # app_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
+    # app_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
+    app_path = r"I:\yzq\MyPythonTest\yzqProgram\media\app".replace('\\', '/')
+
     # print(app_path)
     if socket.gethostbyname(socket.gethostname()) != "192.168.66.55":
-        show_path = 'media/upload'.replace('\\', '/')
-        app_path = img_save_path = os.path.join(os.getcwd(), show_path)
+        show_path = r'media/upload'
+        app_path = img_save_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
+        # app_path = img_save_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
     else:
-        img_save_path = r"I:/91UserData/ScreenCapture" # 192.168.66.55
+        img_save_path = r"I:/91UserData/ScreenCapture"  # 192.168.66.55
     app_save_path = app_path
     # print(app_save_path)
     # print(img_save_path)
@@ -213,7 +219,7 @@ def app_list(request):
 
 
 def test_change_env(request):
-    return render(request, "test_change_env.html",locals())
+    return render(request, "test_change_env.html", locals())
 
 
 def test_report_platform_version(request, platform, version):
@@ -274,7 +280,7 @@ def test_report_platform_version(request, platform, version):
     test_start_time = test_report_info.test_start_time
     test_end_time = test_report_info.test_end_time
 
-    str_splist ="\n"
+    str_splist = "\n"
     test_docs = test_report_info.test_docs.split(str_splist)
     test_points = test_report_info.test_points.split(str_splist)
     test_risks = test_report_info.test_risks.split(str_splist)
@@ -303,14 +309,12 @@ def test_report_platform_version(request, platform, version):
     test_participants = [test_participants_info.test_participant1,
                          ]
 
-
     return render(request, 'test_report_platform_version.html', locals())
 
 
 def test_report_platform(request, platform):
     test_platform = platform
     test_report_info = TestReport.objects.filter(test_platform=platform)
-
 
     return render(request, 'test_report_platform.html', locals())
 

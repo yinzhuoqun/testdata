@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True  # django 自己处理静态网页
+DEBUG = True  # django 自己处理静态网页
 DEBUG = False  # nginx 、Apache 处理静态网页
 
 if socket.gethostbyname(socket.gethostname()) == "192.168.66.55":
@@ -86,7 +86,9 @@ WSGI_APPLICATION = 'yzqProgram.wsgi.application'
 import json
 def json_load():
     pw_name = "alimysqlpw"
-    with open(r"alimysql.pw", 'r') as f:
+    # print(os.getcwd())
+    with open(os.path.join(os.getcwd(), "alimysql.pw"), 'r') as f:
+        # 如果是 Apache web服务器 需要把 .pw 文件放置在 Apache ServerRoot 指向的目录下
         pw_info = json.load(f)
 
         if pw_name in pw_info.keys():
