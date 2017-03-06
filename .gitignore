@@ -12,15 +12,21 @@ Desktop.ini
 *.egg-info
 dist
 build
-*.pw
+
 
 # My configurations:
 db.ini
 deploy_key_rsa
+app/
+upload/
+
+# password
+*.pw
 
 # Pycharm:
 .idea/
-app/
+
+
 =======
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -112,6 +118,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# password
-.pw
 >>>>>>> .merge_file_a15984

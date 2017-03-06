@@ -46,3 +46,12 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
 ]
+
+# 导入setting、static 是为 media 用
+# from django.conf import settings
+# from django.conf.urls.static import static
+# urlpatterns = [
+#
+# # ... the rest of your URLconf goes here ...
+#
+# ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

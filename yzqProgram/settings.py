@@ -31,7 +31,7 @@ if socket.gethostbyname(socket.gethostname()) == "192.168.66.55":
     ALLOWED_HOSTS = [
         "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
 else:
-    ALLOWED_HOSTS = ['python3.cc', 'kiwiproxychecker.sioru.com', '23.83.230.235']
+    ALLOWED_HOSTS = ['python3.cc', 'testauto.site', '23.83.230.235']
 
 # Application definition
 
