@@ -22,7 +22,7 @@ class BugInfoInline(admin.TabularInline):
 
 
 class TestReportAdmin(admin.ModelAdmin):
-    list_display = ('project_name',  'test_platform', 'test_version')
+    list_display = ('project_name',  'test_platform', 'test_version')  # 单元素元组要加逗号
     list_filter = ['test_platform']  # 过滤
     search_fields = ['test_version']
     # fieldsets = [

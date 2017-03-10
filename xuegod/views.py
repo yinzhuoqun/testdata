@@ -184,7 +184,7 @@ def app_list(request):
 
     for app in app_list:
         # app_info_dict = {} # 无序字典
-        app_info_dict = collections.OrderedDict()  # 有序字典
+        app_info_dict = collections.OrderedDict()  # 有序字典, 需要导入 collections
 
         app_unix_time = os.stat(os.path.join(app_path, app)).st_ctime
         app_create_time = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(app_unix_time))
