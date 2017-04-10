@@ -16,8 +16,8 @@ from django import forms
 
 import os, time, socket
 import collections  # 有序字典
-import faker
-
+# import faker
+import uuid
 
 # import random
 
@@ -170,7 +170,8 @@ def app_list(request):
     app_path = r"I:\yzq\MyPythonTest\yzqProgram\media\app".replace('\\', '/')
 
     # print(app_path)
-    if socket.gethostbyname(socket.gethostname()) != "192.168.66.55":
+    ip_local = ["192.168.66.55", "169.254.111.198"]
+    if socket.gethostbyname(socket.gethostname()) not in ip_local:
         show_path = r'media/upload'
         app_path = img_save_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
         # app_path = img_save_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
@@ -201,7 +202,27 @@ def app_list(request):
     # 按时间倒序排列
     app_dict = sorted(app_dict.items(), key=lambda item: item[1]["app_create_time"], reverse=True)
 
-    if request.method == "POST":
+    # token = ''
+    # postToken = str(uuid.uuid4())
+    # if request.method == "GET":
+    #     # token = str(uuid.uuid4())  # 采用随机数
+    #     token = "allow"
+    #     # 在服务端session中添加key认证，避免用户重复提交表单
+    #     request.session['postToken'] = token
+    #
+    #     return render(request, "app.html", locals())
+
+    if request.method == "POST" and request.POST:
+        # 检测session中Token值，判断用户提交动作是否合法
+        #  RemovedInDjango19Warning: `request.REQUEST` is deprecated, use `request.GET` or `request.POST` instead.
+        token = request.REQUEST.get('postToken', default=None)
+        print('token', token)
+        # 获取用户表单提交的Token值
+        user_token = request.POST['postToken']
+        print('user_token', user_token)
+
+        # if user_token == token:
+
         file = request.FILES.get("file", None)
         if not file:
             uploadfile_mes = "请选择文件"
@@ -214,6 +235,18 @@ def app_list(request):
                 destination.write(chunk)
             destination.close()
             uploadfile_mes = "上传成功"
+
+            # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
+            # token = str(uuid.uuid4())  # 采用随机数
+            # 在服务端session中添加key认证，避免用户重复提交表单
+            # request.session['postToken'] = "allow"
+            if "postToken" in request.session:  # keyError
+                del request.session['postToken']
+        return render(request, "app.html", locals())
+        # else:
+        #     if "postToken" in request.session:  # keyError
+        #         del request.session['postToken']
+        #     return render(request, "app.html", locals())
 
     return render(request, "app.html", locals())
 

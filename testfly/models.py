@@ -20,6 +20,7 @@ class TestReport(models.Model):
     test_report_alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
     test_points = models.TextField(max_length=256, help_text=input_text, verbose_name="测试要点")
     test_cases = models.CharField(max_length=128, verbose_name="测试用例")
+    test_regression = models.CharField(max_length=128, verbose_name="回归情况")
     test_way = models.CharField(max_length=32, default="黑盒测试", verbose_name="测试方法")
     test_docs = models.TextField(max_length=256, blank=True, null=True, help_text=input_text, verbose_name="参考文档")
     test_start_time = models.DateTimeField(verbose_name='提测时间')
@@ -40,9 +41,16 @@ class TestReport(models.Model):
         # unique_together = (("user_id", "user_password"),)
 
         # app_label = "测试报告"
-
-    def __str__(self):
-        return "%s %s" % (self.test_platform, self.test_version)
+    #
+    # def __str__(self):
+    #     if self.test_platform == "1":
+    #         self.test_platform = "Android"
+    #     elif self.test_platform == "2":
+    #         self.test_platform = "iOS"
+    #     else:
+    #         self.test_platform = "other"
+    #
+    #     return "%s %s_v%s" % (self.project_name, self.test_platform, self.test_version)
 
 
 class BugInfo(models.Model):

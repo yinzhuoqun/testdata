@@ -24,10 +24,10 @@ class TestId(models.Model):
     class Meta:
         # meta 是否固定？
         # 设置的是后台显示表名  默认是类名
-        verbose_name = "账号"
+        verbose_name = "账号账号"
 
         # 是设置复数形式时显示的名称
-        verbose_name_plural = "测试账号"
+        verbose_name_plural = "测试账号列表"
 
         # 是设置某几个字段 联合起来在表中唯一
         unique_together = (("user_id", "user_password"),)

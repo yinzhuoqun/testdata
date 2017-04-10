@@ -8,6 +8,8 @@ from xuegod.models import *
 
 
 
+
+
 #@admin.register( TestId ) # 注册方法1
 class MultiDBModelAdmin(admin.ModelAdmin):
     # A handy constant for the name of the alternate database.
@@ -15,6 +17,7 @@ class MultiDBModelAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id', 'user_password', 'user_note', 'user_flag') # 展示列表项
     list_filter = ['user_flag'] # 过滤器
     search_fields = ['user_id'] # 搜索框
+    list_display_links = ('id', 'user_id', 'user_password')
     def save_model(self, request, obj, form, change):
         # Tell Django to save objects to the 'other' database.
         obj.save(using=self.using)
@@ -58,6 +61,8 @@ class MultiDBTabularInline(admin.TabularInline):
 
 #指定数据库  # 注册方法2
 admin.site.register(TestId, MultiDBModelAdmin)
+
+
 
 class TestParticipantsInline(admin.TabularInline):
     model = TestParticipants  # 模型名称

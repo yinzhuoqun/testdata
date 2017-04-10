@@ -7,72 +7,75 @@
         下载文件 | TestData
     </title>
     <style>
-        *{margin: 0px;padding: 0px;}
-{#        html{height:100%}#}
-{#        body{#}
-{#            background-image: linear-gradient(#808080, #C0C0C0);#}
-{#            background-repeat: no-repeat;#}
-{#        }#}
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
 
-        .box{
+        {#        html{height:100%}#}
+        {#        body{#}
+        {#            background-image: linear-gradient(#808080, #C0C0C0);#}
+        {#            background-repeat: no-repeat;#}
+        {#        }#}
+
+        .box {
             position: relative;
             float: left;
             width: 100%;
-            word-wrap: break-word;/*允许浏览器在单词内进行断句*/
-            word-break: normal;/*正常断句，标明怎么样进行单词内的断句*/
-            overflow: hidden;/*hidden超出隐藏，auto滚动条*/
+            word-wrap: break-word; /*允许浏览器在单词内进行断句*/
+            word-break: normal; /*正常断句，标明怎么样进行单词内的断句*/
+            overflow: hidden; /*hidden超出隐藏，auto滚动条*/
 
         }
 
-        li{
-{#            list-style: none;#}
-            margin-left: 10px;
+        li {
+        {#            list-style: none;#} margin-left: 10px;
             padding-top: 5px;
             color: red;
 
-{#            list-style-image:radial-gradient(red, green);#}
-{#            linear-gradient(red, green);#}
+        {#            list-style-image:radial-gradient(red, green);#}{#            linear-gradient(red, green);#}
 
         }
 
-        a{
-			color: #006400;
-			text-shadow: 1px 1px 1px green;
-			/*text-shadow 文本阴影*/
-{#            margin-left: -15px;#}
-		}
-
-		a:link,a:visited{
-			/*background-color: ; */
- 			text-decoration:none;  /*超链接无下划线*/
-        }
-		a:hover{
-			/*hover 悬浮*/
-			color: #0000FF;
-			/*color: #fff;			*/
- 			text-decoration:underline;  /*鼠标放上去有下划线*/
+        a {
+            color: #006400;
+            text-shadow: 1px 1px 1px green;
+            /*text-shadow 文本阴影*/
+        {#            margin-left: -15px;#}
         }
 
-        .upload{
+        a:link, a:visited {
+            /*background-color: ; */
+            text-decoration: none; /*超链接无下划线*/
+        }
+
+        a:hover {
+            /*hover 悬浮*/
+            color: #0000FF;
+            /*color: #fff;			*/
+            text-decoration: underline; /*鼠标放上去有下划线*/
+        }
+
+        .upload {
             margin-top: 20px;
             padding-top: 10px;
             padding-left: 15px;
             margin-bottom: 20px;
 
-
         }
-        .upErrMes{
+
+        .upErrMes {
             font-size: 13px;
             color: red;
             margin-left: -2px;
         }
 
-        img{
-            max-width:100%;
-            height:auto;
-            }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
 
-        .appInfo{
+        .appInfo {
             color: #808080;
 
         }
@@ -81,51 +84,51 @@
 </head>
 <body>.
 <div class="box">
-{#    {{ app_list }}<br>#}
-{#    <h3>下载列表</h3>#}
+    {#    {{ app_list }}<br>#}
+    {#    <h3>下载列表</h3>#}
     <div><img width="auto" src="/static/images/gg.gif" alt="图片加载失败"></div>
 
     <div class="upload">
-{#        accept-charset="utf-8"#}
+        {#        accept-charset="utf-8"#}
         <form method='post' action='' enctype="multipart/form-data" id="myForm">
-        {% csrf_token %}
-        <ul>
-
-            <li><input type='file'  name='file' /></li>
-            <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择" /></li>
-            <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
-{#                <span class="upErrMes">{{ uploadfile_mes }}</span></li>#}
-                <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_mes }}</label></li>
-{#                 onclick="myRefresh()"#}
-        </ul>
+{#            <form  onsubmit="return submit_sure()"></form>#}
+            {% csrf_token %}
+            <ul>
+                {{ token }}
+                <input type="hidden" name="postToken" value={{ token }}>
+                <li><input type='file' name='file'/></li>
+                <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择"/></li>
+                <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
+                    {#                <span class="upErrMes">{{ uploadfile_mes }}</span></li>#}
+                    <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_mes }}</label></li>
+                {#                 onclick="myRefresh()"#}
+            </ul>
         </form>
     </div>
 
-{#    <a href="/file/test.txt">test</a>#}
+    {#    <a href="/file/test.txt">test</a>#}
 
     <div class="app">
 
-    {% for key,value in app_dict %}
+        {% for key,value in app_dict %}
 
-        <li><a href="/{{ show_path }}/{{ key }}">{{ key }}
+            <li><a href="/{{ show_path }}/{{ key }}">{{ key }}
                 <span class="appInfo">
                 {% for key1,value1 in value.items %}
-                   {{ value1 }}
+                    {{ value1 }}
                 {% endfor %}
                 </span>
-        </a></li>
+            </a></li>
 
-    {% endfor %}
+        {% endfor %}
 
     </div>
 
 
-
-
-{#     <div id='mp3_local'>#}
-{#		<audio hidden src="/static/audio/Angelababy-lvluoqun.mp3" autoplay="true" controls></audio>#}
-{#        loop="loop" 歌曲循环#}
-{#	</div>#}
+    {#     <div id='mp3_local'>#}
+    {#		<audio hidden src="/static/audio/Angelababy-lvluoqun.mp3" autoplay="true" controls></audio>#}
+    {#        loop="loop" 歌曲循环#}
+    {#	</div>#}
 
 </div>
 
@@ -134,22 +137,30 @@
 <script type="text/javascript">
 
     var lis = document.getElementsByTagName("li");
-    for(var i=0;i<lis.length;i++){
-        if(i%2==0){
-            lis[i].style.backgroundColor="#F5F5F5";
+    for (var i = 0; i < lis.length; i++) {
+        if (i % 2 == 0) {
+            lis[i].style.backgroundColor = "#F5F5F5";
         }
     }
-{##}
-{#    //添加鼠标移入和移出事件#}
-{#    var color =null;#}
-{#    lis[i].onmouseover=function () {#}
-{#        //获取原来的颜色#}
-{#        color = this.style.backgroundColor;#}
-{#        this.style.backgroundColor = "#A9A9A9";#}
-{#    }#}
-{##}
-{#    lis[i].onmouseout=function () {#}
-{#        this.style.backgroundColor=color;#}
-{#    }#}
+    {##}
+    {#    //添加鼠标移入和移出事件#}
+    {#    var color =null;#}
+    {#    lis[i].onmouseover=function () {#}
+    {#        //获取原来的颜色#}
+    {#        color = this.style.backgroundColor;#}
+    {#        this.style.backgroundColor = "#A9A9A9";#}
+    {#    }#}
+    {##}
+    {#    lis[i].onmouseout=function () {#}
+    {#        this.style.backgroundColor=color;#}
+    {#    }#}
+    function submit_sure() {
+        var gnl = confirm("确定提交?");
+        if (gnl == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 </script>
 </html>

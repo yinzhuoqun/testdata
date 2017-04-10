@@ -18,6 +18,9 @@ from xuegod.views import *  # 导入app下views
 from testfly.views import *
 from django.conf import settings
 
+admin.site.site_title = settings.ADMIN_SITE_TITLE  # 站点标题
+admin.site.site_header = settings.ADMIN_SITE_HEADER  # 站点头部
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^index/', index),

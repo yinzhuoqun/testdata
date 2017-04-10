@@ -111,7 +111,7 @@
                 </tr>
 
                 <tr>
-                    <th align="center" >提测时间</th>
+                    <th align="center" >开始测试时间</th>
                     <td align="center" colspan="2">{{ test_report.test_start_time }}</td>
 
                     <th align="center" >测试结束时间</th>
@@ -132,6 +132,12 @@
                  <tr>
                     <th align="center" >测试用例与执行</th>
                     <td align="left" style="padding-left: 15px;" colspan='5'><a href="{{ test_report.test_cases }}">{{ test_report.test_cases }}</a></td>
+
+                </tr>
+
+                <tr>
+                    <th align="center" >回归情况</th>
+                    <td align="left" style="padding-left: 15px;" colspan='5'><a href="{{ test_report.test_regression }}">{{ test_report.test_regression }}</a></td>
 
                 </tr>
 

@@ -24,7 +24,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return TestReport.objects.filter().order_by('-test_version')
+        return TestReport.objects.filter().order_by('-test_version')  # - 是倒序
 
 
 def Platform(request, platform):
