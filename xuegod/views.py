@@ -4,6 +4,7 @@
 
 from django.shortcuts import render
 from django.shortcuts import render_to_response
+from django.http import JsonResponse
 
 from xuegod.models import *
 from xuegod.forms import *
@@ -18,6 +19,7 @@ import os, time, socket
 import collections  # 有序字典
 # import faker
 import uuid
+
 
 # import random
 
@@ -361,4 +363,69 @@ def test_report(request):
 
 
 def resume(request):
+    phone_mobile = "18679600250"
     return render(request, 'resume_yzq.html', locals())
+
+
+# 读取网页
+def get_html(url, ref=None):
+    import urllib.request, random
+    ref = url  # 网页来源
+    agent_list = [
+        'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0']
+    header = {
+        'Referer': '%s' % ref,
+        'User-Agent': '%s' % random.choice(agent_list)
+    }
+
+    # page = urllib.request.build_opener() # 法 1
+    # page.addheaders = [header]
+    # html = page.open(url).read()
+
+    page = urllib.request.Request(url, data=None, headers=header)  # 法 2
+    html = urllib.request.urlopen(page).read().decode()
+    # print(html)
+    return html
+
+
+# 获取 app 信息
+def get_app_info(url):
+    import re
+    soft_id = re.findall("soft_id/(\d+)?", url)[0]
+    info = get_html(url)
+    apk_icon_url = re.findall('<dt><img src="(.*?)" width="72" height="72"', info)[0]
+    apk_name = re.findall('<h2 id="app-name"><span title="(.*?)">', info)[0]
+    re_url = re.compile('class="js-downLog dbtn %s-btn normal"(.*?\.apk)' % soft_id)
+    apk_download_url = re.findall(re_url, info)[0].split("=&url=")[1]
+    apk_version = re.findall('<td><strong>版本：</strong>(.*?)<', info)[0]
+    apk_version_code = re.findall("<!--versioncode:(\d+)-->", info)[0]
+    apk_updatatime = re.findall('<strong>更新时间：</strong>(.*?)</td>', info)[0]
+    apk_imgs = re.findall('<div id="scrollbar" data-snaps="(.*?)">', info)
+    apk_img = (apk_imgs[0] if len(apk_imgs) else "").split(",")
+    re_readme = re.compile('更新内容】</b><br/>(.*?)</div>', re.S)
+    apk_updata_readme1 = re.findall(re_readme, info)[0].split("<br />\r\n")
+    apk_updata_readme = [readme.strip() for readme in apk_updata_readme1 if readme != ""]
+    app_info = collections.OrderedDict()
+    app_info = {
+                "app_360_url": url,
+                "apk_name": apk_name,
+                "apk_icon_url": apk_icon_url,
+                'apk_url': apk_download_url,
+                "apk_imgs": apk_img,
+                "apk_version": apk_version, "apk_version_code": apk_version_code,
+                "apk_updatatime": apk_updatatime,
+                "apk_updata_readme": apk_updata_readme}
+
+    # print(app_info)
+    return app_info
+
+
+def app_info(request):
+    url = "http://zhushou.360.cn/detail/index/soft_id/847609"
+    # url = "http://zhushou.360.cn/detail/index/soft_id/2981222"
+    # url = "http://zhushou.360.cn/detail/index/soft_id/2751"
+    # url = "http://zhushou.360.cn/detail/index/soft_id/3581"
+    # print(get_html(url))
+    info = get_app_info(url)
+    return JsonResponse(info)
