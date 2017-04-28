@@ -11,7 +11,7 @@ Android:
 <ol>
     {% for report in test_report_list %}
         {% if report.test_platform == "1" %}
-        <li><a href="Android/{{ report.test_version }}">Android {{ report.test_version }}</a></li>
+        <li><a href="Android/{{ report.test_version }}">{{ report.project_name }} Android {{ report.test_version }} </a></li>
          {% endif %}
     {% endfor %}
 
@@ -21,7 +21,7 @@ iOS:
 <ol>
     {% for report in test_report_list %}
         {% if report.test_platform == "2" %}
-        <li><a href="iOS/{{ report.test_version }}">iOS {{ report.test_version }}</a></li>
+        <li><a href="iOS/{{ report.test_version }}">{{ report.project_name }} iOS {{ report.test_version }}</a></li>
         {% endif %}
     {% endfor %}
 
@@ -31,7 +31,7 @@ other:
 <ol>
     {% for report in test_report_list %}
         {% if report.test_platform == "0" %}
-        <li><a href="other/{{ report.test_version }}">other {{ report.test_version }}</a></li>
+        <li><a href="other/{{ report.test_version }}"> {{ report.project_name }} {{ report.test_version }}</a></li>
         {% endif %}
     {% endfor %}
 
