@@ -363,7 +363,11 @@ def test_report(request):
 
 
 def resume(request):
-    phone_mobile = "18679600250"
+    info = Resume.objects.filter(name="yinzhuoqun")
+    if info:
+        phone_mobile = info[0].phone
+    else:
+        phone_mobile = "18679600250"
     return render(request, 'resume_yzq.html', locals())
 
 
@@ -408,14 +412,14 @@ def get_app_info(url):
     apk_updata_readme = [readme.strip() for readme in apk_updata_readme1 if readme != ""]
     app_info = collections.OrderedDict()
     app_info = {
-                "app_360_url": url,
-                "apk_name": apk_name,
-                "apk_icon_url": apk_icon_url,
-                'apk_url': apk_download_url,
-                "apk_imgs": apk_img,
-                "apk_version": apk_version, "apk_version_code": apk_version_code,
-                "apk_updatatime": apk_updatatime,
-                "apk_updata_readme": apk_updata_readme}
+        "app_360_url": url,
+        "apk_name": apk_name,
+        "apk_icon_url": apk_icon_url,
+        'apk_url': apk_download_url,
+        "apk_imgs": apk_img,
+        "apk_version": apk_version, "apk_version_code": apk_version_code,
+        "apk_updatatime": apk_updatatime,
+        "apk_updata_readme": apk_updata_readme}
 
     # print(app_info)
     return app_info
