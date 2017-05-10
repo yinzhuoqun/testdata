@@ -33,10 +33,21 @@ def create(request):
 
 def index(request):
     # 插入数据
-    u = User(name="你们太牛了！", age="25", password="老子不跟你们玩了。。。")
+    # u = User(name="你们太牛了！", age="25", password="老子不跟你们玩了。。。")
     # u.save(using='mysql')  # using='mysql'settings database alias (name)
     # u.save(using='alimysql')  # using='mysql'settings database alias (name)
     # print(locals())
+
+    urls = HomePage.objects.filter(url_status="1")
+    # for info in urls:
+    #
+    #     print(info)
+    #     print(info.url,info.url_name)
+    urls_data = urls.filter(url_type="data").order_by('url_order')
+    urls_cs =urls.filter(url_type="cs").order_by('url_order')
+    urls_cl =urls.filter(url_type="cl").order_by('url_order')
+    urls_appinfo =urls.filter(url_type="appinfo").order_by('url_order')
+    urls_other =urls.filter(url_type="other").order_by('url_order')
 
     return render_to_response("index.html", locals())
 

@@ -60,13 +60,13 @@ class BugInfo(models.Model):
     bug_normal = models.IntegerField(default=0, verbose_name="中")
     bug_trivial = models.IntegerField(default=0, verbose_name="低")
 
-    # class Meta:
-    #     # meta 是否固定？
-    #     # 设置的是后台显示表名  默认是类名
-    #     verbose_name = "Bug 统计"
-    #
-    #     # 是设置复数形式时显示的名称
-    #     verbose_name_plural = "Bug 统计列表"
+    class Meta:
+        # meta 是否固定？
+        # 设置的是后台显示表名  默认是类名
+        verbose_name = "提交 Bug 统计"
+
+        # 是设置复数形式时显示的名称
+        verbose_name_plural = "提交 Bug 统计列表"
 
     # app_label = "测试报告"
 
@@ -81,13 +81,13 @@ class BugSurplusInfo(models.Model):
     bug_surplus_normal = models.IntegerField(default=0, verbose_name="中")
     bug_surplus_trivial = models.IntegerField(default=0, verbose_name="低")
 
-    # class Meta:
-    #     # meta 是否固定？
-    #     # 设置的是后台显示表名  默认是类名
-    #     verbose_name = "遗留 Bug 统计"
-    #
-    #     # 是设置复数形式时显示的名称
-    #     verbose_name_plural = "遗留 Bug 统计列表"
+    class Meta:
+        # meta 是否固定？
+        # 设置的是后台显示表名  默认是类名
+        verbose_name = "遗留 Bug 统计"
+
+        # 是设置复数形式时显示的名称
+        verbose_name_plural = "遗留 Bug 统计列表"
 
     # app_label = "测试报告"
 
@@ -99,13 +99,13 @@ class TestParticipants(models.Model):
     test_participants = models.ForeignKey(TestReport)  # 外键到 TestReport
     test_participant = models.CharField(max_length=128, verbose_name="参与测试人员")
 
-    # class Meta:
-    #     # meta 是否固定？
-    #     # 设置的是后台显示表名  默认是类名
-    #     verbose_name = "测试参与人员"
-    #
-    #     # 是设置复数形式时显示的名称
-    #     verbose_name_plural = "测试参与人员列表"
+    class Meta:
+        # meta 是否固定？
+        # 设置的是后台显示表名  默认是类名
+        verbose_name = "测试参与人员"
+
+        # 是设置复数形式时显示的名称
+        verbose_name_plural = "测试参与人员列表"
     #
     #     # app_label = "测试报告"
 

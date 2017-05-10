@@ -151,7 +151,27 @@ class Resume(models.Model):
     class Meta:
         # meta 是否固定？
         # 设置的是后台显示表名  默认是类名
-        verbose_name = "简历"
+        verbose_name = "手机号码"
 
         # 是设置复数形式时显示的名称
-        verbose_name_plural = "简历列表"
+        verbose_name_plural = "手机号码列表"
+
+
+class HomePage(models.Model):
+    url_status_choice = (
+        ("1", "ON"),
+        ('0', 'OFF'),
+    )
+
+    url = models.CharField(max_length=256, verbose_name="网址")
+    url_name = models.CharField(max_length=256, verbose_name="网址名称")
+    url_type = models.CharField(max_length=32, default="other", verbose_name="类型", help_text="自定义类型，方便区分")
+    url_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
+    url_status = models.CharField(max_length=32, choices=url_status_choice, default="ON", verbose_name="显示状态",
+                                  help_text="是否显示到网站")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "网址信息"
+        verbose_name_plural = "网址信息列表"

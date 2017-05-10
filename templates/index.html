@@ -1,113 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
-        <title>
-            Home | TestData
-        </title>
-        <style>
-            html{
-                height:100%;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <title>
+        Home | TestData
+    </title>
+    <style>
+        html {
+            height: 100%;
+        }
 
-{#            body{#}
-{#                background-image: linear-gradient(#808080, #C0C0C0);#}
-{#			    background-repeat: no-repeat;#}
-{#            }#}
+        {#            body{#}
+        {#                background-image: linear-gradient(#808080, #C0C0C0);#}
+        {#			    background-repeat: no-repeat;#}
+        {#            }#}
 
-            a{
-                font-weight: bolder;
-                color: #006400;
-                text-shadow: 1px 1px 1px green;
-                /*text-shadow 文本阴影*/
-            }
+        a {
+            font-weight: bolder;
+            color: #006400;
+            text-shadow: 1px 1px 1px green;
+            /*text-shadow 文本阴影*/
+        }
 
-            a:link,a:visited{
-                /*background-color: ; */
-                text-decoration:none;  /*超链接无下划线*/
-            }
-            a:hover{
-                /*hover 悬浮*/
-                color: #0000FF;
-                /*color: #fff;			*/
-                text-decoration:underline;  /*鼠标放上去有下划线*/
-            }
+        a:link, a:visited {
+            /*background-color: ; */
+            text-decoration: none; /*超链接无下划线*/
+        }
 
-            .box{
-                position: relative;
-                width: 100%;
-                word-wrap: break-word;
-                word-break: normal;
-                overflow: hidden;
-                text-align: center;
+        a:hover {
+            /*hover 悬浮*/
+            color: #0000FF;
+            /*color: #fff;			*/
+            text-decoration: underline; /*鼠标放上去有下划线*/
+        }
 
-            }
+        .box {
+            position: relative;
+            width: 100%;
+            word-wrap: break-word;
+            word-break: normal;
+            overflow: hidden;
+            text-align: center;
 
-            table{
-                font-size: 12px;
-                font-family: 微软雅黑;
-                text-align: left;
-                border: 0px;
-                font-size: medium;
-                margin-top: 20px;
+        }
 
-             }
-            .nav,.download,.manage,.report{
-                text-align: left;
-                padding-left: 30%;
-                padding-top: 30px;
+        table {
+            font-size: 12px;
+            font-family: 微软雅黑;
+            text-align: left;
+            border: 0px;
+            font-size: medium;
+            margin-top: 20px;
 
-            }
+        }
+
+        .nav, .download, .manage, .report {
+            text-align: left;
+            padding-left: 30%;
+            padding-top: 30px;
+
+        }
 
 
-        </style>
-    </head>
-    <body>
-    <div class="box">
-        <div hidden class="insertdata">
+    </style>
+</head>
+<body>
+<div class="box">
+    <div hidden class="insertdata">
         <img width="100%" src="/static/images/gg.gif" alt="图片加载失败">
-            <h3>插入数据</h3>
-            <table>
-                <tr>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>age</th>
-                    <th>password</th>
-                </tr>
-{#            {% for i in u %}#}
-                <tr>
-                    <td>{{ u.id }}</td>
-                    <td>{{ u.name }}</td>
-                    <td>{{ u.age }}</td>
-                    <td>{{ u.password }}</td>
-                </tr>
-{#            {% endfor %}#}
-            </table>
-            {{ data1.id }}
-            {{ data1.name }}
-            {{ data1.age }}
-            {{ data1.password }}
-            </div>
-
-        <table align="center">
-            <tbody>
-
-                <tr><th align='left' ><a href="/app">文件上传下载（临时安装包）</a></th></tr>
-                <tr><th align='left' ><a href="/report">测试报告( Android / iOS)</a></th></tr>
-                <tr><th align='left' ><a href="/sid">测试账号（内网/外网）</a></p></th></tr>
-                <tr><th align='left' ><a href="/test_change_env">切换环境（内网/外网）</a></p></th></tr>
-                <tr><th align='left' ><a href="http://192.168.2.131/bedigest/">床上 Android Release 包下载</a></p></th></tr>
-                <tr><th align='left' ><a href="https://kongming.l99.com/ad_hoc/onbed.html">床上 iOS 测试包下载（ 内网下载 ）</a></th></tr>
-                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.newchuangshang.html">床上 iOS 测试包下载（ 外网下载 ）</a></th></tr>
-                <tr><th align='left' ><a href="http://pre.im/app/45fa4ba6a09fe0bdbff75b420745e70b">床上 iOS 测试包下载（ pre.im ）</a></th></tr>
-                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.chuangliaoHK.html">床聊 iOS 测试包下载</a></p></th></tr>
-                <tr><th align='left' ><a href="/appinfo">360 渠道床上最新信息</a></p></th></tr>
-{#                <tr><th align='left' ><a href="/admin">后台管理（编辑测试数据）</a></p></th></tr>#}
-
-        	</tbody>
-	    </table>
-
+        <h3>插入数据</h3>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>age</th>
+                <th>password</th>
+            </tr>
+            {#            {% for i in u %}#}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.age }}</td>
+                <td>{{ u.password }}</td>
+            </tr>
+            {#            {% endfor %}#}
+        </table>
+        {{ data1.id }}
+        {{ data1.name }}
+        {{ data1.age }}
+        {{ data1.password }}
     </div>
-    </body>
+
+    <table align="center">
+        <tbody>
+
+        {#                <tr><th align='left' ><a href="/app">文件上传下载（临时安装包）</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="/report">测试报告( Android / iOS)</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="/sid">测试账号（内网/外网）</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="/test_change_env">切换环境（内网/外网）</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="http://192.168.2.131/bedigest/">床上 Android Release 包下载</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="https://kongming.l99.com/ad_hoc/onbed.html">床上 iOS 测试包下载（ 内网 ）</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.newchuangshang.html">床上 iOS 测试包下载（ 全网 ）</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="http://pre.im/app/45fa4ba6a09fe0bdbff75b420745e70b">床上 iOS 测试包下载（ pre.im ）</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="https://kongming.l99.com/ad_hoc/bedChat.html">床聊 iOS 测试包下载（内网）</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="http://apps.l99.com/ad_hoc/com.l99.chuangliaoHK.html">床聊 iOS 测试包下载（全网）</a></th></tr>#}
+        {#                <tr><th align='left' ><a href="http://pre.im/Q0z6">床聊 iOS 测试包下载（ pre.im ）</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="/appinfo">360 渠道床上最新信息</a></p></th></tr>#}
+        {#                <tr><th align='left' ><a href="/admin">后台管理（编辑测试数据）</a></p></th></tr>#}
+        {% if urls %}
+            {% for info in urls_data %}
+                <tr>
+                    <th align='left'><a href="{{ info.url }}">{{ info.url_name }}</a></th>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th align='left'><a href=""><p></p></th>
+            </tr>
+            {% for info in urls_cl %}
+                <tr>
+                    <th align='left'><a href="{{ info.url }}">{{ info.url_name }}</a></th>
+                </tr>
+
+            {% endfor %}
+            <tr>
+                <th align='left'><a href=""><p></p></th>
+            </tr>
+            {% for info in urls_cs %}
+                <tr>
+                    <th align='left'><a href="{{ info.url }}">{{ info.url_name }}</a></th>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th align='left'><a href=""><p></p></th>
+            </tr>
+            {% for info in urls_appinfo %}
+                <tr>
+                    <th align='left'><a href="{{ info.url }}">{{ info.url_name }}</a></th>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th align='left'><a href=""><p></p></th>
+            </tr>
+            {% for info in urls_other %}
+                <tr>
+                    <th align='left'><a href="{{ info.url }}">{{ info.url_name }}</a></th>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <th align='left'><a href="/"><h1>还没有内容哦 😄</h1></a></th>
+        {% endif %}
+
+        </tbody>
+    </table>
+
+</div>
+</body>
 </html>

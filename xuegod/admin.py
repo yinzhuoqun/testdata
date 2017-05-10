@@ -110,7 +110,32 @@ class TestReportAdmin(admin.ModelAdmin):
 
 class ResumeAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'alter_time')  # 展示的列
-    list_display_links = ('name', 'phone', 'alter_time')
+    list_display_links = ('name', 'phone', 'alter_time')  # 可以点击的链接
+    list_filter = ['name']  # 过滤
+    search_fields = ['phone']  # 搜索
 
 
 admin.site.register(Resume, ResumeAdmin)
+
+
+def make_homepage_url_status_on(modeladmin, request, queryset):
+    queryset.update(url_status="1")
+
+
+def make_homepage_url_status_off(modeladmin, request, queryset):
+    queryset.update(url_status="0")
+
+
+make_homepage_url_status_on.short_description = "批量置为显示 "
+make_homepage_url_status_off.short_description = "批量置为隐藏 "
+
+
+class HomePageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'url_name', 'url', 'url_status', 'url_type', 'url_order', 'create_time')  # 展示的列
+    list_display_links = ('id', 'url_name', 'url', 'url_status', 'url_type', 'url_order')  # 可以点击的链接
+    list_filter = ['url_status', 'url_type']  # 过滤
+    search_fields = ['url_name']  # 搜索
+    actions = [make_homepage_url_status_on, make_homepage_url_status_off]  # 批量操作
+
+
+admin.site.register(HomePage, HomePageAdmin)

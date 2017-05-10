@@ -3,7 +3,7 @@ import os
 
 # 从Django1.7以后不再使用app_label，修改app相关需要使用AppConfig
 
-verbose_app_name = u"测试账号管理"
+verbose_app_name = u"测试数据管理"  # 站点标题头部
 default_app_config = 'xuegod.XuegodConfig'
 
 def get_current_app_name(_file):

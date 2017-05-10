@@ -12,15 +12,15 @@ class TestParticipantsInline(admin.TabularInline):
 
 
 class BugSurplusInfoInline(admin.TabularInline):
-    model = BugSurplusInfo
+    model = BugSurplusInfo  # 模型名称
     extra = 1  # 默认数量
-    max_num = 1
+    max_num = 1  # 最大数量
 
 
 class BugInfoInline(admin.TabularInline):
-    model = BugInfo
+    model = BugInfo  # 模型名称
     extra = 1  # 默认数量
-    max_num = 1
+    max_num = 1  # 最大数量
 
 
 class TestReportAdmin(admin.ModelAdmin):
