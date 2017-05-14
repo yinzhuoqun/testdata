@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <title>渠道信息 | TestData</title>
+    <script src="/static/js/jquery-1.8.2.min.js"></script>
+    <style>
+        body{
+            text-align: center;
+        }
+        .box {
+{#            text-align: center;#}
+            margin: 0 auto;
+{#            margin-left:50%;#}
+{#            position: relative;#}
+
+        }
+
+        .icon {
+            height: 72px;
+            width: 72px;
+{#            border: 1px dashed red;#}
+            position: absolute;
+            margin-top: 20px;
+            solid-color: red;
+
+        }
+
+        .name {
+            margin-top: 30px;
+            margin-left: 80px;
+            position: absolute;
+        }
+
+        .version {
+            margin-top: 30px;
+            margin-left: 200px;
+            position: absolute;
+        }
+
+        .updatetime {
+            margin-top: 60px;
+            margin-left: 200px;
+            position: absolute;
+        }
+        .size {
+            margin-top: 60px;
+            margin-left: 80px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+<div class="box">
+
+    <div class="icon">
+        <img src="" alt="" id="icon">
+    </div>
+
+    <div class="name"></div>
+    <div class="size"></div>
+    <div class="version"></div>
+    <div class="updatetime"></div>
+    <div class="apk_url"></div>
+    <div class="channel_url"></div>
+    <div class="imgs"></div>
+    <div class="readme"></div>
+</div>
+<script>
+    var myurl = "http://192.168.66.55/appinfo";
+    $.ajax({
+        url: myurl,
+        data: "",
+        type: "get",
+        dataType: "json",
+        success: function (res) {
+            console.log(res);
+            if (res != "") {
+                $("#icon").attr("src", res.apk_icon_url);
+                $(".name").html(res.apk_name);
+                $(".size").html(res.apk_size);
+                $(".version").html("版本：" + res.apk_version);
+                $(".updatetime").html("更新：" + res.apk_updatetime);
+{#                $(".apk_url").html(res.apk_url);#}
+{#                $(".channel_url").html(res.app_360_url);#}
+{#                $(".imgs").html(res.apk_imgs);#}
+{#                $(".readme").html(res.apk_update_readme);#}
+{##}
+
+            }
+        },
+        error: function (res) {
+            console.log(res);
+        }
+    })
+    ;
+</script>
+
+
+</body>
+</html>

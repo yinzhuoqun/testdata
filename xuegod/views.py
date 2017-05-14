@@ -44,10 +44,10 @@ def index(request):
     #     print(info)
     #     print(info.url,info.url_name)
     urls_data = urls.filter(url_type="data").order_by('url_order')
-    urls_cs =urls.filter(url_type="cs").order_by('url_order')
-    urls_cl =urls.filter(url_type="cl").order_by('url_order')
-    urls_appinfo =urls.filter(url_type="appinfo").order_by('url_order')
-    urls_other =urls.filter(url_type="other").order_by('url_order')
+    urls_cs = urls.filter(url_type="cs").order_by('url_order')
+    urls_cl = urls.filter(url_type="cl").order_by('url_order')
+    urls_appinfo = urls.filter(url_type="appinfo").order_by('url_order')
+    urls_other = urls.filter(url_type="other").order_by('url_order')
 
     return render_to_response("index.html", locals())
 
@@ -415,22 +415,24 @@ def get_app_info(url):
     apk_download_url = re.findall(re_url, info)[0].split("=&url=")[1]
     apk_version = re.findall('<td><strong>版本：</strong>(.*?)<', info)[0]
     apk_version_code = re.findall("<!--versioncode:(\d+)-->", info)[0]
-    apk_updatatime = re.findall('<strong>更新时间：</strong>(.*?)</td>', info)[0]
+    apk_updatetime = re.findall('<strong>更新时间：</strong>(.*?)</td>', info)[0]
+    apk_size = re.findall(' <span class="s-3">(\d+.\d+M)</span>', info)[0]
     apk_imgs = re.findall('<div id="scrollbar" data-snaps="(.*?)">', info)
     apk_img = (apk_imgs[0] if len(apk_imgs) else "").split(",")
     re_readme = re.compile('更新内容】</b><br/>(.*?)</div>', re.S)
-    apk_updata_readme1 = re.findall(re_readme, info)[0].split("<br />\r\n")
-    apk_updata_readme = [readme.strip() for readme in apk_updata_readme1 if readme != ""]
+    apk_update_readme1 = re.findall(re_readme, info)[0].split("<br />\r\n")
+    apk_update_readme = [readme.strip() for readme in apk_update_readme1 if readme != ""]
     app_info = collections.OrderedDict()
     app_info = {
         "app_360_url": url,
         "apk_name": apk_name,
         "apk_icon_url": apk_icon_url,
+        "apk_size": apk_size,
         'apk_url': apk_download_url,
         "apk_imgs": apk_img,
         "apk_version": apk_version, "apk_version_code": apk_version_code,
-        "apk_updatatime": apk_updatatime,
-        "apk_updata_readme": apk_updata_readme}
+        "apk_updatetime": apk_updatetime,
+        "apk_update_readme": apk_update_readme}
 
     # print(app_info)
     return app_info
@@ -443,4 +445,25 @@ def app_info(request):
     # url = "http://zhushou.360.cn/detail/index/soft_id/3581"
     # print(get_html(url))
     info = get_app_info(url)
+    return JsonResponse(info)
+
+
+def show_appinfo(request):
+    return render(request, "appinfo.html", locals())
+
+
+def qqbot_start(request):
+    import subprocess, sys
+    my_command = "python I:\yzq\MyPythonTest\qqbot\qqbot_test.py"
+    try:
+        sub_process = subprocess.Popen(my_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # out = sub_process.stdout.read().decode()
+        # print(out)
+        # with open("I:\yzq\MyPythonTest\qqbot\qqbot_log.txt", "ab+") as f:
+        #     f.write(str(out))
+        info = {"code": 200, "msg": "success"}
+    except Exception as e:
+        print(e)
+        info = {"code": 400, "msg": "failed"}
+
     return JsonResponse(info)
