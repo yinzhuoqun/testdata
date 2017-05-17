@@ -424,7 +424,7 @@ def get_app_info(url):
     apk_update_readme = [readme.strip() for readme in apk_update_readme1 if readme != ""]
     app_info = collections.OrderedDict()
     app_info = {
-        "app_360_url": url,
+        "apk_channel_url": url,
         "apk_name": apk_name,
         "apk_icon_url": apk_icon_url,
         "apk_size": apk_size,
@@ -456,7 +456,7 @@ def qqbot_start(request):
     import subprocess, sys
     my_command = "python I:\yzq\MyPythonTest\qqbot\qqbot_test.py"
     try:
-        sub_process = subprocess.Popen(my_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # sub_process = subprocess.Popen(my_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # out = sub_process.stdout.read().decode()
         # print(out)
         # with open("I:\yzq\MyPythonTest\qqbot\qqbot_log.txt", "ab+") as f:

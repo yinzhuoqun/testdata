@@ -6,22 +6,32 @@
     <title>渠道信息 | TestData</title>
     <script src="/static/js/jquery-1.8.2.min.js"></script>
     <style>
-        body{
-            text-align: center;
+        * {
+            margin: 0px;
+            padding: 0px;
         }
+        body {
+            text-align: center;
+
+        }
+
         .box {
-{#            text-align: center;#}
-            margin: 0 auto;
-{#            margin-left:50%;#}
 {#            position: relative;#}
+            float: left;
+            width: 100%;
+            word-wrap: break-word; /*允许浏览器在单词内进行断句*/
+            word-break: normal; /*正常断句，标明怎么样进行单词内的断句*/
+            overflow: hidden; /*hidden超出隐藏，auto滚动条*/
+        {#            text-align: center;#}
+{#            margin: 0 auto;#}
+        {#            margin-left:50%;#}{#            position: relative;#}
 
         }
 
         .icon {
             height: 72px;
             width: 72px;
-{#            border: 1px dashed red;#}
-            position: absolute;
+        {#            border: 1px dashed red;#} position: absolute;
             margin-top: 20px;
             solid-color: red;
 
@@ -44,10 +54,41 @@
             margin-left: 200px;
             position: absolute;
         }
+
         .size {
             margin-top: 60px;
             margin-left: 80px;
             position: absolute;
+        }
+
+        .apk_url, .channel_url {
+            position: absolute;
+            margin-top: 100px;
+        {#            margin-left: 15px;#}
+
+        }
+
+        .channel_url {
+            margin-top: 120px;
+        }
+
+        .readme {
+            position: absolute;
+            margin-top: 140px;
+            float: left;
+            text-align: left;
+        {#            margin-left: 14px;#}
+        }
+        .imgs{
+            position: absolute;
+            margin-top: 250px;
+            float: left;
+            text-align: left;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            width: auto;
         }
 
     </style>
@@ -63,10 +104,10 @@
     <div class="size"></div>
     <div class="version"></div>
     <div class="updatetime"></div>
-    <div class="apk_url"></div>
-    <div class="channel_url"></div>
-    <div class="imgs"></div>
-    <div class="readme"></div>
+    <div class="apk_url">下载：<a id="apk_url" href="">点我下载</a></div>
+    <div class="channel_url">渠道：<a id="channel_url" href="">点我跳转</a></div>
+    <div class="readme">说明：<br><span id="readme"></span></div>
+    <div class="imgs">图片：<br><img src="" id="img"></div>
 </div>
 <script>
     var myurl = "http://192.168.66.55/appinfo";
@@ -75,24 +116,27 @@
         data: "",
         type: "get",
         dataType: "json",
-        success: function (res) {
-            console.log(res);
-            if (res != "") {
-                $("#icon").attr("src", res.apk_icon_url);
-                $(".name").html(res.apk_name);
-                $(".size").html(res.apk_size);
-                $(".version").html("版本：" + res.apk_version);
-                $(".updatetime").html("更新：" + res.apk_updatetime);
-{#                $(".apk_url").html(res.apk_url);#}
-{#                $(".channel_url").html(res.app_360_url);#}
-{#                $(".imgs").html(res.apk_imgs);#}
-{#                $(".readme").html(res.apk_update_readme);#}
-{##}
+        success: function (data) {
+            console.log(data);
+            if (data != "") {
+                $("#icon").attr("src", data.apk_icon_url);
+                $(".name").html(data.apk_name);
+                $(".size").html(data.apk_size);
+                $(".version").html("版本：" + data.apk_version);
+                $(".updatetime").html("更新：" + data.apk_updatetime);
+                $("#apk_url").attr("href", data.apk_url);
+                $("#channel_url").attr("href", data.apk_channel_url);
+                $.each(data.apk_update_readme, function (i, item) {
+                    $("#readme").append("&nbsp;&nbsp;&nbsp;&nbsp;" + item + ";<br>")
+                });
+                 $.each(data.apk_imgs, function (i, item) {
+                    $("#img").append().attr("src",item)
+                });
 
             }
         },
-        error: function (res) {
-            console.log(res);
+        error: function (data) {
+            console.log(data);
         }
     })
     ;
