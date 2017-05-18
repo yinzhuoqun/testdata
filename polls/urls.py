@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
 ]
 
+# http://python.usyiyi.cn/translate/django_182/intro/tutorial04.html
 
 # urlpatterns = [
 #     # ex: /polls/

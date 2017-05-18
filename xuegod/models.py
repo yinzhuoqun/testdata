@@ -17,7 +17,7 @@ class TestId(models.Model):
     user_note = models.CharField(null=True, blank=True, max_length=32, verbose_name="备注")
     # blank=True 选填, null=True 为空时 为null
 
-    user_flag = models.CharField(max_length=16, default="0", verbose_name="网络标识")
+    user_flag = models.CharField(max_length=16, default="0", verbose_name="网络标识", help_text="内网填0，外网填1")
     user_data_joined = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     class Meta:

@@ -8,12 +8,11 @@ from .models import *
 from django.views import generic
 from django.utils import timezone
 
+
 # Create your views here.
 
 
-
-
-
+# http://python.usyiyi.cn/translate/django_182/intro/tutorial04.html
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -22,11 +21,13 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         """Return the last five published questions."""
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
-    # Question.objects.filter(pub_date__lte=timezone.now()) 返回一个查询集，包含pub_date小于等于timezone.now的Question。
+        # Question.objects.filter(pub_date__lte=timezone.now()) 返回一个查询集，包含pub_date小于等于timezone.now的Question。
+
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
+
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
@@ -34,6 +35,7 @@ class DetailView(generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
         # Question.objects.filter(pub_date__lte=timezone.now())
         # 返回一个查询集，包含pub_date小于等于timezone.now的Question。
+
 
 class ResultsView(generic.DetailView):
     model = Question
@@ -44,6 +46,7 @@ def vote(request, question_id):
     p = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
+        print(selected_choice, type(selected_choice))
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {
             'question': p,
@@ -56,7 +59,7 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
-    # return HttpResponse("You're voting on question %s." % question_id)
+        # return HttpResponse("You're voting on question %s." % question_id)
 
 
 '''
@@ -90,12 +93,8 @@ def detail1(request, question_id):
 #     return HttpResponse(response % question_id)
 
 
-
-
-
 def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-
+    question = get_object_or_404(Question, pk=question_id
     return render(request, 'polls/results.html', {"question": question})
 
 '''
