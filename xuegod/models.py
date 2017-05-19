@@ -2,6 +2,10 @@
 from django.db import models
 
 
+# from django.utils.html import format_html
+# from django import forms
+
+
 # Create your models here.
 
 class User(models.Model):
@@ -11,13 +15,19 @@ class User(models.Model):
 
 
 class TestId(models.Model):
+    user_flag_choice = (
+        ("1", "外网"),
+        ('0', '内网'),
+    )
+
     user_id = models.IntegerField(verbose_name="账号")  # 整形
     user_password = models.CharField(max_length=16, verbose_name="密码")
     # user_note = models.CharField(blank=True, max_length=32)  # 选填
     user_note = models.CharField(null=True, blank=True, max_length=32, verbose_name="备注")
     # blank=True 选填, null=True 为空时 为null
 
-    user_flag = models.CharField(max_length=16, default="0", verbose_name="网络标识", help_text="内网填0，外网填1")
+    user_flag = models.CharField(max_length=16, default="0", choices=user_flag_choice, verbose_name="网络标识",
+                                 help_text="内网是 0，外网是 1")
     user_data_joined = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     class Meta:
@@ -42,7 +52,6 @@ class TestReport(models.Model):
     #     ('2', 'iOS'),
     #     ('0', 'other'),
     # )
-
 
     project_name = models.CharField(max_length=32, verbose_name="项目名称")
     test_version = models.CharField(max_length=32, verbose_name="测试版本")
