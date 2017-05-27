@@ -37,3 +37,9 @@ class Login(forms.Form):
         #     if len(user_email) < 6:
         #         raise forms.ValidationError("您的邮箱长度不够 6 位")
         #     return user_email
+
+class Ticket(forms.Form):
+    user_name = forms.CharField(max_length=32, label='用户账号',
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    user_password = forms.CharField(max_length=32, label='登陆密码',
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))

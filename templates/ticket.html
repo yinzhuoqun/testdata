@@ -1,0 +1,37 @@
+{% block "style" %}
+    <head>
+        <title>{{ title }}</title>
+        <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+        <style>
+            .ticket_ul label {
+                font-size: 18px;
+                color: goldenrod;
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            .errorlist {
+                color: red;
+                font-size: xx-small;
+            }
+            .get_ticket{
+                margin-left: 120px;
+                height: 30px;
+                width: 175px;
+            }
+        </style>
+    </head>
+{% endblock %}
+
+{% block "contentRight" %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <ul class="ticket_ul">
+            {{ ticket_form.as_ul }}
+        </ul>
+        <input class="get_ticket" type="submit" value="获取">
+    </form>
+    {{ get_ticket_info.ticket }}
+{% endblock %}

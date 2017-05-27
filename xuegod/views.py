@@ -5,6 +5,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 
 from xuegod.models import *
 from xuegod.forms import *
@@ -18,7 +19,8 @@ from django import forms
 import os, time, socket
 import collections  # 有序字典
 # import faker
-import uuid
+# import uuid
+import requests, re
 
 
 # import random
@@ -228,17 +230,18 @@ def app_list(request):
     if request.method == "POST" and request.POST:
         # 检测session中Token值，判断用户提交动作是否合法
         #  RemovedInDjango19Warning: `request.REQUEST` is deprecated, use `request.GET` or `request.POST` instead.
-        token = request.REQUEST.get('postToken', default=None)
-        print('token', token)
-        # 获取用户表单提交的Token值
-        user_token = request.POST['postToken']
-        print('user_token', user_token)
+        # token = request.REQUEST.get('postToken', default=None)
+        # print('token', token)
+        # # 获取用户表单提交的Token值
+        # user_token = request.POST['postToken']
+        # print('user_token', user_token)
 
         # if user_token == token:
 
         file = request.FILES.get("file", None)
         if not file:
-            uploadfile_mes = "请选择文件"
+            uploadfile_msg = "请选择文件"
+            return render(request, "app.html", locals())
         else:
             if file.name.endswith('.apk'):
                 destination = open(os.path.join(app_save_path, file.name), 'wb+')
@@ -247,19 +250,20 @@ def app_list(request):
             for chunk in file.chunks():
                 destination.write(chunk)
             destination.close()
-            uploadfile_mes = "上传成功"
+            uploadfile_msg = "上传成功，即将跳转"
 
             # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
             # token = str(uuid.uuid4())  # 采用随机数
             # 在服务端session中添加key认证，避免用户重复提交表单
             # request.session['postToken'] = "allow"
-            if "postToken" in request.session:  # keyError
-                del request.session['postToken']
-        return render(request, "app.html", locals())
-        # else:
-        #     if "postToken" in request.session:  # keyError
-        #         del request.session['postToken']
-        #     return render(request, "app.html", locals())
+            # if "postToken" in request.session:  # keyError
+            #     del request.session['postToken']
+            return render(request, "app_temp.html", locals())
+            # return HttpResponseRedirect("/temp")
+            # else:
+            #     if "postToken" in request.session:  # keyError
+            #         del request.session['postToken']
+            #     return render(request, "app.html", locals())
 
     return render(request, "app.html", locals())
 
@@ -467,3 +471,44 @@ def qqbot_start(request):
         info = {"code": 400, "msg": "failed"}
 
     return JsonResponse(info)
+
+
+def get_ticket(url_ticket, userid, password):
+    body_ticket = u'username=%s&password=%s' % (userid, password)  # 床号，密码
+    try:
+        post_info = requests.post(url_ticket, data=body_ticket).text
+        p = re.compile(r'ticket":"(.*?)"},"code')
+        ticket_list = re.findall(p, post_info)
+        # print('ticket =', ticket_list)
+        body_info = {"ticket": '%s' % ticket_list[0]}
+    except Exception as err:
+        body_info = {"ticket": err}
+
+    # return JsonResponse(body_info)
+    return body_info
+
+
+def show_ticket(request, style="in"):
+    url_ticket_in = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
+    url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网
+
+    if request.method == "POST" and request.POST:
+        ticket_form = Ticket(request.POST)
+        valid = ticket_form.is_valid()  # valid 判断是否有效
+        if valid:
+            form_data = ticket_form.cleaned_data
+            # print(type(form_data), form_data)
+            userid = form_data["user_name"]
+            password = form_data["user_password"]
+
+            # userid = "137349027"
+            # password = "q1234567"
+
+            if style == "in":
+                get_ticket_info = get_ticket(url_ticket_in, userid, password)
+            else:
+                get_ticket_info = get_ticket(url_ticket_out, userid, password)
+    else:
+        ticket_form = Ticket()
+    title = "Ticket %s | TestData" % style
+    return render(request, "ticket.html", locals())

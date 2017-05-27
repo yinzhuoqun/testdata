@@ -28,7 +28,7 @@ SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # nginx 、Apache 处理静态网页
-DEBUG = True  # django 自己处理静态网页
+# DEBUG = True  # django 自己处理静态网页
 
 
 ip_local = ["192.168.66.55", "169.254.111.198"]
@@ -89,6 +89,8 @@ WSGI_APPLICATION = 'yzqProgram.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 import json
+
+
 def json_load():
     pw_name = "alimysqlpw"
     # print(os.getcwd())
@@ -104,6 +106,7 @@ def json_load():
             print("%s don't exists" % pw_info)
 
             return None
+
 
 # 阿狸 mysql password
 if json_load():

@@ -48,10 +48,12 @@ urlpatterns = [
 
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
-    url(r'^appinfo', app_info),
-    url(r'^showappinfo', show_appinfo),
+    url(r'^appinfo/', app_info),
+    url(r'^showappinfo/', show_appinfo),
 
-    url(r'^qqbot', qqbot_start),
+    url(r'^qqbot/', qqbot_start),
+
+    url(r'^tk/(in|out)', show_ticket)
 ]
 
 # 导入setting、static 是为 media 用
