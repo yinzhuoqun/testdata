@@ -38,8 +38,26 @@ class Login(forms.Form):
         #         raise forms.ValidationError("您的邮箱长度不够 6 位")
         #     return user_email
 
+
 class Ticket(forms.Form):
+    ticket_type = (
+        ("out", "外网"),
+        ('in', '内网'),
+    )
+    ticket_style = forms.CharField(max_length=32, label='获取模式',
+                                widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
     user_name = forms.CharField(max_length=32, label='用户账号',
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     user_password = forms.CharField(max_length=32, label='登陆密码',
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class DeviceId(forms.Form):
+    api_type = (
+        ("out", "外网"),
+        ('in', '内网'),
+    )
+    api_model = forms.CharField(max_length=128, label='获取模式',
+                                widget=forms.Select(choices=api_type, attrs={'class': 'form-control'}))
+    device_id = forms.CharField(max_length=32, label='设 备 ID ',
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))

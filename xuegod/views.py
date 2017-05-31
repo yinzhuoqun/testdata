@@ -488,7 +488,7 @@ def get_ticket(url_ticket, userid, password):
     return body_info
 
 
-def show_ticket(request, style="in"):
+def show_ticket(request):
     url_ticket_in = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
     url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网
 
@@ -498,17 +498,45 @@ def show_ticket(request, style="in"):
         if valid:
             form_data = ticket_form.cleaned_data
             # print(type(form_data), form_data)
+            ticket_style = form_data["ticket_style"]
             userid = form_data["user_name"]
             password = form_data["user_password"]
 
             # userid = "137349027"
             # password = "q1234567"
 
-            if style == "in":
+            if ticket_style == "in":
                 get_ticket_info = get_ticket(url_ticket_in, userid, password)
             else:
                 get_ticket_info = get_ticket(url_ticket_out, userid, password)
+
+            title = "Ticket %s | TestData" % ticket_style
     else:
         ticket_form = Ticket()
-    title = "Ticket %s | TestData" % style
+
     return render(request, "ticket.html", locals())
+
+
+def device_unlock(request):
+    url_api_in = 'http://192.168.2.175:8080/inner/manage/user/untie/device'  # 内网
+    url_api_out = 'http://192.168.199.126:8080/inner/manage/user/untie/device'  # 外网
+
+    if request.method == "POST" and request.POST:
+        device_form = DeviceId(request.POST)
+        valid = device_form.is_valid()  # valid 判断是否有效
+        if valid:
+            form_data = device_form.cleaned_data
+            api_model = form_data["api_model"]
+            device_id = form_data["device_id"]
+            body = {'machine_code': device_id}
+            if api_model == "in":
+                device_unlock_info = requests.post(url_api_in, body).text
+            else:
+                device_unlock_info = requests.post(url_api_out, body).text
+
+            title = "Device Unlock %s | TestData" % api_model
+
+    else:
+        device_form = DeviceId()
+
+    return render(request, "device_unlock.html", locals())
