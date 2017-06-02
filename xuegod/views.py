@@ -250,7 +250,7 @@ def app_list(request):
             for chunk in file.chunks():
                 destination.write(chunk)
             destination.close()
-            uploadfile_msg = "上传成功，即将跳转"
+            uploadfile_msg = "上传成功，即将跳转..."
 
             # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
             # token = str(uuid.uuid4())  # 采用随机数
@@ -540,3 +540,21 @@ def device_unlock(request):
         device_form = DeviceId()
 
     return render(request, "device_unlock.html", locals())
+
+
+def register_code(request):
+    # url_api_in = 'http://192.168.2.175:8080/inner/manage/user/untie/device'  # 内网
+
+    title = "Register Code | TestData"
+    if request.method == "POST" and request.POST:
+        data_form = RegisterCode(request.POST)
+        valid = data_form.is_valid()  # valid 判断是否有效
+        if valid:
+            form_data = data_form.cleaned_data
+            phone = form_data["phone"]
+            url_api_out = 'http://guojia.api.l99.com/cgi-bin/vericode.py?mobilePhone=%s&appid=CS' % phone
+            data = requests.get(url_api_out).text
+    else:
+        data_form = RegisterCode()
+
+    return render(request, "register_code.html", locals())

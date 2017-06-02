@@ -54,6 +54,7 @@ urlpatterns = [
     url(r'^appinfo/', app_info),
     url(r'^showappinfo/', show_appinfo),
     url(r'^ud/', device_unlock),
+    url(r'^gc/', register_code),
 ]
 
 # 导入setting、static 是为 media 用

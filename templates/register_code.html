@@ -3,7 +3,7 @@
         <title>{{ title }}</title>
         <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
         <style>
-            .ticket_ul label {
+            .form_ul label {
                 font-size: 18px;
                 color: goldenrod;
             }
@@ -17,7 +17,7 @@
                 font-size: xx-small;
             }
 
-            .get_ticket {
+            .submit_btn {
                 margin-left: 120px;
                 height: 30px;
                 width: 173px;
@@ -31,11 +31,11 @@
 
         <form action="" method="post">
             {% csrf_token %}
-            <ul class="ticket_ul">
-                {{ device_form.as_ul }}
+            <ul class="form_ul">
+                {{ data_form.as_ul }}
             </ul>
-            <input class="get_ticket" type="submit" value="解除屏蔽">
+            <input class="submit_btn" type="submit" value="获取验证码">
         </form>
-        <br class="ticket">{{ device_unlock_info }}</div>
+        <br class="data">{{ data }}</div>
     </div>
 {% endblock %}

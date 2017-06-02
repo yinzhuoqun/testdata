@@ -45,7 +45,7 @@ class Ticket(forms.Form):
         ('in', '内网'),
     )
     ticket_style = forms.CharField(max_length=32, label='获取模式',
-                                widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
+                                   widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
     user_name = forms.CharField(max_length=32, label='用户账号',
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     user_password = forms.CharField(max_length=32, label='登陆密码',
@@ -60,4 +60,10 @@ class DeviceId(forms.Form):
     api_model = forms.CharField(max_length=128, label='获取模式',
                                 widget=forms.Select(choices=api_type, attrs={'class': 'form-control'}))
     device_id = forms.CharField(max_length=32, label='设 备 ID ',
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                help_text='Android：📞*#06# 第一行的那一串数字')
+
+class RegisterCode(forms.Form):
+    phone = forms.CharField(max_length=32, label='手机号码 ',
+                                widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                help_text='只支持手机注册')

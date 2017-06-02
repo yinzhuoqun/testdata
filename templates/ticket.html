@@ -29,13 +29,13 @@
 {% block "contentRight" %}
     <div class="box">
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <ul class="ticket_ul">
-            {{ ticket_form.as_ul }}
-        </ul>
-        <input class="get_ticket" type="submit" value="获取">
-    </form>
+        <form action="" method="post">
+            {% csrf_token %}
+            <ul class="ticket_ul">
+                {{ ticket_form.as_ul }}
+            </ul>
+            <input class="get_ticket" type="submit" value="获取">
+        </form>
         <br class="ticket">{{ get_ticket_info.ticket }}</div>
     </div>
 {% endblock %}
