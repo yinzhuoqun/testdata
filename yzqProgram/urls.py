@@ -17,6 +17,8 @@ from django.contrib import admin
 from xuegod.views import *  # 导入app下views
 from testfly.views import *
 from django.conf import settings
+from django.conf.urls.static import static
+
 
 admin.site.site_title = settings.ADMIN_SITE_TITLE  # 站点标题
 admin.site.site_header = settings.ADMIN_SITE_HEADER  # 站点头部
@@ -46,7 +48,7 @@ urlpatterns = [
 
     url(r'^resume/', resume),
 
-    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     url(r'^qqbot/', qqbot_start),
 
@@ -55,7 +57,7 @@ urlpatterns = [
     url(r'^showappinfo/', show_appinfo),
     url(r'^ud/', device_unlock),
     url(r'^gc/', register_code),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 导入setting、static 是为 media 用
 # from django.conf import settings
@@ -64,4 +66,5 @@ urlpatterns = [
 #
 # # ... the rest of your URLconf goes here ...
 #
-# ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # nginx 时，网页不能单独访问？
+# url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), # 网页可以单独访问？

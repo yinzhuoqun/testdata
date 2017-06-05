@@ -17,10 +17,15 @@
                 font-size: xx-small;
             }
 
-            .get_ticket {
+            .get_ticket{
                 margin-left: 120px;
                 height: 30px;
                 width: 173px;
+
+            }
+            .user_info{
+                word-wrap: break-word;
+                word-break: break-all;
             }
         </style>
     </head>
@@ -28,7 +33,6 @@
 
 {% block "contentRight" %}
     <div class="box">
-
         <form action="" method="post">
             {% csrf_token %}
             <ul class="ticket_ul">
@@ -36,6 +40,7 @@
             </ul>
             <input class="get_ticket" type="submit" value="获取">
         </form>
-        <br class="ticket">{{ get_ticket_info.ticket }}</div>
+        <div class="ticket">ticket: <br>{{ get_ticket_info.ticket }}</div><p></p>
+        <div class="user_info">{{ get_ticket_info.userinfo }}</div>
     </div>
 {% endblock %}

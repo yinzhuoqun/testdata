@@ -481,6 +481,7 @@ def get_ticket(url_ticket, userid, password):
         ticket_list = re.findall(p, post_info)
         # print('ticket =', ticket_list)
         body_info = {"ticket": '%s' % ticket_list[0]}
+
     except Exception as err:
         body_info = {"ticket": err}
 
@@ -491,6 +492,8 @@ def get_ticket(url_ticket, userid, password):
 def show_ticket(request):
     url_ticket_in = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
     url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网
+    url_login_in = r"http://192.168.2.171:8080/account/basic/login"
+    url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
 
     if request.method == "POST" and request.POST:
         ticket_form = Ticket(request.POST)
@@ -504,11 +507,14 @@ def show_ticket(request):
 
             # userid = "137349027"
             # password = "q1234567"
-
+            hearder = {"username": userid, "password": password}
             if ticket_style == "in":
                 get_ticket_info = get_ticket(url_ticket_in, userid, password)
+                get_ticket_info["userinfo"] = requests.post(url_login_in, data=hearder).text
+
             else:
                 get_ticket_info = get_ticket(url_ticket_out, userid, password)
+                get_ticket_info["userinfo"] = requests.post(url_login_out, data=hearder).text
 
             title = "Ticket %s | TestData" % ticket_style
     else:
