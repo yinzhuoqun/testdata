@@ -20,7 +20,7 @@ import os, time, socket
 import collections  # 有序字典
 # import faker
 # import uuid
-import requests, re
+import requests, re, json
 
 
 # import random
@@ -169,9 +169,22 @@ def alter_testid(request):
     return render(request, "altertestid.html", locals())
 
 
-class UploadFileForm(forms.Form):
-    # title = forms.CharField(max_length=50)
-    file = forms.FileField()
+def dd_text_post(url, msg, atMoblies, atAll="flase"):
+    body = {
+        "msgtype": "text",
+        "text": {
+            "content": msg
+        },
+        "at": {
+            "atMobiles": atMoblies,
+            "isAtAll": atAll
+        }
+    }
+    headers = {'content-type': 'application/json',
+               'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'}
+    r = requests.post(url, headers=headers, data=json.dumps(body))
+    # print(r.text)
+    return r.text
 
 
 def app_list(request):
@@ -247,10 +260,31 @@ def app_list(request):
                 destination = open(os.path.join(app_save_path, file.name), 'wb+')
             else:
                 destination = open(os.path.join(img_save_path, file.name), 'wb+')
-            for chunk in file.chunks():
-                destination.write(chunk)
-            destination.close()
-            uploadfile_msg = "上传成功，即将跳转..."
+            try:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+                destination.close()
+            except Exception as e:
+                uploadfile_msg = "上传失败，即将跳转..."
+
+            finally:
+                uploadfile_msg = "上传成功，即将跳转..."
+                three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
+                qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
+                csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
+
+                dd_send = request.POST['dd_send']
+                # print(dd_send)
+                if file.name.endswith('.apk') and dd_send == "True":
+                    # if file.name.find("chuangshang") or file.name.find("l99"):
+                    apk_url = "http://192.168.66.55/media/app/%s" % file.name
+                    msg_upload_success = "Android 最新测试包：%s" % apk_url
+                    dd_text_post(csdev_url_ddbot, msg_upload_success, atMoblies=["18679600250", "18344023069"],
+                                 atAll="false")
+                else:
+                    msg_upload_success = "有新文件上传：%s" % file.name
+                    dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                 atAll="false")
 
             # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
             # token = str(uuid.uuid4())  # 采用随机数
@@ -490,8 +524,10 @@ def get_ticket(url_ticket, userid, password):
 
 
 def show_ticket(request):
-    url_ticket_in = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
-    url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网
+    url_ticket_in1 = r'http://192.168.2.171:8080/account/basic/ticket'  # 内网
+    url_ticket_in2 = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
+    # url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网 公司
+    url_ticket_out = r'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
     url_login_in = r"http://192.168.2.171:8080/account/basic/login"
     url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
 
@@ -509,12 +545,21 @@ def show_ticket(request):
             # password = "q1234567"
             hearder = {"username": userid, "password": password}
             if ticket_style == "in":
-                get_ticket_info = get_ticket(url_ticket_in, userid, password)
-                get_ticket_info["userinfo"] = requests.post(url_login_in, data=hearder).text
+                get_user_info = {}
+                try:
+                    get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
+                except Exception as e:
+                    get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
+                get_user_info["userinfo"] = requests.post(url_login_in, data=hearder).json()
+                get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
 
             else:
-                get_ticket_info = get_ticket(url_ticket_out, userid, password)
-                get_ticket_info["userinfo"] = requests.post(url_login_out, data=hearder).text
+                get_user_info = {}
+                # get_ticket_info = get_ticket(url_ticket_out, userid, password)  # 公司内网
+
+                get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
+                get_user_info["userinfo"] = requests.post(url_login_out, data=hearder).json()
+                get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
 
             title = "Ticket %s | TestData" % ticket_style
     else:

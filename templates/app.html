@@ -91,17 +91,22 @@
     <div class="upload">
         {#        accept-charset="utf-8"#}
         <form method='post' action='' enctype="multipart/form-data" id="myForm">
-{#            <form  onsubmit="return submit_sure()"></form>#}
+            {#            <form  onsubmit="return submit_sure()"></form>#}
             {% csrf_token %}
             <ul>
                 {{ token }}
                 <input type="hidden" name="postToken" value={{ token }}>
                 <li><input type='file' name='file'/></li>
                 <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择"/></li>
+                <li><select name="dd_send">
+                    <option value="True" selected = "selected">发送</option>
+                    <option value="False">不发送</option>
+                </select> 测试包钉钉消息提醒</li>
                 <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
                     {#                <span class="upErrMes">{{ uploadfile_mes }}</span></li>#}
                     <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_mes }}</label></li>
                 {#                 onclick="myRefresh()"#}
+
             </ul>
         </form>
     </div>

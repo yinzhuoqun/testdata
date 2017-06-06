@@ -61,9 +61,15 @@ class DeviceId(forms.Form):
                                 widget=forms.Select(choices=api_type, attrs={'class': 'form-control'}))
     device_id = forms.CharField(max_length=32, label='设 备 ID ',
                                 widget=forms.TextInput(attrs={'class': 'form-control'}),
-                                help_text='Android：📞*#06# 第一行的那一串数字')
+                                help_text='<br>Android：📞*#06# 第一行的那一串数字<br>iOS:第三方登录之后后台可拿到机器码')
+
 
 class RegisterCode(forms.Form):
     phone = forms.CharField(max_length=32, label='手机号码 ',
-                                widget=forms.TextInput(attrs={'class': 'form-control'}),
-                                help_text='只支持手机注册')
+                            widget=forms.TextInput(attrs={'class': 'form-control'}),
+                            help_text='只支持手机注册')
+
+
+class UploadFileForm(forms.Form):
+    # title = forms.CharField(max_length=50)
+    file = forms.FileField()
