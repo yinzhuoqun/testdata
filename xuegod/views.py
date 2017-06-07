@@ -551,7 +551,8 @@ def show_ticket(request):
                 except Exception as e:
                     get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
                 get_user_info["userinfo"] = requests.post(url_login_in, data=hearder).json()
-                get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
+                if get_user_info["userinfo"]["code"] == 1000:
+                    get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
 
             else:
                 get_user_info = {}
@@ -559,7 +560,8 @@ def show_ticket(request):
 
                 get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
                 get_user_info["userinfo"] = requests.post(url_login_out, data=hearder).json()
-                get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
+                if get_user_info["userinfo"]["code"] == 1000:
+                    get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
 
             title = "Ticket %s | TestData" % ticket_style
     else:
