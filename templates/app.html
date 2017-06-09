@@ -79,6 +79,9 @@
             color: #808080;
 
         }
+        .msg_updata{
+            width: 250px;
+        }
 
     </style>
 </head>
@@ -101,7 +104,8 @@
                 <li><select name="dd_send">
                     <option value="True" selected = "selected">发送</option>
                     <option value="False">不发送</option>
-                </select> 测试包钉钉消息提醒</li>
+                </select> 新测试包下载地址到钉钉群</li>
+                 <li><input type='text' name='msg_updata' class="msg_updata" placeholder="发送到钉钉群 包更新的内容，选填"/></li>
                 <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
                     {#                <span class="upErrMes">{{ uploadfile_mes }}</span></li>#}
                     <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_mes }}</label></li>

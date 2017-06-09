@@ -109,10 +109,10 @@ class TestReportAdmin(admin.ModelAdmin):
 # admin.site.register()
 
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'alter_time')  # 展示的列
-    list_display_links = ('name', 'phone', 'alter_time')  # 可以点击的链接
-    list_filter = ['name']  # 过滤
-    search_fields = ['phone']  # 搜索
+    list_display = ('name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order', 'alter_time')  # 展示的列
+    list_display_links = ('name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order')  # 可以点击的链接
+    list_filter = ['name', 'ip']  # 过滤
+    search_fields = ['phone', 'ip']  # 搜索
 
 
 admin.site.register(Resume, ResumeAdmin)

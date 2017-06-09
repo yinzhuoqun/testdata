@@ -21,6 +21,7 @@ import collections  # 有序字典
 # import faker
 # import uuid
 import requests, re, json
+from ipware.ip import get_ip
 
 
 # import random
@@ -239,6 +240,12 @@ def app_list(request):
     #     request.session['postToken'] = token
     #
     #     return render(request, "app.html", locals())
+    # ip = get_ip(request)
+    # # ip = "192.168.66.65" # test
+    # ipinfo = Resume.objects.filter(ip=ip)
+    # if ipinfo.exists():
+    #     print(ipinfo.values("phone")[0]["phone"])
+    # print(ipinfo.values("ip", "phone"))
 
     if request.method == "POST" and request.POST:
         # 检测session中Token值，判断用户提交动作是否合法
@@ -248,7 +255,6 @@ def app_list(request):
         # # 获取用户表单提交的Token值
         # user_token = request.POST['postToken']
         # print('user_token', user_token)
-
         # if user_token == token:
 
         file = request.FILES.get("file", None)
@@ -273,16 +279,30 @@ def app_list(request):
                 qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
                 csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
 
-                dd_send = request.POST['dd_send']
-                # print(dd_send)
+                dd_send = request.POST['dd_send']  # 是否发送钉钉消息
+                ip = get_ip(request)
                 if file.name.endswith('.apk') and dd_send == "True":
-                    # if file.name.find("chuangshang") or file.name.find("l99"):
-                    apk_url = "http://192.168.66.55/media/app/%s" % file.name
-                    msg_upload_success = "Android 最新测试包：%s" % apk_url
-                    dd_text_post(csdev_url_ddbot, msg_upload_success, atMoblies=["18679600250", "18344023069"],
-                                 atAll="false")
+                    at_moblies = []
+                    if file.name.find("chuangshang") or file.name.find("l99"):
+                        ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
+                        # print(ip_use.values("phone", "ip"))
+                        for ip_phone in ip_use.values("phone", "ip"):
+                            at_moblies.append(ip_phone["phone"])
+                        if ip is not None:
+                            ipinfo = Resume.objects.filter(phone_status_select="1", ip=ip)
+                            if ipinfo.exists():
+                                at_moblies.append(ipinfo.values("phone")[0]["phone"])
+                            at_moblies = sorted(set(at_moblies), key=at_moblies.index)
+                        apk_url = "http://192.168.66.55/media/app/%s" % file.name
+                        msg_updata = request.POST["msg_updata"]
+                        msg_upload_success = "Android 最新测试包：%s\n%s" % (apk_url, msg_updata)
+                        dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+                    else:
+                        msg_upload_success = "有新文件: %s 从 IP: %s 上传" % (file.name, ip)
+                        dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                     atAll="false")
                 else:
-                    msg_upload_success = "有新文件上传：%s" % file.name
+                    msg_upload_success = "有新文件: %s 从 IP: %s 上传" % (file.name, ip)
                     dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                  atAll="false")
 
@@ -550,18 +570,18 @@ def show_ticket(request):
                     get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
                 except Exception as e:
                     get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
-                get_user_info["userinfo"] = requests.post(url_login_in, data=hearder).json()
-                if get_user_info["userinfo"]["code"] == 1000:
-                    get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
+                get_user_info["ipinfo"] = requests.post(url_login_in, data=hearder).json()
+                if get_user_info["ipinfo"]["code"] == 1000:
+                    get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
 
             else:
                 get_user_info = {}
                 # get_ticket_info = get_ticket(url_ticket_out, userid, password)  # 公司内网
 
                 get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
-                get_user_info["userinfo"] = requests.post(url_login_out, data=hearder).json()
-                if get_user_info["userinfo"]["code"] == 1000:
-                    get_user_info["account_id"] = get_user_info["userinfo"]["data"]["user"]["account_id"]
+                get_user_info["ipinfo"] = requests.post(url_login_out, data=hearder).json()
+                if get_user_info["ipinfo"]["code"] == 1000:
+                    get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
 
             title = "Ticket %s | TestData" % ticket_style
     else:

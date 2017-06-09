@@ -152,8 +152,20 @@ class TestParticipants(models.Model):
 
 
 class Resume(models.Model):
-    name = models.CharField(unique=True, max_length=48, verbose_name="用户名")
-    phone = models.CharField(max_length=32, verbose_name="手机")
+    phone_status_choice = (
+        ("1", "ON"),
+        ('0', 'OFF'),
+    )
+
+    name = models.CharField(unique=True, max_length=48, verbose_name="用户名称")
+    phone = models.CharField(max_length=32, verbose_name="手机号码")
+    ip = models.GenericIPAddressField(null=True, blank=True, verbose_name="IP")
+    phone_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
+    phone_status = models.CharField(max_length=32, choices=phone_status_choice, default="0FF", verbose_name="必定使用",
+                                    help_text="一定使用该号码")
+    phone_status_select = models.CharField(max_length=32, choices=phone_status_choice, default="ON",
+                                           verbose_name="使用状态",
+                                           help_text="IP 在范围之内才使用")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 
