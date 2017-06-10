@@ -177,6 +177,9 @@ class Resume(models.Model):
         # 是设置复数形式时显示的名称
         verbose_name_plural = "手机号码列表"
 
+    def __str__(self):
+        return "%s" % self.name
+
 
 class HomePage(models.Model):
     url_status_choice = (
@@ -196,3 +199,6 @@ class HomePage(models.Model):
     class Meta:
         verbose_name = "网址信息"
         verbose_name_plural = "网址信息列表"
+
+    def __str__(self):
+        return "%s" % self.url_name
