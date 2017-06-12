@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
+from django.conf import settings
 
 from xuegod.models import *
 from xuegod.forms import *
@@ -13,8 +14,6 @@ from xuegod.forms import *
 from django.db import connection
 from django.template import RequestContext  # csrf
 from django.http import StreamingHttpResponse
-
-from django import forms
 
 import os, time, socket
 import collections  # 有序字典
@@ -296,7 +295,12 @@ def app_list(request):
                         apk_url = "http://192.168.66.55/media/app/%s" % file.name
                         msg_updata = request.POST["msg_updata"]
                         msg_upload_success = "Android 最新测试包：%s\n%s" % (apk_url, msg_updata)
-                        dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+                        if settings.DEBUG == True:
+                            url_ddbot = three_url_ddbot
+                        else:
+                            url_ddbot = csdev_url_ddbot
+                        dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+
                     else:
                         msg_upload_success = "有新文件: %s 从 IP: %s 上传" % (file.name, ip)
                         dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
@@ -578,9 +582,9 @@ def show_ticket(request):
                 get_user_info = {}
                 # get_ticket_info = get_ticket(url_ticket_out, userid, password)  # 公司内网
 
-                get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
                 get_user_info["ipinfo"] = requests.post(url_login_out, data=hearder).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
+                    get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
 
             title = "Ticket %s | TestData" % ticket_style

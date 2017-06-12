@@ -42,7 +42,7 @@ class TestId(models.Model):
         unique_together = (("user_id", "user_password"),)
 
     def __str__(self):
-        return "%s|%s|%s" % (self.user_id, self.user_password, self.user_note)
+        return "%s|%s" % (self.user_id, self.user_password)
 
 
 class TestReport(models.Model):
