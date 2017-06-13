@@ -635,3 +635,12 @@ def register_code(request):
         data_form = RegisterCode()
 
     return render(request, "register_code.html", locals())
+
+
+def user_ip(request):
+    title = "IP | TestData"
+    three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
+    ip = get_ip(request)
+    dd_text_post(three_url_ddbot, ip, atMoblies=["18679600250"],
+                 atAll="false")
+    return render(request, "ip.html", locals())
