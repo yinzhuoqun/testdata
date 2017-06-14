@@ -197,7 +197,6 @@ def app_list(request):
     # app_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
     app_path = r"I:\yzq\MyPythonTest\yzqProgram\media\app".replace('\\', '/')
 
-    # print(app_path)
     ip_local = ["192.168.66.55", "169.254.111.198"]
     if socket.gethostbyname(socket.gethostname()) not in ip_local:
         show_path = r'media/upload'
@@ -246,6 +245,7 @@ def app_list(request):
     #     print(ipinfo.values("phone")[0]["phone"])
     # print(ipinfo.values("ip", "phone"))
 
+
     if request.method == "POST" and request.POST:
         # 检测session中Token值，判断用户提交动作是否合法
         #  RemovedInDjango19Warning: `request.REQUEST` is deprecated, use `request.GET` or `request.POST` instead.
@@ -257,6 +257,15 @@ def app_list(request):
         # if user_token == token:
 
         file = request.FILES.get("file", None)
+        #  print(dir(file))
+        # ['DEFAULT_CHUNK_SIZE', '__bool__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__enter__',
+        #  '__eq__', '__exit__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__iter__',
+        #  '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__nonzero__', '__reduce__', '__reduce_ex__',
+        #  '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_closed',
+        #  '_get_name', '_get_size', '_get_size_from_underlying_file', '_name', '_set_name', '_set_size', '_size',
+        #  'charset', 'chunks', 'close', 'closed', 'content_type', 'content_type_extra', 'encoding', 'field_name', 'file',
+        #  'fileno', 'flush', 'isatty', 'multiple_chunks', 'name', 'newlines', 'open', 'read', 'readinto', 'readline',
+        #  'readlines', 'seek', 'size', 'softspace', 'tell', 'truncate', 'write', 'writelines', 'xreadlines']
         if not file:
             uploadfile_msg = "请选择文件"
             return render(request, "app.html", locals())
@@ -280,9 +289,15 @@ def app_list(request):
 
                 dd_send = request.POST['dd_send']  # 是否发送钉钉消息
                 ip = get_ip(request)
+                url_request = request.get_host()
+                file_size = file.size
+                if file_size > 1024 * 1024:
+                    file_size = "%.2fMB" % (file_size / 1024 / 1024)
+                else:
+                    file_size = "%.2fKB" % (file_size / 1024)
                 if file.name.endswith('.apk') and dd_send == "True":
                     at_moblies = []
-                    if file.name.find("chuangshang") or file.name.find("l99"):
+                    if file.name.find("chuangshang") + file.name.find("l99") >= 0:
                         ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
                         # print(ip_use.values("phone", "ip"))
                         for ip_phone in ip_use.values("phone", "ip"):
@@ -292,21 +307,22 @@ def app_list(request):
                             if ipinfo.exists():
                                 at_moblies.append(ipinfo.values("phone")[0]["phone"])
                             at_moblies = sorted(set(at_moblies), key=at_moblies.index)
-                        apk_url = "http://192.168.66.55/media/app/%s" % file.name
+                        apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
+                        print(apk_url)
                         msg_updata = request.POST["msg_updata"]
-                        msg_upload_success = "Android 最新测试包：%s\n%s" % (apk_url, msg_updata)
+                        msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
                         if settings.DEBUG == True:
                             url_ddbot = three_url_ddbot
                         else:
                             url_ddbot = csdev_url_ddbot
                         dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
-
                     else:
-                        msg_upload_success = "有新文件: %s 从 IP: %s 上传" % (file.name, ip)
+                        msg_upload_success = "file: %s\nsize：%s\nIP : %s\nurl: %s" % (
+                        file.name, file_size, ip, url_request)
                         dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                      atAll="false")
                 else:
-                    msg_upload_success = "有新文件: %s 从 IP: %s 上传" % (file.name, ip)
+                    msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (file.name, file_size, ip, url_request)
                     dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                  atAll="false")
 

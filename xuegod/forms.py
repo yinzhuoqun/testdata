@@ -60,7 +60,7 @@ class DeviceId(forms.Form):
     api_model = forms.CharField(max_length=128, label='获取模式',
                                 widget=forms.Select(choices=api_type, attrs={'class': 'form-control'}))
     device_id = forms.CharField(max_length=128, label='设 备 ID ',
-                                widget=forms.TextInput(attrs={'class': 'form-control', 'width': '300px'}),
+                                widget=forms.TextInput(attrs={'class': 'form-control', 'size': '35'}),
                                 help_text='<br>Android：📞*#06# 第一行的那一串数字<br>iOS:第三方登录之后后台可拿到机器码')
 
 

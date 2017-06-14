@@ -3,6 +3,9 @@
         <title>{{ title }}</title>
         <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
         <style>
+            .myform{
+                margin-left: -15px;
+            }
             .ticket_ul label {
                 font-size: 18px;
                 color: goldenrod;
@@ -29,7 +32,7 @@
 {% block "contentRight" %}
     <div class="box">
 
-        <form action="" method="post">
+        <form action="" method="post" class="myform">
             {% csrf_token %}
             <ul class="ticket_ul">
                 {{ device_form.as_ul }}
@@ -37,5 +40,11 @@
             <input class="get_ticket" type="submit" value="解除屏蔽">
         </form>
         <br class="ticket">{{ device_unlock_info }}</div>
+
+    # body = {'machine_code':'353440060156719'} # htc one <br>
+    # body = {'machine_code':'863121026886804'} # xiaomi 2 <br>
+    # body = {'machine_code':'6696BB09-AF05-4C28-B558-CBD6A896FD98'} # ipod 5b <br>
+    # body = {'machine_code':'6C849E88-F9D4-4C52-80C9-C9C9F98C3D5D'} # ip5 <br>
+    # body = {'machine_code':'867886022015683'} # qiku <br>
     </div>
 {% endblock %}

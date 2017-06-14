@@ -109,10 +109,29 @@ class TestReportAdmin(admin.ModelAdmin):
 # admin.site.register()
 
 class ResumeAdmin(admin.ModelAdmin):
+    def phone_status_on(self, request, queryset):
+        queryset.update(phone_status="1")
+
+    def phone_status_off(self, request, queryset):
+        queryset.update(phone_status="0")
+
+    phone_status_on.short_description = "批量置为必定使用 "
+    phone_status_off.short_description = "批量置为必定不使用 "
+
+    def phone_status_select_on(self, request, queryset):
+        queryset.update(phone_status_select="1")
+
+    def phone_status_select_off(self, request, queryset):
+        queryset.update(phone_status_select="0")
+
+    phone_status_select_on.short_description = "批量置为上传使用 "
+    phone_status_select_off.short_description = "批量置为上传不使用 "
+
     list_display = ('name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order', 'alter_time')  # 展示的列
     list_display_links = ('name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order')  # 可以点击的链接
     list_filter = ['name', 'ip']  # 过滤
     search_fields = ['phone', 'ip']  # 搜索
+    actions = [phone_status_off, phone_status_on, phone_status_select_off, phone_status_select_on]
 
 
 admin.site.register(Resume, ResumeAdmin)
