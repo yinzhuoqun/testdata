@@ -24,7 +24,7 @@
 
             }
 
-            .user_info,.ticket {
+            .user_info, .ticket {
                 word-wrap: break-word;
                 word-break: break-all;
             }
@@ -45,6 +45,12 @@
         <p></p>
         <div class="ticket">account id: <br>{{ get_user_info.account_id }}</div>
         <p></p>
-        <div class="user_info">{{ get_user_info.ipinfo }}</div>
+        <div class="charm">魅力值信息 <br>魅力值: {{ get_user_info.charm_values }}, 等级: {{ get_user_info.charm_level }}</div>
+        <p></p>
+        <div class="charm">财富值信息 <br>财富值: {{ get_user_info.wealth_values }}, 等级: {{ get_user_info.wealth_level }}</div>
+        <p></p>
+        <div class="charm">vip 信息 <br>vip 值: {{ get_user_info.vip_values }}, 等级: {{ get_user_info.vip_level }}</div>
+        <p></p>
+        <div class="user_info">其他信息 <br>{{ get_user_info.ipinfo }}</div>
     </div>
 {% endblock %}

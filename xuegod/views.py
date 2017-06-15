@@ -270,7 +270,7 @@ def app_list(request):
             uploadfile_msg = "请选择文件"
             return render(request, "app.html", locals())
         else:
-            if file.name.endswith('.apk'):
+            if file.name.endswith(('.apk', '.json')):
                 destination = open(os.path.join(app_save_path, file.name), 'wb+')
             else:
                 destination = open(os.path.join(img_save_path, file.name), 'wb+')
@@ -318,11 +318,12 @@ def app_list(request):
                         dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
                     else:
                         msg_upload_success = "file: %s\nsize：%s\nIP : %s\nurl: %s" % (
-                        file.name, file_size, ip, url_request)
+                            file.name, file_size, ip, url_request)
                         dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                      atAll="false")
                 else:
-                    msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (file.name, file_size, ip, url_request)
+                    msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (
+                        file.name, file_size, ip, url_request)
                     dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                  atAll="false")
 
@@ -586,13 +587,32 @@ def show_ticket(request):
             hearder = {"username": userid, "password": password}
             if ticket_style == "in":
                 get_user_info = {}
-                try:
-                    get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
-                except Exception as e:
-                    get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
                 get_user_info["ipinfo"] = requests.post(url_login_in, data=hearder).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
+                    try:
+                        get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
+                    except Exception as e:
+                        get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
+                    api_dev_charm = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=1' % \
+                                    get_user_info["account_id"]
+                    api_dev_wealth = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=2' % \
+                                     get_user_info["account_id"]
+                    api_dev_vip = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=3' % \
+                                  get_user_info["account_id"]
+
+                    get_user_info['charm_info'] = requests.get(api_dev_charm).json()
+                    if get_user_info['charm_info']['code'] == 1000:
+                        get_user_info['charm_values'] = get_user_info['charm_info']['data']['current_num']
+                        get_user_info['charm_level'] = get_user_info['charm_info']['data']['current_level']
+                    get_user_info['wealth_info'] = requests.get(api_dev_wealth).json()
+                    if get_user_info['wealth_info']['code'] == 1000:
+                        get_user_info['wealth_values'] = get_user_info['wealth_info']['data']['current_num']
+                        get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
+                    get_user_info['vip_info'] = requests.get(api_dev_vip).json()
+                    if get_user_info['vip_info']['code'] == 1000:
+                        get_user_info['vip_values'] = get_user_info['wealth_info']['data']['current_num']
+                        get_user_info['vip_level'] = get_user_info['wealth_info']['data']['current_level']
 
             else:
                 get_user_info = {}
@@ -602,6 +622,26 @@ def show_ticket(request):
                 if get_user_info["ipinfo"]["code"] == 1000:
                     get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
+
+                    api_idc_charm = 'https://apinyx.l99.com/account/info/rank/info?target_id=%s&rank_type=1' % \
+                                    get_user_info["account_id"]
+                    api_idc_wealth = 'https://apinyx.l99.com/account/info/rank/info?target_id=%s&rank_type=2' % \
+                                     get_user_info["account_id"]
+                    api_idc_vip = 'https://apinyx.l99.com/account/info/rank/info?target_id=%s&rank_type=3' % \
+                                  get_user_info["account_id"]
+
+                    get_user_info['charm_info'] = requests.get(api_idc_charm).json()
+                    if get_user_info['charm_info']['code'] == 1000:
+                        get_user_info['charm_values'] = get_user_info['charm_info']['data']['current_num']
+                        get_user_info['charm_level'] = get_user_info['charm_info']['data']['current_level']
+                    get_user_info['wealth_info'] = requests.get(api_idc_wealth).json()
+                    if get_user_info['wealth_info']['code'] == 1000:
+                        get_user_info['wealth_values'] = get_user_info['wealth_info']['data']['current_num']
+                        get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
+                    get_user_info['vip_info'] = requests.get(api_idc_vip).json()
+                    if get_user_info['vip_info']['code'] == 1000:
+                        get_user_info['vip_values'] = get_user_info['wealth_info']['data']['current_num']
+                        get_user_info['vip_level'] = get_user_info['wealth_info']['data']['current_level']
 
             title = "Ticket %s | TestData" % ticket_style
     else:
