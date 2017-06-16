@@ -19,7 +19,7 @@ import os, time, socket
 import collections  # 有序字典
 # import faker
 # import uuid
-import requests, re, json
+import requests, re, random, json
 from ipware.ip import get_ip
 
 
@@ -463,7 +463,7 @@ def resume(request):
 
 # 读取网页
 def get_html(url, ref=None):
-    import urllib.request, random
+    import urllib.request
     ref = url  # 网页来源
     agent_list = [
         'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
@@ -579,7 +579,7 @@ def show_ticket(request):
             form_data = ticket_form.cleaned_data
             # print(type(form_data), form_data)
             ticket_style = form_data["ticket_style"]
-            userid = form_data["user_name"]
+            userid = form_data["user_name"].strip()
             password = form_data["user_password"]
 
             # userid = "137349027"
@@ -643,6 +643,21 @@ def show_ticket(request):
                         get_user_info['vip_values'] = get_user_info['wealth_info']['data']['current_num']
                         get_user_info['vip_level'] = get_user_info['wealth_info']['data']['current_level']
 
+            if get_user_info["ipinfo"]["code"] == 1000:
+                if "mobile_phone" in get_user_info["ipinfo"]["data"]["user"].keys():
+                    phone = get_user_info["ipinfo"]["data"]["user"]["mobile_phone"]
+                    try:
+                        appcode = 'f832858116c44a348db4f65376e3f46d'
+                        url = 'http://showphone.market.alicloudapi.com/6-1?num=%s' % phone
+                        headers = {'Authorization': 'APPCODE %s' % appcode}
+                        phone_location_info = requests.get(url, headers=headers).json()
+                        location = '%s %s %s' % (phone_location_info["showapi_res_body"]["prov"],
+                                                 phone_location_info["showapi_res_body"]["city"],
+                                                 phone_location_info["showapi_res_body"]["name"])
+                    except Exception as e:
+                        location = re.findall(r"carrier:'(.+?)'", requests.get(
+                            r"http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s" % phone).text)[0]
+
             title = "Ticket %s | TestData" % ticket_style
     else:
         ticket_form = Ticket()
@@ -676,6 +691,13 @@ def device_unlock(request):
 
 
 def register_code(request):
+    agent_list = [
+        'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0']
+    headers = {
+        # 'Referer': '%s' % ref,
+        'User-Agent': '%s' % random.choice(agent_list)
+    }
     # url_api_in = 'http://192.168.2.175:8080/inner/manage/user/untie/device'  # 内网
 
     title = "Register Code | TestData"
@@ -686,7 +708,7 @@ def register_code(request):
             form_data = data_form.cleaned_data
             phone = form_data["phone"]
             url_api_out = 'http://guojia.api.l99.com/cgi-bin/vericode.py?mobilePhone=%s&appid=CS' % phone
-            data = requests.get(url_api_out).text
+            data = requests.get(url_api_out, headers=headers, timeout=3).text
     else:
         data_form = RegisterCode()
 
