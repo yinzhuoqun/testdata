@@ -611,8 +611,8 @@ def show_ticket(request):
                         get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
                     get_user_info['vip_info'] = requests.get(api_dev_vip).json()
                     if get_user_info['vip_info']['code'] == 1000:
-                        get_user_info['vip_values'] = get_user_info['wealth_info']['data']['current_num']
-                        get_user_info['vip_level'] = get_user_info['wealth_info']['data']['current_level']
+                        get_user_info['vip_values'] = get_user_info['vip_info']['data']['current_num']
+                        get_user_info['vip_level'] = get_user_info['vip_info']['data']['current_level']
 
             else:
                 get_user_info = {}
@@ -640,8 +640,8 @@ def show_ticket(request):
                         get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
                     get_user_info['vip_info'] = requests.get(api_idc_vip).json()
                     if get_user_info['vip_info']['code'] == 1000:
-                        get_user_info['vip_values'] = get_user_info['wealth_info']['data']['current_num']
-                        get_user_info['vip_level'] = get_user_info['wealth_info']['data']['current_level']
+                        get_user_info['vip_values'] = get_user_info['vip_info']['data']['current_num']
+                        get_user_info['vip_level'] = get_user_info['vip_info']['data']['current_level']
 
             if get_user_info["ipinfo"]["code"] == 1000:
                 if "mobile_phone" in get_user_info["ipinfo"]["data"]["user"].keys():

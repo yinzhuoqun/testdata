@@ -3,13 +3,35 @@
         <title>{{ title }}</title>
         <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
         <style>
+            .box {
+                position: relative;
+                margin: 0 auto;
+                float: left;
+            }
+
+            .myform {
+                padding-left: -50px;
+            {#                 float: left;#}{#                 position: absolute;#}
+            }
+
+            .box1 {
+                margin-left: 20px;
+                margin-top: 5px;
+                position: absolute;
+            }
+
             .ticket_ul label {
                 font-size: 18px;
                 color: goldenrod;
             }
 
+            .myform {
+                margin-left: -20px;
+            }
+
             ul {
                 list-style: none;
+                margin-left: 0px;
             }
 
             .errorlist {
@@ -28,39 +50,77 @@
                 word-wrap: break-word;
                 word-break: break-all;
             }
+
+            pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
         </style>
+        <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+        <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script>
+
+            function foo(o) {
+                o.size = o.placeholder.length;
+                for (var i = 0; i < o.placeholder.length; i++)
+                    if (o.placeholder.charCodeAt(i) > 256) o.size++;
+            }
+
+        </script>
     </head>
 {% endblock %}
 
 {% block "contentRight" %}
     <div class="box">
-        <form action="" method="post">
+        <form action="" method="post" class="myform">
             {% csrf_token %}
             <ul class="ticket_ul">
                 {{ ticket_form.as_ul }}
             </ul>
             <input class="get_ticket" type="submit" value="获取">
         </form>
-        <div class="ticket"><b>Ticket </b><br>{{ get_user_info.ticket }}</div>
-        <p></p>
-        <div class="ticket"><b>Account ID</b> <br>{{ get_user_info.account_id }}</div>
-        <p></p>
-        <div class="charm"><b>魅力值信息</b><br>魅力值: {{ get_user_info.charm_values }}, 等级: {{ get_user_info.charm_level }}</div>
-        <p></p>
-        <div class="charm"><b>财富值信息</b><br>财富值: {{ get_user_info.wealth_values }}, 等级: {{ get_user_info.wealth_level }}</div>
-        <p></p>
-        <div class="charm"><b>vip 信息</b><br>vip 值: {{ get_user_info.vip_values }}, 等级: {{ get_user_info.vip_level }}</div>
-        <p></p>
-        <FORM METHOD=GET ACTION="http://www.ip138.com:8080/search.asp" name="mobileform" target="_blank">
-            <tr>
-                <td align="center"><b>{{ phone }}</b> 归属地<br><input style="width: 180px;" type="text" name="mobile" size="16"
-                                                             placeholder="{{ location }}">
-                    <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="mobile">
-                </td>
-            </tr>
-        </FORM>
-        <P></P>
-        <div class="user_info"><b>其他信息</b><br>{{ get_user_info.ipinfo }}</div>
-        <p></p>
+        <hr>
+        <div class="box1">
+            {% if get_user_info.ipinfo.code == 1000 %}
+                <div class="ticket"><b>Ticket </b><br>{{ get_user_info.ticket }}</div>
+                <p></p>
+                <div class="ticket"><b>Account ID</b> <br>{{ get_user_info.account_id }}</div>
+                <p></p>
+                <div class="charm"><b>魅力值信息</b><br>魅力值: {{ get_user_info.charm_values }},
+                    等级: {{ get_user_info.charm_level }}</div>
+                <p></p>
+                <div class="charm"><b>财富值信息</b><br>财富值: {{ get_user_info.wealth_values }},
+                    等级: {{ get_user_info.wealth_level }}</div>
+                <p></p>
+                <div class="charm"><b>vip 信息</b><br>vip 值: {{ get_user_info.vip_values }},
+                    等级: {{ get_user_info.vip_level }}
+                </div>
+                <p></p>
+                <FORM METHOD=GET ACTION="http://www.ip138.com:8080/search.asp" name="mobileform" target="_blank">
+                    <tr>
+                        <td align="center"><b>{{ phone }}</b> 归属地<br><input type="text" name="mobile"
+                                                                            size="16"
+                                                                            placeholder="{{ location }}"
+                                                                            onclick="foo(this)">
+                            <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="mobile">
+                        </td>
+                    </tr>
+                </FORM>
+                <P></P>
+            {% endif %}
+            <div class="user_info"><b>其他信息</b><br>
+                <pre id="result"><code>{{ get_user_info.ipinfo }}</code></pre>
+            </div>
+            <p></p>
+        </div>
     </div>
+    <script type="text/javascript">
+        {#        var ResJson = document.getElementById("result").innerText#}
+        {#        var ResJson = $("#result").html();#}
+        {#        JSON.stringify(ResJson, null, 2);    // 缩进4个空格#}
+        var ResJson = $("#result").text(JSON.stringify(ResJson, null, 2));
+
+
+    </script>
 {% endblock %}
