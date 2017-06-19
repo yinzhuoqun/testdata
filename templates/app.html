@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <title>
-        下载文件 | TestData
+        {{ web_title }}
     </title>
     <style>
         * {
@@ -90,7 +90,7 @@
     {#    {{ app_list }}<br>#}
     {#    <h3>下载列表</h3>#}
     <div><img width="auto" src="/static/images/gg.gif" alt="图片加载失败"></div>
-
+    {% if forms_show_status == "1" %}
     <div class="upload">
         {#        accept-charset="utf-8"#}
         <form method='post' action='' enctype="multipart/form-data" id="myForm">
@@ -107,13 +107,14 @@
                 </select> 新测试包下载地址到钉钉群</li>
                  <li><input type='text' name='msg_updata' class="msg_updata" placeholder="发送到钉钉群 包更新的内容，选填"/></li>
                 <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
-                    {#                <span class="upErrMes">{{ uploadfile_mes }}</span></li>#}
-                    <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_mes }}</label></li>
+                    {#                <span class="upErrMes">{{ uploadfile_msg }}</span></li>#}
+                    <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_msg }}</label></li>
                 {#                 onclick="myRefresh()"#}
 
             </ul>
         </form>
     </div>
+    {% endif %}
 
     {#    <a href="/file/test.txt">test</a>#}
 

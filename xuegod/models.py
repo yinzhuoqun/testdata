@@ -166,6 +166,7 @@ class Resume(models.Model):
     phone_status_select = models.CharField(max_length=32, choices=phone_status_choice, default="ON",
                                            verbose_name="上传使用",
                                            help_text="上传文件时，IP 在范围之内才使用")
+    note = models.CharField(max_length=256, blank=True, null=True, verbose_name="备注")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 

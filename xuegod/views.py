@@ -229,6 +229,17 @@ def app_list(request):
     # 按时间倒序排列
     app_dict = sorted(app_dict.items(), key=lambda item: item[1]["app_create_time"], reverse=True)
 
+    # 是否显示上传表单
+    forms_show_status = "1"  # 默认打开
+    forms_show_obj = Resume.objects.filter(ip="0.0.0.0")
+    if forms_show_obj.exists():
+        forms_show_status = forms_show_obj.values("phone_status_select")[0]["phone_status_select"]
+    if forms_show_status == "1":
+        web_title = "上传下载文件 | TestData"
+    else:
+        web_title = "下载文件 | TestData"
+
+
     # token = ''
     # postToken = str(uuid.uuid4())
     # if request.method == "GET":
@@ -270,76 +281,82 @@ def app_list(request):
             uploadfile_msg = "请选择文件"
             return render(request, "app.html", locals())
         else:
-            if file.name.endswith(('.apk', '.json')):
-                destination = open(os.path.join(app_save_path, file.name), 'wb+')
-            else:
-                destination = open(os.path.join(img_save_path, file.name), 'wb+')
-            try:
-                for chunk in file.chunks():
-                    destination.write(chunk)
-                destination.close()
-            except Exception as e:
-                uploadfile_msg = "上传失败，即将跳转..."
-
-            finally:
-                uploadfile_msg = "上传成功，即将跳转..."
-                three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
-                qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
-                csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
-
-                dd_send = request.POST['dd_send']  # 是否发送钉钉消息
-                ip = get_ip(request)
-                url_request = request.get_host()
-                file_size = file.size
-                if file_size > 1024 * 1024:
-                    file_size = "%.2fMB" % (file_size / 1024 / 1024)
+            uploadfile_status = "1"
+            uploadfile_obj = Resume.objects.filter(ip="0.0.0.0")
+            if uploadfile_obj.exists():
+                uploadfile_status = uploadfile_obj.values("phone_status")[0]["phone_status"]
+            if uploadfile_status == "1":
+                if file.name.endswith(('.apk', '.json')):
+                    destination = open(os.path.join(app_save_path, file.name), 'wb+')
                 else:
-                    file_size = "%.2fKB" % (file_size / 1024)
-                if file.name.endswith('.apk') and dd_send == "True":
-                    at_moblies = []
-                    if file.name.find("chuangshang") + file.name.find("l99") >= 0:
-                        ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
-                        # print(ip_use.values("phone", "ip"))
-                        for ip_phone in ip_use.values("phone", "ip"):
-                            at_moblies.append(ip_phone["phone"])
-                        if ip is not None:
-                            ipinfo = Resume.objects.filter(phone_status_select="1", ip=ip)
-                            if ipinfo.exists():
-                                at_moblies.append(ipinfo.values("phone")[0]["phone"])
-                            at_moblies = sorted(set(at_moblies), key=at_moblies.index)
-                        apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
-                        print(apk_url)
-                        msg_updata = request.POST["msg_updata"]
-                        msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
-                        if settings.DEBUG == True:
-                            url_ddbot = three_url_ddbot
-                        else:
-                            url_ddbot = csdev_url_ddbot
-                        dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+                    destination = open(os.path.join(img_save_path, file.name), 'wb+')
+                try:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                    destination.close()
+                except Exception as e:
+                    uploadfile_msg = "上传失败，即将跳转上一页..."
+
+                finally:
+                    uploadfile_msg = "上传成功，即将跳转..."
+                    three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
+                    qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
+                    csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
+
+                    dd_send = request.POST['dd_send']  # 是否发送钉钉消息
+                    ip = get_ip(request)
+                    url_request = request.get_host()
+                    file_size = file.size
+                    if file_size > 1024 * 1024:
+                        file_size = "%.2fMB" % (file_size / 1024 / 1024)
                     else:
-                        msg_upload_success = "file: %s\nsize：%s\nIP : %s\nurl: %s" % (
+                        file_size = "%.2fKB" % (file_size / 1024)
+                    if file.name.endswith('.apk') and dd_send == "True":
+                        at_moblies = []
+                        if file.name.find("chuangshang") + file.name.find("l99") >= 0:
+                            ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
+                            # print(ip_use.values("phone", "ip"))
+                            for ip_phone in ip_use.values("phone", "ip"):
+                                at_moblies.append(ip_phone["phone"])
+                            if ip is not None:
+                                ipinfo = Resume.objects.filter(phone_status_select="1", ip=ip)
+                                if ipinfo.exists():
+                                    at_moblies.append(ipinfo.values("phone")[0]["phone"])
+                                at_moblies = sorted(set(at_moblies), key=at_moblies.index)
+                            apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
+                            # print(apk_url)
+                            msg_updata = request.POST["msg_updata"]
+                            msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
+                            if settings.DEBUG == True:
+                                url_ddbot = three_url_ddbot
+                            else:
+                                url_ddbot = csdev_url_ddbot
+                            dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+                        else:
+                            msg_upload_success = "file: %s\nsize：%s\nIP : %s\nurl: %s" % (
+                                file.name, file_size, ip, url_request)
+                            dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                         atAll="false")
+                    else:
+                        msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (
                             file.name, file_size, ip, url_request)
                         dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                      atAll="false")
-                else:
-                    msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (
-                        file.name, file_size, ip, url_request)
-                    dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
-                                 atAll="false")
 
-            # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
-            # token = str(uuid.uuid4())  # 采用随机数
-            # 在服务端session中添加key认证，避免用户重复提交表单
-            # request.session['postToken'] = "allow"
-            # if "postToken" in request.session:  # keyError
-            #     del request.session['postToken']
-            return render(request, "app_temp.html", locals())
-            # return HttpResponseRedirect("/temp")
-            # else:
-            #     if "postToken" in request.session:  # keyError
-            #         del request.session['postToken']
-            #     return render(request, "app.html", locals())
-
+                # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
+                # token = str(uuid.uuid4())  # 采用随机数
+                # 在服务端session中添加key认证，避免用户重复提交表单
+                # request.session['postToken'] = "allow"
+                # if "postToken" in request.session:  # keyError
+                #     del request.session['postToken']
+                return render(request, "app_temp.html", locals())
+                # return HttpResponseRedirect("/temp")
+                # else:
+                #     if "postToken" in request.session:  # keyError
+                #         del request.session['postToken']
+                #     return render(request, "app.html", locals())
+            else:
+                uploadfile_msg = "管理员禁止上传"
     return render(request, "app.html", locals())
 
 
