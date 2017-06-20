@@ -187,6 +187,22 @@ def dd_text_post(url, msg, atMoblies, atAll="flase"):
     return r.text
 
 
+def ip_location(query_ip):
+    appcode = 'f832858116c44a348db4f65376e3f46d'
+    url = 'http://saip.market.alicloudapi.com/ip?ip=%s' % query_ip
+    headers = {'Authorization': 'APPCODE %s' % appcode}
+    location_info = requests.get(url, headers=headers).json()
+    if location_info["showapi_res_body"]["ret_code"] == 0:
+        location = '%s %s %s %s' % (location_info["showapi_res_body"]["country"],
+                                    location_info["showapi_res_body"]["region"],
+                                    location_info["showapi_res_body"]["city"],
+                                    location_info["showapi_res_body"]["isp"])
+    else:
+        location = "未知地区或局域网"
+
+    return location
+
+
 def app_list(request):
     # print(os.getcwd())
     show_path = r'media/app'
@@ -238,7 +254,6 @@ def app_list(request):
         web_title = "上传下载文件 | TestData"
     else:
         web_title = "下载文件 | TestData"
-
 
     # token = ''
     # postToken = str(uuid.uuid4())
@@ -324,7 +339,6 @@ def app_list(request):
                                     at_moblies.append(ipinfo.values("phone")[0]["phone"])
                                 at_moblies = sorted(set(at_moblies), key=at_moblies.index)
                             apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
-                            # print(apk_url)
                             msg_updata = request.POST["msg_updata"]
                             msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
                             if settings.DEBUG == True:
@@ -333,13 +347,13 @@ def app_list(request):
                                 url_ddbot = csdev_url_ddbot
                             dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
                         else:
-                            msg_upload_success = "file: %s\nsize：%s\nIP : %s\nurl: %s" % (
-                                file.name, file_size, ip, url_request)
+                            msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
+                                file.name, file_size, ip, ip_location(ip), url_request)
                             dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                          atAll="false")
                     else:
-                        msg_upload_success = "File: %s\nSize：%s\nUserIP: %s\nServer: %s" % (
-                            file.name, file_size, ip, url_request)
+                        msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
+                            file.name, file_size, ip, ip_location(ip), url_request)
                         dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
                                      atAll="false")
 
@@ -739,3 +753,8 @@ def user_ip(request):
     dd_text_post(three_url_ddbot, ip, atMoblies=["18679600250"],
                  atAll="false")
     return render(request, "ip.html", locals())
+
+
+def check_password(request):
+    url_login_in = r"http://192.168.2.171:8080/account/basic/login"
+    url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
