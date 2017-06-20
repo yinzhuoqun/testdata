@@ -198,7 +198,7 @@ def ip_location(query_ip):
                                     location_info["showapi_res_body"]["city"],
                                     location_info["showapi_res_body"]["isp"])
     else:
-        location = "未知地区或局域网"
+        location = "局域网或未知区域"
 
     return location
 
