@@ -79,10 +79,12 @@
             color: #808080;
 
         }
-        .msg_updata{
+
+        .msg_updata {
             width: 250px;
         }
-        .app{
+
+        .app {
             margin-bottom: 10px;
         }
 
@@ -94,37 +96,56 @@
     {#    <h3>下载列表</h3>#}
     <div><img width="auto" src="/static/images/gg.gif" alt="图片加载失败"></div>
     {% if forms_show_status == "1" %}
-    <div class="upload">
-        {#        accept-charset="utf-8"#}
-        <form method='post' action='' enctype="multipart/form-data" id="myForm">
-            {#            <form  onsubmit="return submit_sure()"></form>#}
-            {% csrf_token %}
-            <ul>
-                {{ token }}
-                <input type="hidden" name="postToken" value={{ token }}>
-                <li><input type='file' name='file'/></li>
-                <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择"/></li>
-                <li><select name="dd_send">
-                    <option value="True" selected = "selected">发送</option>
-                    <option value="False">不发送</option>
-                </select> 新测试包下载地址到钉钉群</li>
-                 <li><input type='text' name='msg_updata' class="msg_updata" placeholder="发送到钉钉群 包更新的内容，选填"/></li>
-                <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
-                    {#                <span class="upErrMes">{{ uploadfile_msg }}</span></li>#}
-                    <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_msg }}</label></li>
-                {#                 onclick="myRefresh()"#}
+        <div class="upload">
+            {#        accept-charset="utf-8"#}
+            <form method='post' action='' enctype="multipart/form-data" id="myForm">
+                {#            <form  onsubmit="return submit_sure()"></form>#}
+                {% csrf_token %}
+                <ul>
+                    {{ token }}
+                    <input type="hidden" name="postToken" value={{ token }}>
+                    <li><input type='file' name='file'/></li>
+                    <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择"/></li>
+                    {% if form_dd_show == True %}
+                        <li><select name="dd_send" id="dd_send" onchange="dd_button()">
+                            <option value="True" selected="selected">发送</option>
+                            <option value="False">不发送</option>
+                        </select> <span style="color: #8c8c8c;font-size:15px;">新测试包下载地址到DEV钉钉群</span>
+                        </li>
+                        <div id="dd_content">
+                            <li><span style="color: #0d6aad">@:</span>
+                                {% for name in at_names %}
+                                    <span style="color: #0d6aad;font-size:15px;">{{ name.name }}</span>
+                                {% endfor %}
+                                {% for name in at_names_select %}
+                                    <input type="checkbox" value="{{ name.name }}" id="{{ name.name }}"
+                                           class="at_names_select_button" name="at_names_select_button"
+                                           onclick="at_names_select_button_onclick()">
+                                    {#                                    <span name="at_names_select_text" style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span>#}
+                                    <label for="{{ name.name }}"><span class="at_names_select_text"
+                                                                       id="at_names_select_text"
+                                                                       style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span></label>
+                                {% endfor %}
 
-            </ul>
-        </form>
-    </div>
+                            </li>
+                            <li><input type='text' name='msg_updata' class="msg_updata" placeholder="发送到钉钉群 包更新的内容，选填"/>
+                            </li>
+                        </div>
+                    {% endif %}
+                    <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
+                        {#                <span class="upErrMes">{{ uploadfile_msg }}</span></li>#}
+                        <label for="sub" class="upErrMes" id="sub-mes">{{ uploadfile_msg }}</label></li>
+                    {#                 onclick="myRefresh()"#}
+
+                </ul>
+            </form>
+        </div>
     {% endif %}
 
     {#    <a href="/file/test.txt">test</a>#}
 
     <div class="app">
-
         {% for key,value in app_dict %}
-
             <li><a href="/{{ show_path }}/{{ key }}">{{ key }}
                 <span class="appInfo">
                 {% for key1,value1 in value.items %}
@@ -132,11 +153,8 @@
                 {% endfor %}
                 </span>
             </a></li>
-
         {% endfor %}
-
     </div>
-
 
     {#     <div id='mp3_local'>#}
     {#		<audio hidden src="/static/audio/Angelababy-lvluoqun.mp3" autoplay="true" controls></audio>#}
@@ -148,6 +166,33 @@
 </body>
 
 <script type="text/javascript">
+    var at_names_select_button = document.getElementsByClassName("at_names_select_button");
+    {#    console.log(at_names_select_button[0].checked)#}
+    function at_names_select_button_onclick() {
+        var at_names_select_text_name = document.getElementsByClassName("at_names_select_text");
+        {#        console.log(at_names_select_text_name[0])#}
+        for (var i = 0; i < at_names_select_text_name.length; i++) {
+            if (at_names_select_button[i].checked == false) {
+                at_names_select_text_name[i].style.color = "#8c8c8c";
+            } else {
+                at_names_select_text_name[i].style.color = "#0d6aad";
+            }
+        }
+    }
+
+
+    function dd_button() {
+        var dd_send_status = document.getElementById("dd_send");
+        var dd_send_select_index = dd_send_status.selectedIndex;
+        var select_value = dd_send_status.options[dd_send_select_index].value
+{#        console.log(dd_send_select_index);#}
+{#        console.log(dd_send_status.options[dd_send_select_index]);#}
+        if ( select_value == "True") {
+            document.getElementById("dd_content").style.display = "inline";
+        } else if( select_value == "False"){
+            document.getElementById("dd_content").style.display = "none";
+        }
+    }
 
     var lis = document.getElementsByTagName("li");
     for (var i = 0; i < lis.length; i++) {

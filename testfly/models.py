@@ -41,16 +41,16 @@ class TestReport(models.Model):
         # unique_together = (("user_id", "user_password"),)
 
         # app_label = "测试报告"
-    #
-    # def __str__(self):
-    #     if self.test_platform == "1":
-    #         self.test_platform = "Android"
-    #     elif self.test_platform == "2":
-    #         self.test_platform = "iOS"
-    #     else:
-    #         self.test_platform = "other"
-    #
-    #     return "%s %s_v%s" % (self.project_name, self.test_platform, self.test_version)
+        #
+        # def __str__(self):
+        #     if self.test_platform == "1":
+        #         self.test_platform = "Android"
+        #     elif self.test_platform == "2":
+        #         self.test_platform = "iOS"
+        #     else:
+        #         self.test_platform = "other"
+        #
+        #     return "%s %s_v%s" % (self.project_name, self.test_platform, self.test_version)
 
 
 class BugInfo(models.Model):
@@ -68,10 +68,10 @@ class BugInfo(models.Model):
         # 是设置复数形式时显示的名称
         verbose_name_plural = "提交 Bug 统计列表"
 
-    # app_label = "测试报告"
+        # app_label = "测试报告"
 
-    # def __str__(self):
-    #     return "%s %s" % (self.test_platform, self.test_version)
+        # def __str__(self):
+        #     return "%s %s" % (self.test_platform, self.test_version)
 
 
 class BugSurplusInfo(models.Model):
@@ -89,10 +89,10 @@ class BugSurplusInfo(models.Model):
         # 是设置复数形式时显示的名称
         verbose_name_plural = "遗留 Bug 统计列表"
 
-    # app_label = "测试报告"
+        # app_label = "测试报告"
 
-    # def __str__(self):
-    #     return "%s %s" % (self.test_platform, self.test_version)
+        # def __str__(self):
+        #     return "%s %s" % (self.test_platform, self.test_version)
 
 
 class TestParticipants(models.Model):
@@ -106,8 +106,48 @@ class TestParticipants(models.Model):
 
         # 是设置复数形式时显示的名称
         verbose_name_plural = "测试参与人员列表"
+
     #
     #     # app_label = "测试报告"
 
     def __str__(self):
         return self.test_participant
+
+
+class TestDevice(models.Model):
+    device_platfrom_choice = (
+        ("1", "Android"),
+        ('2', 'iOS'),
+        ('0', 'other'),
+    )
+
+    device_show_status_choice = (
+        ("1", "显示"),
+        ("0", "隐藏")
+    )
+
+    device_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
+    device_name = models.CharField(max_length=128, verbose_name="设备名称", help_text="设备的中文名称")
+    device_screen_size = models.CharField(max_length=48, blank=True, null=True, verbose_name="屏幕尺寸",
+                                          help_text="单位：英寸，如：5.5")
+    device_screen_resolution = models.CharField(max_length=48, blank=True, null=True, verbose_name="分辨率",
+                                                help_text="单位：像素，如：1920*1080")
+    device_platfrom = models.CharField(max_length=48, choices=device_platfrom_choice, default="Android",
+                                       verbose_name="系统平台")
+    device_platfrom_version = models.CharField(max_length=48, blank=True, null=True, verbose_name="系统版本",
+                                               help_text="如：4.3")
+    use_name = models.CharField(max_length=128, blank=True, null=True, verbose_name="领用人员",
+                                help_text="如：张三")
+    use_time = models.DateTimeField(auto_now_add=True, verbose_name="领用日期")
+    return_time = models.DateTimeField(blank=True, null=True, verbose_name='归还日期')
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+    device_show_status = models.CharField(max_length=48, choices=device_show_status_choice, default="显示",
+                                          verbose_name="是否显示到网页")
+    note = models.CharField(max_length=256, blank=True, null=True, verbose_name="备注")
+
+    class Meta:
+        verbose_name = "设备借用信息"
+        verbose_name_plural = "设备借用信息列表"
+
+    def __str__(self):
+        return "%s|%s" % (self.use_name, self.device_name)

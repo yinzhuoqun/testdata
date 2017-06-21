@@ -212,14 +212,20 @@ def app_list(request):
     # app_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
     # app_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
     app_path = r"I:\yzq\MyPythonTest\yzqProgram\media\app".replace('\\', '/')
-
+    ip = get_ip(request)
     ip_local = ["192.168.66.55", "169.254.111.198"]
+    form_dd_show = True  #
     if socket.gethostbyname(socket.gethostname()) not in ip_local:
         show_path = r'media/upload'
         app_path = img_save_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
         # app_path = img_save_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
+        form_dd_show = False
+
     else:
         img_save_path = r"I:/91UserData/ScreenCapture"  # 192.168.66.55
+        at_names = Resume.objects.filter(phone_status="1").exclude(ip="0.0.0.0").values("name")
+        at_names_select = Resume.objects.filter(phone_status="0", phone_status_select="1").exclude(ip=ip).values("name")
+
     app_save_path = app_path
     # print(app_save_path)
     # print(img_save_path)
@@ -319,7 +325,7 @@ def app_list(request):
                     csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
 
                     dd_send = request.POST['dd_send']  # 是否发送钉钉消息
-                    ip = get_ip(request)
+                    # ip = get_ip(request)
                     url_request = request.get_host()
                     file_size = file.size
                     if file_size > 1024 * 1024:
@@ -329,6 +335,15 @@ def app_list(request):
                     if file.name.endswith('.apk') and dd_send == "True":
                         at_moblies = []
                         if file.name.find("chuangshang") + file.name.find("l99") >= 0:
+                            at_names_select_enable = request.POST.getlist("at_names_select_button", [])
+                            print(at_names_select_enable, type(at_names_select_enable))
+                            at_names_select = Resume.objects.filter(phone_status="0", phone_status_select="1").exclude(
+                                ip=ip).values("name")
+                            for name in at_names_select_enable:
+                                at_names_select_one = at_names_select.filter(name=name).values("phone")
+                                if at_names_select_one.exists():
+                                    at_moblies.append(at_names_select_one.values("phone")[0]["phone"])
+
                             ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
                             # print(ip_use.values("phone", "ip"))
                             for ip_phone in ip_use.values("phone", "ip"):
@@ -581,8 +596,11 @@ def qqbot_start(request):
 
 def get_ticket(url_ticket, userid, password):
     body_ticket = u'username=%s&password=%s' % (userid, password)  # 床号，密码
+    headers = {
+        "User-Agent": r"com.l99.bed/5.7.1(Android OS 5.0.2,MI 2S)"
+    }
     try:
-        post_info = requests.post(url_ticket, data=body_ticket).text
+        post_info = requests.post(url_ticket, headers=headers, data=body_ticket).text
         p = re.compile(r'ticket":"(.*?)"},"code')
         ticket_list = re.findall(p, post_info)
         # print('ticket =', ticket_list)
@@ -603,6 +621,11 @@ def show_ticket(request):
     url_login_in = r"http://192.168.2.171:8080/account/basic/login"
     url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
 
+    headers = {
+        "User-Agent": r"com.l99.bed/5.7.0(Android OS 5.0.2,MI 2S)",
+
+    }
+
     if request.method == "POST" and request.POST:
         ticket_form = Ticket(request.POST)
         valid = ticket_form.is_valid()  # valid 判断是否有效
@@ -615,10 +638,22 @@ def show_ticket(request):
 
             # userid = "137349027"
             # password = "q1234567"
-            hearder = {"username": userid, "password": password}
+            machine_code_list = ["863121026886804", "867886022015683", "353440060156719"]
+            data_ticket = {
+                "username": userid,
+                "password": password,
+                "machine_code": random.choice(machine_code_list),
+                "local_name": '深圳',
+                "market": "chuangshang_yingyongbao",
+                "client:": "key:BedForAndroid",
+                "version:": "1.0",
+                "lat": "22.541304",
+                "lng": "113.948919",
+
+            }
             if ticket_style == "in":
                 get_user_info = {}
-                get_user_info["ipinfo"] = requests.post(url_login_in, data=hearder).json()
+                get_user_info["ipinfo"] = requests.post(url_login_in, headers=headers, data=data_ticket).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
                     try:
                         get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
@@ -632,7 +667,7 @@ def show_ticket(request):
                     api_dev_vip = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=3' % \
                                   get_user_info["account_id"]
 
-                    get_user_info['charm_info'] = requests.get(api_dev_charm).json()
+                    get_user_info['charm_info'] = requests.get(api_dev_charm, headers=headers).json()
                     if get_user_info['charm_info']['code'] == 1000:
                         get_user_info['charm_values'] = get_user_info['charm_info']['data']['current_num']
                         get_user_info['charm_level'] = get_user_info['charm_info']['data']['current_level']
@@ -649,9 +684,9 @@ def show_ticket(request):
                 get_user_info = {}
                 # get_ticket_info = get_ticket(url_ticket_out, userid, password)  # 公司内网
 
-                get_user_info["ipinfo"] = requests.post(url_login_out, data=hearder).json()
+                get_user_info["ipinfo"] = requests.post(url_login_out, headers=headers, data=data_ticket).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
-                    get_user_info["ticket"] = requests.post(url_ticket_out, data=hearder).json()["data"]["ticket"]
+                    get_user_info["ticket"] = requests.post(url_ticket_out, data=data_ticket).json()["data"]["ticket"]
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
 
                     api_idc_charm = 'https://apinyx.l99.com/account/info/rank/info?target_id=%s&rank_type=1' % \
