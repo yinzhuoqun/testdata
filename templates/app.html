@@ -110,7 +110,22 @@
                         <li><select name="dd_send" id="dd_send" onchange="dd_button()">
                             <option value="True" selected="selected">发送</option>
                             <option value="False">不发送</option>
-                        </select> <span style="color: #8c8c8c;font-size:15px;">新测试包下载地址到DEV钉钉群</span>
+                        </select> <span style="color: #8c8c8c;font-size:15px;">到钉钉群:</span>
+                            {% for group in url_ddbots_use %}
+                                <span style="color: #0d6aad;font-size:15px;">{{ group.url_nickname }}</span>
+                            {% endfor %}
+
+                            {% for group in url_ddbots_select %}
+                                {#                                {{ group.url_nickname }},#}
+                                <input type="checkbox" value="{{ group.url_nickname }}" id="{{ group.url_nickname }}"
+                                       class="url_nickname_select_button" name="url_nickname_select_button"
+                                       onclick="url_nickname_select_button_onclick()">
+                                <label for="{{ group.url_nickname }}">
+                                    <span class="url_nickname_select_text"
+                                          id="url_nickname_select_text"
+                                          style="color: #8c8c8c;font-size:15px;">{{ group.url_nickname }}</span></label>
+
+                            {% endfor %}
                         </li>
                         <div id="dd_content">
                             <li><span style="color: #0d6aad">@:</span>
@@ -180,16 +195,28 @@
         }
     }
 
+     var url_nickname_select_button = document.getElementsByClassName("url_nickname_select_button");
+    function url_nickname_select_button_onclick() {
+        var url_nickname_select_text_name = document.getElementsByClassName("url_nickname_select_text");
+        for (var i = 0; i < url_nickname_select_text_name.length; i++) {
+            if (url_nickname_select_button[i].checked == false) {
+                url_nickname_select_text_name[i].style.color = "#8c8c8c";
+            } else {
+                url_nickname_select_text_name[i].style.color = "#0d6aad";
+            }
+        }
+    }
+
 
     function dd_button() {
         var dd_send_status = document.getElementById("dd_send");
         var dd_send_select_index = dd_send_status.selectedIndex;
         var select_value = dd_send_status.options[dd_send_select_index].value
-{#        console.log(dd_send_select_index);#}
-{#        console.log(dd_send_status.options[dd_send_select_index]);#}
-        if ( select_value == "True") {
+        {#        console.log(dd_send_select_index);#}
+        {#        console.log(dd_send_status.options[dd_send_select_index]);#}
+        if (select_value == "True") {
             document.getElementById("dd_content").style.display = "inline";
-        } else if( select_value == "False"){
+        } else if (select_value == "False") {
             document.getElementById("dd_content").style.display = "none";
         }
     }

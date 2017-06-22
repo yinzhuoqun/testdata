@@ -215,16 +215,33 @@ def app_list(request):
     ip = get_ip(request)
     ip_local = ["192.168.66.55", "169.254.111.198"]
     form_dd_show = True  #
+    url_ddbots_use = [{'url_nickname': ''}]
     if socket.gethostbyname(socket.gethostname()) not in ip_local:
         show_path = r'media/upload'
         app_path = img_save_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
         # app_path = img_save_path = os.path.join(os.path.abspath('.'), show_path).replace('\\', '/')
         form_dd_show = False
-
     else:
         img_save_path = r"I:/91UserData/ScreenCapture"  # 192.168.66.55
         at_names = Resume.objects.filter(phone_status="1").exclude(ip="0.0.0.0").values("name")
         at_names_select = Resume.objects.filter(phone_status="0", phone_status_select="1").exclude(ip=ip).values("name")
+        # url_ddbot = HomePage.objects.filter(url_type="dd").values("url_nickname")
+        url_ddbot = HomePage.objects.filter(url_type="dd").values("url_nickname")
+        if settings.DEBUG == True:
+            url_ddbot_obj = HomePage.objects.filter(url_type="dd", url_status_use="1", id=25).values(
+                "url_nickname")
+            # print(url_ddbot_obj)
+            if url_ddbot_obj.exists():
+                url_ddbots_use = url_ddbot_obj
+
+        else:
+            url_ddbot_obj = HomePage.objects.filter(url_type="dd", url_status_use="1").values("url_nickname")
+            if url_ddbot_obj.exists():
+                url_ddbots_use = url_ddbot_obj
+            url_ddbots_select = HomePage.objects.filter(url_type="dd", url_status="1", url_status_use="0").values(
+                "url_nickname").order_by("url_order")
+            # print(url_ddbots_use)
+            # print(url_ddbots_select)
 
     app_save_path = app_path
     # print(app_save_path)
@@ -303,9 +320,9 @@ def app_list(request):
             return render(request, "app.html", locals())
         else:
             uploadfile_status = "1"
-            uploadfile_obj = Resume.objects.filter(ip="0.0.0.0")
+            uploadfile_obj = Resume.objects.filter(ip="0.0.0.0")  # 从ip为 0.0.0.0 的上传使用状态来判断是否禁止上传文件
             if uploadfile_obj.exists():
-                uploadfile_status = uploadfile_obj.values("phone_status")[0]["phone_status"]
+                uploadfile_status = uploadfile_obj.values("phone_status")[0]["phone_status"]  # 是否禁止上传文件
             if uploadfile_status == "1":
                 if file.name.endswith(('.apk', '.json')):
                     destination = open(os.path.join(app_save_path, file.name), 'wb+')
@@ -321,8 +338,8 @@ def app_list(request):
                 finally:
                     uploadfile_msg = "上传成功，即将跳转..."
                     three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
-                    qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
-                    csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
+                    # qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
+                    # csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
 
                     dd_send = request.POST['dd_send']  # 是否发送钉钉消息
                     # ip = get_ip(request)
@@ -335,8 +352,9 @@ def app_list(request):
                     if file.name.endswith('.apk') and dd_send == "True":
                         at_moblies = []
                         if file.name.find("chuangshang") + file.name.find("l99") >= 0:
+                            # 选择网页添加 @的人
                             at_names_select_enable = request.POST.getlist("at_names_select_button", [])
-                            print(at_names_select_enable, type(at_names_select_enable))
+                            # print(at_names_select_enable, type(at_names_select_enable))
                             at_names_select = Resume.objects.filter(phone_status="0", phone_status_select="1").exclude(
                                 ip=ip).values("name")
                             for name in at_names_select_enable:
@@ -344,6 +362,7 @@ def app_list(request):
                                 if at_names_select_one.exists():
                                     at_moblies.append(at_names_select_one.values("phone")[0]["phone"])
 
+                            # 选择手机使用状态为必定使用的人
                             ip_use = Resume.objects.filter(phone_status="1").order_by('phone_order')
                             # print(ip_use.values("phone", "ip"))
                             for ip_phone in ip_use.values("phone", "ip"):
@@ -352,25 +371,56 @@ def app_list(request):
                                 ipinfo = Resume.objects.filter(phone_status_select="1", ip=ip)
                                 if ipinfo.exists():
                                     at_moblies.append(ipinfo.values("phone")[0]["phone"])
-                                at_moblies = sorted(set(at_moblies), key=at_moblies.index)
+                                at_moblies = sorted(set(at_moblies), key=at_moblies.index)  # @的人去重
                             apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
                             msg_updata = request.POST["msg_updata"]
                             msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
-                            if settings.DEBUG == True:
-                                url_ddbot = three_url_ddbot
-                            else:
-                                url_ddbot = csdev_url_ddbot
-                            dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
+
+                            url_ddbots_select = HomePage.objects.filter(url_type="dd", url_status="1",
+                                                                        url_status_use="0").values("url_nickname")
+                            # print(url_ddbots_select)
+                            url_ddbots_select_name = request.POST.getlist("url_nickname_select_button", [])
+                            # print("url_ddbots_select_name", url_ddbots_select_name)
+
+                            url_ddbots_all = []
+                            for nickname in url_ddbots_select_name:
+                                url_ddbots_select_one = url_ddbots_select.filter(url_nickname=nickname).values(
+                                    "url_nickname")
+                                if url_ddbots_select_one.exists():
+                                    url_ddbots_all.append(url_ddbots_select_one.values("url")[0]["url"])
+                            # print("url_ddbots_all", url_ddbots_all)
+                            # print(url_ddbots_use)
+                            for nickname in url_ddbots_use:
+                                # print("nickname", nickname)
+                                url_ddbots_one = HomePage.objects.filter(url_type="dd", url_status_use="1",
+                                                                         url_nickname=nickname["url_nickname"]).values(
+                                    "url_nickname")
+                                if url_ddbots_one.exists():
+                                    url_ddbots_all.append(url_ddbots_one.values("url")[0]["url"])
+                            url_ddbots_all.append(three_url_ddbot)
+                            # print("url_ddbots_all", url_ddbots_all)
+                            url_ddbots_all = sorted(set(url_ddbots_all), key=url_ddbots_all.index)  # 保持排序去重
+                            # print("url_ddbots_all", url_ddbots_all)
+                            for url_ddbot in url_ddbots_all:
+                                dd_text_post(url_ddbot, msg_upload_success, atMoblies=at_moblies, atAll="false")
                         else:
                             msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                                 file.name, file_size, ip, ip_location(ip), url_request)
-                            dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
-                                         atAll="false")
+
+                            url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                            if url_ddbot_obj.exists():
+                                my_url_ddbot = url_ddbot_obj[0]["url"]
+                                dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                             atAll="false")
                     else:
                         msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                             file.name, file_size, ip, ip_location(ip), url_request)
-                        dd_text_post(three_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
-                                     atAll="false")
+
+                        url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                        if url_ddbot_obj.exists():
+                            my_url_ddbot = url_ddbot_obj[0]["url"]
+                            dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                         atAll="false")
 
                 # 表单POST提交成功，重置服务端中存在的Token值，避免重复提交
                 # token = str(uuid.uuid4())  # 采用随机数
@@ -732,7 +782,7 @@ def show_ticket(request):
 
 
 def device_unlock(request):
-    url_api_in = 'http://192.168.2.175:8080/inner/manage/user/untie/device'  # 内网
+    url_api_in = 'http://192.168.2.171:8080/inner/manage/user/untie/device'  # 内网
     url_api_out = 'http://192.168.199.126:8080/inner/manage/user/untie/device'  # 外网
 
     if request.method == "POST" and request.POST:

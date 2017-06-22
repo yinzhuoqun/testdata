@@ -189,11 +189,14 @@ class HomePage(models.Model):
     )
 
     url = models.CharField(max_length=256, verbose_name="网址")
-    url_name = models.CharField(max_length=256, verbose_name="网址名称")
+    url_name = models.CharField(max_length=256, verbose_name="显示名称")
+    url_nickname = models.CharField(max_length=256, blank=True, null=True, verbose_name="简短名称")
     url_type = models.CharField(max_length=32, default="other", verbose_name="类型", help_text="自定义类型，方便区分")
     url_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
     url_status = models.CharField(max_length=32, choices=url_status_choice, default="ON", verbose_name="显示状态",
                                   help_text="是否显示到网站")
+    url_status_use = models.CharField(max_length=32, choices=url_status_choice, default="OFF", verbose_name="使用状态",
+                                  help_text="钉钉群链接定制")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 

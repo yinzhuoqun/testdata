@@ -127,8 +127,10 @@ class ResumeAdmin(admin.ModelAdmin):
     phone_status_select_on.short_description = "批量置为上传使用 "
     phone_status_select_off.short_description = "批量置为上传不使用 "
 
-    list_display = ('id', 'name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order', 'note', 'alter_time')  # 展示的列
-    list_display_links = ('id', 'name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'note', 'phone_order')  # 可以点击的链接
+    list_display = (
+        'id', 'name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'phone_order', 'note', 'alter_time')  # 展示的列
+    list_display_links = (
+        'id', 'name', 'phone', 'ip', 'phone_status', 'phone_status_select', 'note', 'phone_order')  # 可以点击的链接
     list_filter = ['name', 'ip']  # 过滤
     search_fields = ['phone', 'ip']  # 搜索
     actions = [phone_status_off, phone_status_on, phone_status_select_off, phone_status_select_on]
@@ -150,8 +152,10 @@ make_homepage_url_status_off.short_description = "批量置为隐藏 "
 
 
 class HomePageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'url_name', 'url', 'url_status', 'url_type', 'url_order', 'create_time')  # 展示的列
-    list_display_links = ('id', 'url_name', 'url', 'url_status', 'url_type', 'url_order')  # 可以点击的链接
+    list_display = ('id', 'url_name', 'url_nickname', 'url', 'url_status', 'url_status_use', 'url_type', 'url_order',
+                    'create_time')  # 展示的列
+    list_display_links = (
+        'id', 'url_name', 'url_nickname', 'url', 'url_status', 'url_status_use', 'url_type', 'url_order')  # 可以点击的链接
     list_filter = ['url_status', 'url_type']  # 过滤
     search_fields = ['url_name']  # 搜索
     actions = [make_homepage_url_status_on, make_homepage_url_status_off]  # 批量操作
