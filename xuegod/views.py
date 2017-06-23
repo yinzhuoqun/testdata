@@ -337,7 +337,7 @@ def app_list(request):
 
                 finally:
                     uploadfile_msg = "上传成功，即将跳转..."
-                    three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
+                    # three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
                     # qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
                     # csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
 
@@ -351,7 +351,7 @@ def app_list(request):
                         file_size = "%.2fKB" % (file_size / 1024)
                     if file.name.endswith('.apk') and dd_send == "True":
                         at_moblies = []
-                        if file.name.find("chuangshang") + file.name.find("l99") >= 0:
+                        if file.name.find("chuangshang") + file.name.find("l99") > -2:
                             # 选择网页添加 @的人
                             at_names_select_enable = request.POST.getlist("at_names_select_button", [])
                             # print(at_names_select_enable, type(at_names_select_enable))
@@ -397,8 +397,17 @@ def app_list(request):
                                     "url_nickname")
                                 if url_ddbots_one.exists():
                                     url_ddbots_all.append(url_ddbots_one.values("url")[0]["url"])
-                            url_ddbots_all.append(three_url_ddbot)
+                            # url_ddbots_all.append(three_url_ddbot)
                             # print("url_ddbots_all", url_ddbots_all)
+                            if len(url_ddbots_all) == 0:
+                                # msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
+                                #     file.name, file_size, ip, ip_location(ip), url_request)
+                                url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                                if url_ddbot_obj.exists():
+                                    my_url_ddbot = url_ddbot_obj[0]["url"]
+                                    dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
+                                                 atAll="false")
+
                             url_ddbots_all = sorted(set(url_ddbots_all), key=url_ddbots_all.index)  # 保持排序去重
                             # print("url_ddbots_all", url_ddbots_all)
                             for url_ddbot in url_ddbots_all:
@@ -406,7 +415,6 @@ def app_list(request):
                         else:
                             msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                                 file.name, file_size, ip, ip_location(ip), url_request)
-
                             url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
                             if url_ddbot_obj.exists():
                                 my_url_ddbot = url_ddbot_obj[0]["url"]
