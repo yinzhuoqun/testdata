@@ -214,6 +214,7 @@ def app_list(request):
     app_path = r"I:\yzq\MyPythonTest\yzqProgram\media\app".replace('\\', '/')
     ip = get_ip(request)
     ip_local = ["192.168.66.55", "169.254.111.198"]
+    # ip_local = []  # test
     form_dd_show = True  #
     url_ddbots_use = [{'url_nickname': ''}]
     if socket.gethostbyname(socket.gethostname()) not in ip_local:
@@ -228,7 +229,7 @@ def app_list(request):
         # url_ddbot = HomePage.objects.filter(url_type="dd").values("url_nickname")
         url_ddbot = HomePage.objects.filter(url_type="dd").values("url_nickname")
         if settings.DEBUG == True:
-            url_ddbot_obj = HomePage.objects.filter(url_type="dd", url_status_use="1", id=25).values(
+            url_ddbot_obj = HomePage.objects.filter(url_type="dd", url_status_use="1", id=29).values(
                 "url_nickname")
             # print(url_ddbot_obj)
             if url_ddbot_obj.exists():
@@ -246,9 +247,10 @@ def app_list(request):
     app_save_path = app_path
     # print(app_save_path)
     # print(img_save_path)
-    app_list = os.listdir(app_path)
-    app_dict = {}
+    app_list = [name for name in os.listdir(app_path) if os.path.isfile(os.path.join(app_path, name))]  # 不包含文件夹
+    # app_list = os.listdir(app_path)  # 包含文件夹
 
+    app_dict = {}
     for app in app_list:
         # app_info_dict = {} # 无序字典
         app_info_dict = collections.OrderedDict()  # 有序字典, 需要导入 collections
@@ -340,8 +342,21 @@ def app_list(request):
                     # three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
                     # qa_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=09d43b3b9fcb66e962a1c7bad06401ab831439c7809f12b511159c6ca2e15a11"
                     # csdev_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=400e0e7bb9cca3ca33c086d24c7ead6a07929bf1cfa724d9a48fdff48fb93f53"
+                    # print(dir(request.POST))
+                    # ['__class__', '__contains__', '__copy__', '__deepcopy__', '__delattr__', '__delitem__', '__dict__',
+                    #  '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__',
+                    #  '__getstate__', '__gt__', '__hash__', '__init__', '__iter__', '__le__', '__len__', '__lt__',
+                    #  '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
+                    #  '__setitem__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
+                    #  '_assert_mutable', '_encoding', '_iteritems', '_iterlists', '_itervalues', '_mutable',
+                    #  'appendlist', 'clear', 'copy', 'dict', 'encoding', 'fromkeys', 'get', 'getlist', 'items', 'keys',
+                    #  'lists', 'pop', 'popitem', 'setdefault', 'setlist', 'setlistdefault', 'update', 'urlencode',
+                    #  'values']
 
-                    dd_send = request.POST['dd_send']  # 是否发送钉钉消息
+                    if request.POST.get("dd_send", None):
+                        dd_send = request.POST['dd_send']  # 是否发送钉钉群消息
+                    else:
+                        dd_send = "False"  # 是否发送钉钉群消息
                     # ip = get_ip(request)
                     url_request = request.get_host()
                     file_size = file.size
@@ -373,7 +388,7 @@ def app_list(request):
                                     at_moblies.append(ipinfo.values("phone")[0]["phone"])
                                 at_moblies = sorted(set(at_moblies), key=at_moblies.index)  # @的人去重
                             apk_url = "http://%s/%s/%s" % (url_request, show_path, file.name)
-                            msg_updata = request.POST["msg_updata"]
+                            msg_updata = request.POST.get("msg_updata", None)
                             msg_upload_success = "Android 有新包啦：%s\n%s" % (apk_url, msg_updata)
 
                             url_ddbots_select = HomePage.objects.filter(url_type="dd", url_status="1",
@@ -402,7 +417,7 @@ def app_list(request):
                             if len(url_ddbots_all) == 0:
                                 # msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                                 #     file.name, file_size, ip, ip_location(ip), url_request)
-                                url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                                url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=29).values("url")
                                 if url_ddbot_obj.exists():
                                     my_url_ddbot = url_ddbot_obj[0]["url"]
                                     dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
@@ -415,7 +430,7 @@ def app_list(request):
                         else:
                             msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                                 file.name, file_size, ip, ip_location(ip), url_request)
-                            url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                            url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=29).values("url")
                             if url_ddbot_obj.exists():
                                 my_url_ddbot = url_ddbot_obj[0]["url"]
                                 dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
@@ -424,7 +439,7 @@ def app_list(request):
                         msg_upload_success = "File: %s\nSize：%s\nUserIP: %s（%s）\nServer: %s" % (
                             file.name, file_size, ip, ip_location(ip), url_request)
 
-                        url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=25).values("url")
+                        url_ddbot_obj = HomePage.objects.filter(url_type="dd", id=29).values("url")
                         if url_ddbot_obj.exists():
                             my_url_ddbot = url_ddbot_obj[0]["url"]
                             dd_text_post(my_url_ddbot, msg_upload_success, atMoblies=["18679600250"],
