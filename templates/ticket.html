@@ -1,73 +1,91 @@
 {% block "style" %}
-    <head xmlns="http://www.w3.org/1999/html">
-        <title>{{ title }}</title>
-        <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
-        <style>
-            .box {
-                position: relative;
-                margin: 0 auto;
-                float: left;
-            }
+    <title>{{ title }}</title>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <style>
+        .box {
+            position: relative;
+            margin: 0 auto;
+            float: left;
+        }
 
-            .myform {
-                padding-left: -50px;
-            {#                 float: left;#}{#                 position: absolute;#}
-            }
+        .myform {
+            padding-left: -50px;
+        {#                 float: left;#}{#                 position: absolute;#}
+        }
 
-            .box1 {
-                margin-left: 20px;
-                margin-top: 5px;
-                position: absolute;
-            }
+        .box1 {
+            margin-left: 20px;
+            margin-top: 5px;
+            position: absolute;
+        }
 
-            .ticket_ul label {
-                font-size: 18px;
-                color: goldenrod;
-            }
+        .ticket_ul label {
+            font-size: 18px;
+            color: goldenrod;
+        }
 
-            .myform {
-                margin-left: -20px;
-            }
+        .myform {
+            margin-left: -20px;
+        }
 
-            ul {
-                list-style: none;
-                margin-left: 0px;
-            }
+        ul {
+            list-style: none;
+            margin-left: 0px;
+        }
 
-            .errorlist {
-                color: red;
-                font-size: xx-small;
-            }
+        .errorlist {
+            color: red;
+            font-size: xx-small;
+        }
 
-            .get_ticket {
-                margin-left: 120px;
-                height: 30px;
-                width: 173px;
+        .get_ticket {
+            margin-left: 120px;
+            height: 30px;
+            width: 173px;
 
-            }
+        }
 
-            .user_info, .ticket {
-                word-wrap: break-word;
-                word-break: break-all;
-            }
+        .user_info, .ticket {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
 
-            pre {
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-        </style>
-        <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
-        <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-        <script>
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
 
-            function foo(o) {
-                o.size = o.placeholder.length;
-                for (var i = 0; i < o.placeholder.length; i++)
-                    if (o.placeholder.charCodeAt(i) > 256) o.size++;
-            }
+        .copy-tips {
+            position: fixed;
+            z-index: 999;
+            bottom: 50%;
+            left: 50%;
+            margin: 0 0 -20px -80px;
+            background-color: rgba(0, 0, 0, 0.2);
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#30000000, endColorstr=#30000000);
+            padding: 6px;
+        }
 
-        </script>
+        .copy-tips-wrap {
+            padding: 10px 20px;
+            text-align: center;
+            border: 1px solid #F4D9A6;
+            background-color: #FFFDEE;
+            font-size: 14px;
+        }
+    </style>
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+
+        function foo(o) {
+            o.size = o.placeholder.length;
+            for (var i = 0; i < o.placeholder.length; i++)
+                if (o.placeholder.charCodeAt(i) > 256) o.size++;
+        }
+
+    </script>
     </head>
 {% endblock %}
 

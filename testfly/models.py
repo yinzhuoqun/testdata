@@ -136,11 +136,14 @@ class TestDevice(models.Model):
                                        verbose_name="系统平台")
     device_platfrom_version = models.CharField(max_length=48, blank=True, null=True, verbose_name="系统版本",
                                                help_text="如：4.3")
+    device_machine_code = models.CharField(max_length=128, blank=True, null=True, verbose_name="机器码",
+                                               help_text="如有两个MEID，选最上面的")
     use_name = models.CharField(max_length=128, blank=True, null=True, verbose_name="领用人员",
                                 help_text="如：张三")
-    use_time = models.DateTimeField(auto_now_add=True, verbose_name="领用日期")
+    use_time = models.DateTimeField(blank=True, null=True, verbose_name='领用日期')
     return_time = models.DateTimeField(blank=True, null=True, verbose_name='归还日期')
-    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+    add_time = models.DateTimeField(auto_now_add=True, verbose_name="添加日期")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='变更日期')
     device_show_status = models.CharField(max_length=48, choices=device_show_status_choice, default="显示",
                                           verbose_name="是否显示到网页")
     note = models.CharField(max_length=256, blank=True, null=True, verbose_name="备注")

@@ -46,8 +46,8 @@ admin.site.register(TestReport, TestReportAdmin)
 class TestDeviceAdmin(admin.ModelAdmin):
     list_display = list_display_links = (
         "id", "device_order", "device_name", "device_screen_size", "device_screen_resolution",
-        "device_platfrom", "device_platfrom_version", "use_name", "use_time", "return_time",
-        "alter_time", "device_show_status", "note"
+        "device_platfrom", "device_platfrom_version", "device_machine_code", "use_name", "use_time", "return_time",
+        "alter_time", "note", "device_show_status",
     )
     list_filter = ["device_platfrom", "device_platfrom_version", "use_name"]  # 过滤
     search_fields = ["use_name", "device_name"]
