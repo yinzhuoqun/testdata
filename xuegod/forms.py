@@ -41,8 +41,8 @@ class Login(forms.Form):
 
 class Ticket(forms.Form):
     ticket_type = (
-        ("out", "外网"),
         ('in', '内网'),
+        ("out", "外网"),
     )
     ticket_style = forms.CharField(max_length=32, label='获取模式',
                                    widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
