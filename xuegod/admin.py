@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django.utils.html import format_html
 
 # Register your models here.
 from django.apps import AppConfig
@@ -15,9 +16,22 @@ class MultiDBModelAdmin(admin.ModelAdmin):
     list_filter = ['user_flag']  # 过滤器
     search_fields = ['user_id']  # 搜索框
     list_display_links = ('id', 'user_id', 'user_password')
+    list_max_show_all = 20
+    list_per_page = 25
+
+    # def width_id(self):
+    #     return format_html('<span style="width:275px;">{}</span>',
+    #                        self.user_id,
+    #                        # self.first_name,
+    #                        # self.last_name,
+    #                        )
+    #
+    # width_id.allow_tags = True
+
 
     def save_model(self, request, obj, form, change):
         # Tell Django to save objects to the 'other' database.
+        # obj.user = request.user
         obj.save(using=self.using)
 
     def delete_model(self, request, obj):
@@ -162,3 +176,26 @@ class HomePageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(HomePage, HomePageAdmin)
+
+
+class IndexNavInline(admin.StackedInline):
+    model = IndexNav  # 模型名称
+    extra = 1  # 默认数量
+
+
+class IndexNavAdmin(admin.ModelAdmin):
+    list_display = list_display_links = (
+    'url', 'fullname', 'nickname', 'url_type', 'order', 'show_status', 'create_time')
+
+
+class IndexTypeAdmin(admin.ModelAdmin):
+    list_display = list_display_links = ('url_type',)
+    inlines = [IndexNavInline, ]
+
+
+class IndexTypeAdmin(admin.ModelAdmin):
+    list_display = list_display_links = ('id', 'url_type', 'create_time', 'alter_time')
+
+# admin.site.register(IndexType, IndexTypeAdmin)
+admin.site.register(IndexType, IndexTypeAdmin)
+admin.site.register(IndexNav, IndexNavAdmin)

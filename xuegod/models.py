@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-
 # from django.utils.html import format_html
 # from django import forms
 
@@ -20,7 +19,7 @@ class TestId(models.Model):
         ('0', '内网'),
     )
 
-    user_id = models.IntegerField(verbose_name="账号")  # 整形
+    user_id = models.IntegerField(unique=True, verbose_name="账号")  # 整形
     user_password = models.CharField(max_length=16, verbose_name="密码")
     # user_note = models.CharField(blank=True, max_length=32)  # 选填
     user_note = models.CharField(null=True, blank=True, max_length=32, verbose_name="备注")
@@ -206,3 +205,44 @@ class HomePage(models.Model):
 
     def __str__(self):
         return "%s" % self.url_name
+
+
+class IndexType(models.Model):
+    url_type = models.CharField(max_length=32, default="other", verbose_name="类型", help_text="自定义类型，方便区分")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "导航类型"
+        verbose_name_plural = "导航类型列表"
+
+    def __str__(self):
+        return "%s" % self.url_type
+
+class IndexNav(models.Model):
+    status_choice = (
+        ("1", "ON"),
+        ('0', 'OFF'),
+    )
+
+    url = models.CharField(max_length=256, verbose_name="网址")
+    fullname = models.CharField(max_length=256, verbose_name="显示名称")
+    nickname = models.CharField(max_length=256, blank=True, null=True, verbose_name="简短名称")
+    url_type = models.ForeignKey('IndexType', related_name='type_set', verbose_name="分类")
+    order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
+    show_status = models.BooleanField(max_length=32, default=True, verbose_name="显示状态",
+                                  help_text="是否显示到网站")
+    # select_status = models.BooleanField(max_length=32, default=False, verbose_name="选择使用",
+    #                                  help_text="钉钉群链接定制")
+    # use_status = models.BooleanField(max_length=32, default=False, verbose_name="必定使用",
+    #                               help_text="钉钉群链接定制")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "首页导航"
+        verbose_name_plural = "首页导航列表"
+
+    def __str__(self):
+        return "%s" % self.fullname
+

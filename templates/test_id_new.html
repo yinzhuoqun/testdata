@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <!-- 适应手机 -->
-	<meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <meta name="viewport" content="initial-scale=1, user-sccalable=0, minimal-ui">
     <title>
         测试账号 | TestData
     </title>
     <style>
-        table{
+        table {
             font-size: 12px;
             font-family: 微软雅黑;
             text-align: left;
             border: 0px;
-
         }
-         a:link,a:visited{
-            text-decoration:none;  /*超链接无下划线*/
+
+        a:link, a:visited {
+            text-decoration: none; /*超链接无下划线*/
             color: darkgreen;
-          }
-        a:hover{
-            text-decoration:underline;  /*鼠标放上去有下划线*/
+        }
+
+        a:hover {
+            text-decoration: underline; /*鼠标放上去有下划线*/
             color: #0000FF;
         }
-        .trme{
+
+        .trme {
             font-size: 15px;
         }
 
-        th,td{
-            background-color: #ffffff ;
+        th, td {
+            background-color: #ffffff;
         }
 
+        #check_id, #check_id1 {
+            width: 25px;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -43,22 +49,28 @@
         <th>密码</th>
         <th>备注</th>
         <th>环境</th>
-        <th>创建时间</th>
+        {#        <th>创建时间</th>#}
+        <th>密码检测</th>
     </tr>
     {% for d in data %}
-    <div class="trbg">
-    <tr>
-        <td>{{ d.id }}</td>
-        <td>{{ d.user_id }}</td>
-        <td>{{ d.user_password }}</td>
-        <td>{{ d.user_note }}</td>
-        <td>内网</td>
-        <td>{{ d.user_data_joined }}</td>
-    </tr>
-    </div>
+        <div class="trbg">
+            <tr>
+                <form method='post' action='' enctype="multipart/form-data" id="myForm">
+                    {% csrf_token %}
+                    {#                    <td>{{ d.id }}</td>#}
+                    <td><input type="text" name="check_id" id="check_id" value="{{ d.id }}" readonly></td>
+                    <td>{{ d.user_id }}</td>
+                    <td>{{ d.user_password }}</td>
+                    <td>{{ d.user_note }}</td>
+                    <td>内网</td>
+                    {#        <td>{{ d.user_data_joined }}</td>#}
+                    <td><input type="submit" value="检测"></td>
+                </form>
+            </tr>
+        </div>
     {% endfor %}
-    </table>
-    <p></p>
+</table>
+<p></p>
 <table cellspacing="5">
     <h4 style="width: 100px"><a id="out" href="#in" title="点击跳转内网账号">→外网账号</a></h4>
     <tr class="trme">
@@ -67,33 +79,39 @@
         <th>密码</th>
         <th>备注</th>
         <th>环境</th>
-        <th>创建时间</th>
+        {#        <th>创建时间</th>#}
+        <th>密码检测</th>
     </tr>
     {% for d1 in data1 %}
-    <div class="trbg">
-    <tr>
-        <td>{{ d1.id }}</td>
-        <td>{{ d1.user_id }}</td>
-        <td>{{ d1.user_password }}</td>
-        <td>{{ d1.user_note }}</td>
-        <td>外网</td>
-        <td>{{ d1.user_data_joined }}</td>
-    </tr>
-    </div>
+        <div class="trbg">
+            <tr>
+                <form method='post' action='' enctype="multipart/form-data" id="myForm1">
+                    {% csrf_token %}
+                    {#                <td>{{ d1.id }}</td>#}
+                    <td><input type="text" name="check_id" id="check_id1" value="{{ d1.id }}" readonly></td>
+                    <td>{{ d1.user_id }}</td>
+                    <td>{{ d1.user_password }}</td>
+                    <td>{{ d1.user_note }}</td>
+                    <td>外网</td>
+                    {#        <td>{{ d1.user_data_joined }}</td>#}
+                    <td><input type="submit" value="检测"></td>
+                </form>
+            </tr>
+        </div>
     {% endfor %}
 </table>
 <p></p>
 
 <script>
 
-{#    var lis = document.getElementsByTagName("tr");#}
-{#    var lis = document.getElementsByClassName("trbg");#}
-{#    alert(lis.length)#}
-{#    for(var i=0;i<lis.length;i++){#}
-{#        if(i%2==0){#}
-{#            lis[i].style.backgroundColor="#F5F5F5";#}
-{#        }#}
-{#    }#}
+    {#    var lis = document.getElementsByTagName("tr");#}
+    {#    var lis = document.getElementsByClassName("trbg");#}
+    {#    alert(lis.length)#}
+    {#    for(var i=0;i<lis.length;i++){#}
+    {#        if(i%2==0){#}
+    {#            lis[i].style.backgroundColor="#F5F5F5";#}
+    {#        }#}
+    {#    }#}
 
 </script>
 </body>

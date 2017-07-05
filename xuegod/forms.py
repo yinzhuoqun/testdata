@@ -4,6 +4,8 @@ __author__ = 'yinzhuoqun'
 
 from django import forms
 import re
+from xuegod.models import *
+from testfly.models import TestDevice
 
 
 class Login(forms.Form):
@@ -47,7 +49,7 @@ class Ticket(forms.Form):
     ticket_style = forms.CharField(max_length=32, label='获取模式',
                                    widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
     user_name = forms.CharField(max_length=32, label='用户账号',
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                widget=forms.TextInput(attrs={'class': 'form-control'}), help_text="龙号")
     user_password = forms.CharField(max_length=32, label='登陆密码',
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
 
@@ -60,8 +62,15 @@ class DeviceId(forms.Form):
     api_model = forms.CharField(max_length=128, label='获取模式',
                                 widget=forms.Select(choices=api_type, attrs={'class': 'form-control'}))
     device_id = forms.CharField(max_length=128, label='设 备 ID ',
-                                widget=forms.TextInput(attrs={'class': 'form-control', 'size': '35'}),
-                                help_text='<br>Android：📞*#06# 第一行的那一串数字<br>iOS:第三方登录之后后台可拿到机器码')
+                                widget=forms.Select(attrs={'class': 'form-control'}),  # 'size': '35'
+                                help_text='<br>Android：📞*#06# 第一行的那一串数字<br>iOS:第三方登录后台可拿到机器码<br>'
+                                          '如无机器名称，请到后台添加机器码')
+
+    def __init__(self, *args, **kwargs):
+        super(DeviceId, self).__init__(*args, **kwargs)
+        # print(TestDevice.objects.filter(pk=30).values_list('device_machine_code', 'device_name'))
+        self.fields['device_id'].widget.choices = TestDevice.objects.exclude(device_machine_code=None).values_list('device_machine_code',
+                                                                                               'device_name')
 
 
 class RegisterCode(forms.Form):

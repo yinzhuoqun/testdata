@@ -79,17 +79,25 @@
             text-align: left;
         {#            margin-left: 14px;#}
         }
-        .imgs{
+        .img_text,.imgs{
             position: absolute;
             margin-top: 250px;
             float: left;
             text-align: left;
         }
+        .imgs{
+            margin-top: 275px;
+        }
         img {
             max-width: 100%;
             height: auto;
             width: auto;
+            padding-top: 5px;
         }
+        .apk_url,.channel_url,.readme,.img_text{
+            margin-left: 15px;
+        }
+
 
     </style>
 </head>
@@ -106,11 +114,13 @@
     <div class="updatetime"></div>
     <div class="apk_url">下载：<a id="apk_url" href="">点我下载</a></div>
     <div class="channel_url">渠道：<a id="channel_url" href="">点我跳转</a></div>
-    <div class="readme">说明：<br><span id="readme"></span></div>
-    <div class="imgs">图片：<br><img src="" id="img"></div>
+    <div class="readme">更新：<br><span id="readme"></span></div>
+    <div class="img_text">图片：<br></div>
+{#    <div class="imgs"><img src="" id="img"></div>#}
+    <div class="imgs"></div>
 </div>
 <script>
-    var myurl = "http://192.168.66.55/appinfo";
+    var myurl = "/appinfo";
     $.ajax({
         url: myurl,
         data: "",
@@ -118,25 +128,27 @@
         dataType: "json",
         success: function (data) {
 {#            console.log(data);#}
-            if (data != "") {
-                $("#icon").attr("src", data.apk_icon_url);
-                $(".name").html(data.apk_name);
-                $(".size").html(data.apk_size);
-                $(".version").html("版本：" + data.apk_version);
-                $(".updatetime").html("更新：" + data.apk_updatetime);
-                $("#apk_url").attr("href", data.apk_url);
-                $("#channel_url").attr("href", data.apk_channel_url);
-                $.each(data.apk_update_readme, function (i, item) {
-                    $("#readme").append("&nbsp;&nbsp;&nbsp;&nbsp;" + item + ";<br>")
+            if (data.status_code==1000) {
+                $("#icon").attr("src", data.data.apk_icon_url);
+                $(".name").html(data.data.apk_name);
+                $(".size").html(data.data.apk_size);
+                $(".version").html("版本：" + data.data.apk_version);
+                $(".updatetime").html("更新：" + data.data.apk_updatetime);
+                $("#apk_url").attr("href", data.data.apk_url);
+                $("#channel_url").attr("href", data.data.apk_channel_url);
+                $.each(data.data.apk_update_readme, function (i, item) {
+                    $("#readme").append("&nbsp;&nbsp;&nbsp;&nbsp;" + item + "<br>")
                 });
-                 $.each(data.apk_imgs, function (i, item) {
-                    $("#img").append().attr("src",item)
+                $.each(data.data.apk_imgs, function (i, item) {
+                     $(".imgs").html( "<img src="+ item + ">");
+
+{#                    $("#img").append().attr("src",item)#}
                 });
 
             }
         },
         error: function (data) {
-            console.log(data);
+            console.log(data.data.msg);
         }
     })
     ;

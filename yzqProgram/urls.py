@@ -54,7 +54,7 @@ urlpatterns = [
 
     url(r'^tk/', show_ticket),
     url(r'^appinfo/', app_info),
-    url(r'^showappinfo/', show_appinfo),
+    url(r'^sapp/', show_appinfo),
     url(r'^ud/', device_unlock),
     url(r'^gc/', register_code),
 

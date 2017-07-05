@@ -97,6 +97,117 @@ def testid(request):
 
 
 def show_testid(request):
+    url_login_in = r"http://192.168.2.171:8080/account/basic/login"
+    url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
+
+    headers = {
+        "User-Agent": r"com.l99.bed/5.7.1(Android OS 5.0.2,MI 2S)"
+    }
+
+    proxies = {
+        "http": "192.168.66.51:80",
+    }
+    machine_code_list = ["863121026886804", "867886022015683", "353440060156719"]
+
+    data_ticket = {
+        # "username": userid,
+        # "password": password,
+        "machine_code": random.choice(machine_code_list),
+        "local_name": '深圳',
+        "market": "chuangshang_yingyongbao",
+        "client:": "key:BedForAndroid",
+        "version:": "1.0",
+        "lat": "22.541304",
+        "lng": "113.948919",
+
+    }
+
+    # data = TestId.objects.using('alimysql').filter(user_flag=0)  # filter 列表 0是内网 1是外网
+    # data1 = TestId.objects.using('alimysql').filter(user_flag=1)  # 外网
+    # for field in data1:
+    #     data_ticket['username'] = str(field.user_id)
+    #     data_ticket['password'] = field.user_password
+    #     # login_result = requests.post(url_login_in, headers=headers, data=data_ticket).json()  # 内网
+    #     login_result = requests.post(url_login_out, headers=headers, data=data_ticket).json()  # 外网
+    #     login_result = {'code': 1000}  # test
+    #     if login_result['code'] == 1000:
+    #         user_note_old = \
+    #             TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).values("user_note")[0][
+    #                 "user_note"]
+    #         if user_note_old.find("，账号屏蔽") + user_note_old.find("，密码错误") + user_note_old.find("，账号不存在") > -1:
+    #             user_note_new = user_note_old.replace("，密码错误", "").replace("，账号屏蔽", "").replace("，账号不存在", "")
+    #             TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).update(
+    #                 user_note=user_note_new)
+    #             # print(data_ticket['username'], login_result['data']['user']['name'])
+    #     elif login_result['code'] == 11026:  # 密码错误
+    #         user_note_old = \
+    #             TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).values("user_note")[0][
+    #                 "user_note"]
+    #         TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).update(
+    #             user_note="%s，密码错误" % user_note_old)
+    #         print(data_ticket['username'], login_result['msg'])
+    #     elif login_result['code'] == 11004:  # 账号屏蔽
+    #         user_note_old = \
+    #             TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).values("user_note")[0][
+    #                 "user_note"]
+    #         TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).update(
+    #             user_note="%s，账号屏蔽" % user_note_old)
+    #         print(data_ticket['username'], login_result['msg'])
+    #     elif login_result['code'] == 11002:  # 账号不存在
+    #         user_note_old = \
+    #             TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).values("user_note")[0][
+    #                 "user_note"]
+    #         TestId.objects.using("alimysql").filter(user_id=data_ticket["username"]).update(
+    #             user_note="%s，账号不存在" % user_note_old)
+    #         print(data_ticket['username'], login_result['msg'])
+    #     elif login_result['code'] == 11001:  # ip 受限
+    #         print(data_ticket['username'], login_result['msg'])
+    #     else:
+    #         # print(data_ticket['username'], login_result['msg'])
+    #         print(data_ticket['username'], login_result['code'], login_result['msg'])
+
+    if request.method == "POST" and request.POST:
+        check_id = request.POST.get("check_id", None)
+        if check_id:
+            check_type = TestId.objects.using("alimysql").filter(pk=check_id).values("user_flag")
+            if check_type.exists():
+                user_id = TestId.objects.using("alimysql").filter(pk=check_id).values("user_id")[0]["user_id"]
+                data_ticket['username'] = str(user_id).strip()
+                user_password = TestId.objects.using("alimysql").filter(pk=check_id).values("user_password")[0][
+                    "user_password"]
+                data_ticket['password'] = user_password.strip()
+                user_note_old = TestId.objects.using("alimysql").filter(pk=check_id).values("user_note")[0][
+                    "user_note"]
+                if check_type[0]["user_flag"] == "0":
+                    login_result = requests.post(url_login_in, headers=headers, data=data_ticket).json()
+                    if login_result['code'] == 11026:  # 密码错误
+                        if user_note_old.find("，密码错误") < 0:
+                            TestId.objects.using("alimysql").filter(pk=check_id).update(
+                                user_note="%s，密码错误" % user_note_old)
+                    elif login_result['code'] == 11004:  # 账号屏蔽
+                        if user_note_old.find("，账号屏蔽") < 0:
+                            TestId.objects.using("alimysql").filter(pk=check_id).update(
+                                user_note="%s，账号屏蔽" % user_note_old)
+                    else:
+                        TestId.objects.using("alimysql").filter(pk=check_id).update(
+                            user_note=user_note_old.replace("，密码错误", "").replace("，账号屏蔽", "").replace("，账号不存在", ""))
+                else:
+                    login_result = requests.post(url_login_out, headers=headers, data=data_ticket).json()
+                    if login_result['code'] == 11026:  # 密码错误
+                        if user_note_old.find("，密码错误") < 0:
+                            pass
+                            # TestId.objects.using("alimysql").filter(pk=check_id).update(
+                            #     user_note="%s，密码错误" % user_note_old)
+                    elif login_result['code'] == 11004:  # 账号屏蔽
+                        if user_note_old.find("，账号屏蔽") < 0:
+                            TestId.objects.using("alimysql").filter(pk=check_id).update(
+                                user_note="%s，账号屏蔽" % user_note_old)
+                    else:
+                        TestId.objects.using("alimysql").filter(pk=check_id).update(
+                            user_note=user_note_old.replace("，密码错误", "").replace("，账号屏蔽", "").replace("，账号不存在", ""))
+            else:
+                msg = "测试账号库中未检测到账号"
+
     data = TestId.objects.using('alimysql').filter(user_flag=0)  # filter 列表 0是内网 1是外网
     data1 = TestId.objects.using('alimysql').filter(user_flag=1)
     # data = TestId.objects.all()
@@ -597,41 +708,47 @@ def get_html(url, ref=None):
     # html = page.open(url).read()
 
     page = urllib.request.Request(url, data=None, headers=header)  # 法 2
-    html = urllib.request.urlopen(page).read().decode()
-    # print(html)
-    return html
+    html = urllib.request.urlopen(page)
+    if html.code == 200:
+        return html.read().decode()
+    else:
+        return None
 
 
 # 获取 app 信息
 def get_app_info(url):
     import re
     soft_id = re.findall("soft_id/(\d+)?", url)[0]
-    info = get_html(url)
-    apk_icon_url = re.findall('<dt><img src="(.*?)" width="72" height="72"', info)[0]
-    apk_name = re.findall('<h2 id="app-name"><span title="(.*?)">', info)[0]
-    re_url = re.compile('class="js-downLog dbtn %s-btn normal"(.*?\.apk)' % soft_id)
-    apk_download_url = re.findall(re_url, info)[0].split("=&url=")[1]
-    apk_version = re.findall('<td><strong>版本：</strong>(.*?)<', info)[0]
-    apk_version_code = re.findall("<!--versioncode:(\d+)-->", info)[0]
-    apk_updatetime = re.findall('<strong>更新时间：</strong>(.*?)</td>', info)[0]
-    apk_size = re.findall(' <span class="s-3">(\d+.\d+M)</span>', info)[0]
-    apk_imgs = re.findall('<div id="scrollbar" data-snaps="(.*?)">', info)
-    apk_img = (apk_imgs[0] if len(apk_imgs) else "").split(",")
-    re_readme = re.compile('更新内容】</b><br/>(.*?)</div>', re.S)
-    apk_update_readme1 = re.findall(re_readme, info)[0].split("<br />\r\n")
-    apk_update_readme = [readme.strip() for readme in apk_update_readme1 if readme != ""]
-    app_info = collections.OrderedDict()
-    app_info = {
-        "apk_channel_url": url,
-        "apk_name": apk_name,
-        "apk_icon_url": apk_icon_url,
-        "apk_size": apk_size,
-        'apk_url': apk_download_url,
-        "apk_imgs": apk_img,
-        "apk_version": apk_version, "apk_version_code": apk_version_code,
-        "apk_updatetime": apk_updatetime,
-        "apk_update_readme": apk_update_readme}
 
+    info = get_html(url)
+    if info:
+        apk_icon_url = re.findall('<dt><img src="(.*?)" width="72" height="72"', info)[0]
+        apk_name = re.findall('<h2 id="app-name"><span title="(.*?)">', info)[0]
+        re_url = re.compile('class="js-downLog dbtn %s-btn normal"(.*?\.apk)' % soft_id)
+        apk_download_url = re.findall(re_url, info)[0].split("=&url=")[1]
+        apk_version = re.findall('<td><strong>版本：</strong>(.*?)<', info)[0]
+        apk_version_code = re.findall("<!--versioncode:(\d+)-->", info)[0]
+        apk_updatetime = re.findall('<strong>更新时间：</strong>(.*?)</td>', info)[0]
+        apk_size = re.findall(' <span class="s-3">(\d+.\d+M)</span>', info)[0]
+        apk_imgs = re.findall('<div id="scrollbar" data-snaps="(.*?)">', info)
+        apk_img = (apk_imgs[0] if len(apk_imgs) else "").split(",")
+        re_readme = re.compile('更新内容】</b><br/>(.*?)</div>', re.S)
+        apk_update_readme1 = re.findall(re_readme, info)[0].split("<br />\r\n")
+        apk_update_readme = [readme.strip() for readme in apk_update_readme1 if readme != ""]
+        get_app_info = collections.OrderedDict()
+        get_app_info = {
+            "apk_channel_url": url,
+            "apk_name": apk_name,
+            "apk_icon_url": apk_icon_url,
+            "apk_size": apk_size,
+            'apk_url': apk_download_url,
+            "apk_imgs": apk_img,
+            "apk_version": apk_version, "apk_version_code": apk_version_code,
+            "apk_updatetime": apk_updatetime,
+            "apk_update_readme": apk_update_readme}
+        app_info = {"status_code": 1000, "data": get_app_info, "msg": "请求成功"}
+    else:
+        app_info = {"status_code": 1004, "data": {}, "msg": "获取信息失败"}
     # print(app_info)
     return app_info
 
@@ -756,7 +873,6 @@ def show_ticket(request):
             else:
                 get_user_info = {}
                 # get_ticket_info = get_ticket(url_ticket_out, userid, password)  # 公司内网
-
                 get_user_info["ipinfo"] = requests.post(url_login_out, headers=headers, data=data_ticket).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
                     get_user_info["ticket"] = requests.post(url_ticket_out, data=data_ticket).json()["data"]["ticket"]
@@ -794,8 +910,12 @@ def show_ticket(request):
                                                  phone_location_info["showapi_res_body"]["city"],
                                                  phone_location_info["showapi_res_body"]["name"])
                     except Exception as e:
-                        location = re.findall(r"carrier:'(.+?)'", requests.get(
-                            r"http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s" % phone).text)[0]
+                        location_re = re.findall(r"carrier:'(.+?)'", requests.get(
+                            r"http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s" % phone).text)
+                        if location_re:
+                            location = location_re[0]
+                        else:
+                            location = "手机号码未知归属地"
 
             title = "Ticket %s | TestData" % ticket_style
     else:

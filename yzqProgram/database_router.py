@@ -43,7 +43,8 @@ class DatabaseAppsRouter(object):
                 return False
         return None
 
-    def allow_syncdb(self, db, model):
+    # def allow_syncdb(self, db, model):  # p2
+    def allow_migrate(self, db, app_label, model=None, **hints):  # p3
         """Make sure that apps only appear in the related database."""
 
         if db in DATABASE_MAPPING.values():
