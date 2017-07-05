@@ -34,9 +34,9 @@ DEBUG = True  # django 自己处理静态网页
 ip_local = ["192.168.66.55", "169.254.111.198"]
 if socket.gethostbyname(socket.gethostname()) in ip_local:
     ALLOWED_HOSTS = [
-        "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in", "test.com"]
+        "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
 else:
-    ALLOWED_HOSTS = ['python3.cc', 'testauto.site', '23.83.230.235']
+    ALLOWED_HOSTS = ['python3.cc', 'testauto.site']
 
 # Application definition
 
