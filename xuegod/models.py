@@ -240,8 +240,8 @@ class IndexNav(models.Model):
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 
     class Meta:
-        verbose_name = "首页导航"
-        verbose_name_plural = "首页导航列表"
+        verbose_name = "导航网址"
+        verbose_name_plural = "导航网址列表"
 
     def __str__(self):
         return "%s" % self.fullname
