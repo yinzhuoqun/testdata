@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+
 # from django.utils.html import format_html
 # from django import forms
 
@@ -195,7 +196,7 @@ class HomePage(models.Model):
     url_status = models.CharField(max_length=32, choices=url_status_choice, default="ON", verbose_name="显示状态",
                                   help_text="是否显示到网站")
     url_status_use = models.CharField(max_length=32, choices=url_status_choice, default="OFF", verbose_name="使用状态",
-                                  help_text="钉钉群链接定制")
+                                      help_text="钉钉群链接定制")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 
@@ -219,6 +220,7 @@ class IndexType(models.Model):
     def __str__(self):
         return "%s" % self.url_type
 
+
 class IndexNav(models.Model):
     status_choice = (
         ("1", "ON"),
@@ -231,7 +233,7 @@ class IndexNav(models.Model):
     url_type = models.ForeignKey('IndexType', related_name='type_set', verbose_name="分类")
     order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
     show_status = models.BooleanField(max_length=32, default=True, verbose_name="显示状态",
-                                  help_text="是否显示到网站")
+                                      help_text="是否显示到网站")
     # select_status = models.BooleanField(max_length=32, default=False, verbose_name="选择使用",
     #                                  help_text="钉钉群链接定制")
     # use_status = models.BooleanField(max_length=32, default=False, verbose_name="必定使用",
@@ -246,3 +248,56 @@ class IndexNav(models.Model):
     def __str__(self):
         return "%s" % self.fullname
 
+class PositionType(models.Model):
+    position_type = models.CharField(max_length=128, verbose_name="职位名称")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "职位名称"
+        verbose_name_plural = "职位名称列表"
+
+    def __str__(self):
+        return "%s" % self.position_type
+
+
+class VestAccount(models.Model):
+    gender_choice = (
+        ("1", "男"),
+        ('0', "女"),
+    )
+    account = models.CharField(unique=True, max_length=32, verbose_name="账号")
+    gender = models.CharField(max_length=32, choices=gender_choice, default="男", verbose_name="账号性别")
+    name = models.CharField(max_length=128, blank=True, null=True, verbose_name="账号昵称")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "马甲账号"
+        verbose_name_plural = "马甲账号列表"
+        ordering = ['-gender']  # 反向排序
+
+    def __str__(self):
+        if self.gender == "1":
+            self.gender = "男"
+        else:
+            self.gender = "女"
+        return "%s %s" % (self.account, self.gender)
+
+class VestInfo(models.Model):
+    owner = models.CharField(max_length=128, verbose_name="姓名")
+    # position = models.CharField(max_length=128, blank=True, null=True, verbose_name="职位")
+    position = models.ForeignKey("PositionType", related_name="position_set", verbose_name="职位昵称")
+    id_info = models.ManyToManyField('VestAccount', related_name='id_set', verbose_name="账号信息", help_text="1 是男性，0 是女性")
+    order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
+    show_status = models.BooleanField(max_length=32, default=True, verbose_name="显示状态",
+                                      help_text="是否显示到网站")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
+
+    class Meta:
+        verbose_name = "马甲账号信息"
+        verbose_name_plural = "马甲账号信息列表"
+
+    def __str__(self):
+        return "%s" % self.owner

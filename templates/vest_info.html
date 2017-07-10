@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VestInfo | TestData</title>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+</head>
+<body>
+
+<table cellpadding="4">
+    <h3>马甲账号</h3>
+    <tr>
+        <th>ID</th>
+        <th>拥有者</th>
+        <th>职位</th>
+        <th>马甲账号</th>
+    </tr>
+
+    {% for info in vest_info %}
+        <tr>
+            <td>{{ info.id }}</td>
+            <td>{{ info.owner }}</td>
+            <td>{{ info.position }}</td>
+            <td>
+                {% for account in info.id_info.all %}
+                    {% if account.gender == "1" %}
+                        ♂👳
+                    {% else %}
+                        ♀👯
+                    {% endif %}
+                    {{ account.account }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>
+</html>

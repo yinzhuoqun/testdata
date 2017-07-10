@@ -2,7 +2,7 @@
 
 <ul>
 {% for choice in question.choice_set.all %}
-{#    {{ 列表或数字|pluralize }} 单词的复数形式，如列表字符串个数大于1，返回s，否则返回空串 #}
+
     <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
 {% endfor %}
 </ul>

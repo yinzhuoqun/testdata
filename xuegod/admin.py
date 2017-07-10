@@ -185,7 +185,7 @@ class IndexNavInline(admin.StackedInline):
 
 class IndexNavAdmin(admin.ModelAdmin):
     list_display = list_display_links = (
-    'url', 'fullname', 'nickname', 'url_type', 'order', 'show_status', 'create_time')
+        'url', 'fullname', 'nickname', 'url_type', 'order', 'show_status', 'create_time')
 
 
 class IndexTypeAdmin(admin.ModelAdmin):
@@ -196,6 +196,19 @@ class IndexTypeAdmin(admin.ModelAdmin):
 class IndexTypeAdmin(admin.ModelAdmin):
     list_display = list_display_links = ('id', 'url_type', 'create_time', 'alter_time')
 
+
 # admin.site.register(IndexType, IndexTypeAdmin)
 admin.site.register(IndexType, IndexTypeAdmin)
 admin.site.register(IndexNav, IndexNavAdmin)
+
+
+class VestInfoAdmin(admin.ModelAdmin):
+    list_display = list_display_links = ('id', 'owner', 'position', 'order', 'show_status', 'create_time')
+
+class VestAccountAdmin(admin.ModelAdmin):
+    list_display = list_display_links = ('id', 'account', 'gender', 'name', 'alter_time', 'create_time')
+
+
+admin.site.register(PositionType)
+admin.site.register(VestAccount, VestAccountAdmin)
+admin.site.register(VestInfo, VestInfoAdmin)

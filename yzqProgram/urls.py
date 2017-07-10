@@ -57,8 +57,10 @@ urlpatterns = [
     url(r'^sapp/', show_appinfo),
     url(r'^ud/', device_unlock),
     url(r'^gc/', register_code),
+    url(r'^vest/', vest_info),
 
     url(r'^ip/', user_ip),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 导入setting、static 是为 media 用

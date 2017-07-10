@@ -986,3 +986,9 @@ def user_ip(request):
 def check_password(request):
     url_login_in = r"http://192.168.2.171:8080/account/basic/login"
     url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
+
+
+def vest_info(request):
+    vest_info = VestInfo.objects.filter()
+
+    return render(request, "vest_info.html", locals())
