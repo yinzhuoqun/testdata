@@ -31,8 +31,8 @@ DEBUG = False  # nginx 、Apache 处理静态网页
 # DEBUG = True  # django 自己处理静态网页
 
 
-ip_local = ["192.168.66.55", "169.254.111.198"]
-if socket.gethostbyname(socket.gethostname()) in ip_local:
+IP_LOCAL = ["192.168.66.55", "169.254.111.198"]  # 字母要大写才能被 django.conf 载入
+if socket.gethostbyname(socket.gethostname()) in IP_LOCAL:
     ALLOWED_HOSTS = [
         "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
 else:

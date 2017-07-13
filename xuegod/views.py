@@ -989,7 +989,8 @@ def check_password(request):
 
 
 def vest_info(request):
-    # vest_info = VestInfo.objects.filter()
+    if get_ip(request) in settings.IP_LOCAL:
+        vest_info = VestInfo.objects.filter()
     if request.method == "POST" and request.POST:
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
         url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
