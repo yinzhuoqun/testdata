@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>{{ title }}</title>#}
+{#</head>#}
+{#<body>#}
+{#    You IP：{{ ip }}#}
+{#</body>#}
+{#</html>#}
+
+
+{% extends "base.html" %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block box %}
     You IP：{{ ip }}
-</body>
-</html>
+{% endblock %}

@@ -976,9 +976,9 @@ def register_code(request):
 
 def user_ip(request):
     title = "IP | TestData"
-    three_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=a11467840d64d7ae39f0eb48c471d3973c701e13b29c10bbceca17c188b8e376"
+    mygroup_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=45776b0caa3979d86cbb758d7aaede3d2c62940bdd04bcfbe96b607a9348f34e"
     ip = get_ip(request)
-    dd_text_post(three_url_ddbot, ip, atMoblies=["18679600250"],
+    dd_text_post(mygroup_url_ddbot, ip, atMoblies=["18679600250"],
                  atAll="false")
     return render(request, "ip.html", locals())
 
@@ -989,6 +989,27 @@ def check_password(request):
 
 
 def vest_info(request):
-    vest_info = VestInfo.objects.filter()
+    # vest_info = VestInfo.objects.filter()
+    if request.method == "POST" and request.POST:
+        find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
+        url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
+        find_id = request.POST.get("myInput", None)
+        # print(request.POST)
+        if find_id:
+            result = VestAccount.objects.filter(account__contains=find_id)  # 字段名__查询内容
+            if result.exists():
+                find_id = [x["account"] for x in result.values()]
+                find_result = []
+                for uid in find_id:
+                    args = "{%22type%22:%22search%22,%22rows%22:20,%22start%22:%220%22,%22keyword%22:%22long_no:" \
+                           + uid + "%20OR%20name:\%22\%22%22}"
+                    url = find_api + args
+                    headers = get_ticket(url_ticket_out, "139828156", "q1234567")
+                    req_api = requests.get(url, headers=headers).json()
+                    if req_api["code"] == 1000:
+                        find_result.append({'uid': uid, 'name': req_api['data']['users'][0]["name"],
+                                            'gender': req_api['data']['users'][0]["gender"]})
+            else:
+                find_result = [{'uid': "未收录"}]
 
     return render(request, "vest_info.html", locals())
