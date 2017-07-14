@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='vestinfo',
             name='position',
-            field=models.ForeignKey(to='xuegod.PositionType', related_name='position_set', default=datetime.datetime(2017, 7, 10, 14, 25, 21, 100563, tzinfo=utc), verbose_name='职位昵称'),
+            field=models.ForeignKey(to='xuegod.PositionType', related_name='position_set', default='1', verbose_name='职位昵称'),
             preserve_default=False,
         ),
     ]

@@ -19,49 +19,57 @@ from testfly.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
+from testfly import api
+from rest_framework import routers
 
 admin.site.site_title = settings.ADMIN_SITE_TITLE  # 站点标题
 admin.site.site_header = settings.ADMIN_SITE_HEADER  # 站点头部
 
+
+router = routers.DefaultRouter()
+router.register(r'users', api.UserViewSet)
+router.register(r'blogs', api.BlogViewSet)
+
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/', index),
-    url(r'^$', index),
+                  url(r'^admin/', include(admin.site.urls)),
+                  url(r'^index/', index),
+                  url(r'^$', index),
 
-    url(r'^page/(\d{1,2})', new_page),
+                  url(r'^page/(\d{1,2})', new_page),
 
-    url(r'^login/', login),
-    url(r'^id/', testid),
-    url(r'^sid/', show_testid),
-    url(r'^aid/', alter_testid),
-    url(r'^test_change_env/', test_change_env),
+                  url(r'^login/', login),
+                  url(r'^id/', testid),
+                  url(r'^sid/', show_testid),
+                  url(r'^aid/', alter_testid),
+                  url(r'^test_change_env/', test_change_env),
 
-    url(r'^app/', app_list),
+                  url(r'^app/', app_list),
 
-    url(r'^report/', include('testfly.urls', namespace="testfly")),
+                  url(r'^report/', include('testfly.urls', namespace="testfly")),
+                  url(r'^', include(router.urls)),
 
-    url(r'^testreport/', test_report),
-    url(r'^testreport/(Android|iOS)', test_report_platform),
-    url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
+                  url(r'^testreport/', test_report),
+                  url(r'^testreport/(Android|iOS)', test_report_platform),
+                  url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
 
-    url(r'^polls/', include('polls.urls', namespace="polls")),
+                  url(r'^polls/', include('polls.urls', namespace="polls")),
 
-    url(r'^resume/', resume),
+                  url(r'^resume/', resume),
 
-    # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+                  # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
-    url(r'^qqbot/', qqbot_start),
+                  url(r'^qqbot/', qqbot_start),
 
-    url(r'^tk/', show_ticket),
-    url(r'^appinfo/', app_info),
-    url(r'^sapp/', show_appinfo),
-    url(r'^ud/', device_unlock),
-    url(r'^gc/', register_code),
-    url(r'^vest/', vest_info),
+                  url(r'^tk/', show_ticket),
+                  url(r'^appinfo/', app_info),
+                  url(r'^sapp/', show_appinfo),
+                  url(r'^ud/', device_unlock),
+                  url(r'^gc/', register_code),
+                  url(r'^vest/', vest_info),
 
-    url(r'^ip/', user_ip),
+                  url(r'^ip/', user_ip),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 导入setting、static 是为 media 用
 # from django.conf import settings

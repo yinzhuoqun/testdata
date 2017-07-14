@@ -19,7 +19,8 @@ import os, time, socket
 import collections  # 有序字典
 # import faker
 # import uuid
-import requests, re, random, json
+import requests
+import re, random, json
 from ipware.ip import get_ip
 
 

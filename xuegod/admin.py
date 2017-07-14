@@ -206,11 +206,16 @@ class VestInfoAdmin(admin.ModelAdmin):
     search_fields = ['owner']
     list_display = list_display_links = ('id', 'owner', 'position', 'order', 'show_status', 'create_time')
 
+
 class VestAccountAdmin(admin.ModelAdmin):
     search_fields = ['account']
     list_display = list_display_links = ('id', 'account', 'gender', 'name', 'alter_time', 'create_time')
 
 
-admin.site.register(PositionType)
+class PositionTypeAdmin(admin.ModelAdmin):
+    list_display = list_display_links = ('id', 'position_type', 'alter_time', 'create_time')
+
+
+admin.site.register(PositionType, PositionTypeAdmin)
 admin.site.register(VestAccount, VestAccountAdmin)
 admin.site.register(VestInfo, VestInfoAdmin)

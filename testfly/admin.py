@@ -53,3 +53,5 @@ class TestDeviceAdmin(admin.ModelAdmin):
     search_fields = ["use_name", "device_name"]
 
 admin.site.register(TestDevice, TestDeviceAdmin)
+
+admin.site.register(Blog)
