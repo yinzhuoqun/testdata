@@ -990,6 +990,10 @@ def check_password(request):
 
 
 def vest_info(request):
+    # b = VestInfo.objects.get(id=3)
+    # print(b.position)
+    # e = VestAccount.objects.get(account="140578508")
+    # print(e.id_set.get())
     if get_ip(request) in settings.IP_LOCAL:
         vest_info = VestInfo.objects.filter()
     if request.method == "POST" and request.POST:
@@ -1003,15 +1007,18 @@ def vest_info(request):
                 find_id = [x["account"] for x in result.values()]
                 find_result = []
                 for uid in find_id:
+                    owner = VestAccount.objects.get(account=uid).id_set.first()
                     args = "{%22type%22:%22search%22,%22rows%22:20,%22start%22:%220%22,%22keyword%22:%22long_no:" \
                            + uid + "%20OR%20name:\%22\%22%22}"
                     url = find_api + args
                     headers = get_ticket(url_ticket_out, "139828156", "q1234567")
                     req_api = requests.get(url, headers=headers).json()
                     if req_api["code"] == 1000:
-                        find_result.append({'uid': uid, 'name': req_api['data']['users'][0]["name"],
+                        find_result.append({'uid': uid, 'owner': owner, 'name': req_api['data']['users'][0]["name"],
                                             'gender': req_api['data']['users'][0]["gender"]})
+                    else:
+                        find_result.append({'uid': uid, 'owner': owner})
             else:
-                find_result = [{'uid': "未收录"}]
+                find_result = [{'uid': '马甲库未收录'}]
 
     return render(request, "vest_info.html", locals())

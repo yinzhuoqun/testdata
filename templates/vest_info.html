@@ -11,44 +11,49 @@
     <input type="number" name='myInput' placeholder="输入查询的马甲账号"/>
     <input type="submit" name='myFind' value="查询" onclick="">
 </form>
-{% for info in find_result %}
-    {{ info.uid }}
-    {% if info.gender == 1 %}
-        ♂
-    {% elif info.gender == 0 %}
-        ♀
-    {% endif %}
-    {{ info.name }}
-    <br>
-{% endfor %}
-
-{% if vest_info != None %}
 <table cellpadding="4">
-    <h3>马甲账号</h3>
-    <tr>
-        <th>ID</th>
-        <th>拥有者</th>
-        <th>职位</th>
-        <th>马甲账号</th>
-    </tr>
-    {% for info in vest_info %}
+    {% for info in find_result %}
         <tr>
-            <td>{{ info.id }}</td>
             <td>{{ info.owner }}</td>
-            <td>{{ info.position }}</td>
-            <td>
-                {% for account in info.id_info.all %}
-                    {% if account.gender == "1" %}
-                        ♂👳
-                    {% else %}
-                        ♀👧
-                    {% endif %}
-                    {{ account.account }}
-                {% endfor %}
+            <td>{{ info.uid }}</td>
+            <td>{% if info.gender == 1 %}
+                ♂
+            {% elif info.gender == 0 %}
+                ♀
+            {% endif %}
             </td>
+            <td>{{ info.name }}</td>
         </tr>
     {% endfor %}
 </table>
+
+{% if vest_info != None %}
+    <table cellpadding="4">
+        <h3>马甲账号</h3>
+        <tr>
+            <th>ID</th>
+            <th>拥有者</th>
+            <th>职位</th>
+            <th>马甲账号</th>
+        </tr>
+        {% for info in vest_info %}
+            <tr>
+                <td>{{ info.id }}</td>
+                <td>{{ info.owner }}</td>
+                <td>{{ info.position }}</td>
+                <td>
+                    {% for account in info.id_info.all %}
+                        {% if account.gender == "1" %}
+                            ♂👳
+                        {% else %}
+                            ♀👧
+                        {% endif %}
+                        {{ account.account }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endif %}
 </body>
 </html>

@@ -28,7 +28,7 @@ SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # nginx 、Apache 处理静态网页
-DEBUG = True  # django 自己处理静态网页
+# DEBUG = True  # django 自己处理静态网页
 
 IP_LOCAL = ["192.168.66.55", "169.254.111.198"]  # 字母要大写才能被 django.conf 载入
 if socket.gethostbyname(socket.gethostname()) in IP_LOCAL:
