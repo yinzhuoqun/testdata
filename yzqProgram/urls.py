@@ -18,14 +18,20 @@ from xuegod.views import *  # 导入app下views
 from testfly.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+# from django.conf.urls import handler404, handler500
 
 from testfly import api
 from rest_framework import routers
 
+# 定制站点头部和标题
 admin.site.site_title = settings.ADMIN_SITE_TITLE  # 站点标题
 admin.site.site_header = settings.ADMIN_SITE_HEADER  # 站点头部
 
+# 自定义错误页面，不用导入 handler400
+handler404 = page_not_found
+handler500 = server_error
 
+# rest_framework 路由
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'blogs', api.BlogViewSet)

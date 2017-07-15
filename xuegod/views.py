@@ -26,6 +26,13 @@ from ipware.ip import get_ip
 
 # import random
 
+def page_not_found(request):
+    return render_to_response("404.html")
+
+
+def server_error(request):
+    return render_to_response("404.html")
+
 
 def create(request):
     data = ""  # 前端表单传来的数据
@@ -994,7 +1001,7 @@ def vest_info(request):
     # print(b.position)
     # e = VestAccount.objects.get(account="140578508")
     # print(e.id_set.get())
-    if get_ip(request) in settings.IP_LOCAL:
+    if request.get_host() in settings.IP_LOCAL:
         vest_info = VestInfo.objects.filter()
     if request.method == "POST" and request.POST:
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
