@@ -1,0 +1,38 @@
+{#{% extends "base.html" %}#}
+
+{% block "style" %}
+    <head>
+        <title>login</title>
+
+        <style>
+            .login_ul label {
+                font-size: 18px;
+                color: goldenrod;
+            }
+            ul{
+            list-style:none;
+            }
+            .errorlist{
+                color: red;
+                font-size: xx-small;
+            }
+
+        </style>
+    </head>
+{% endblock %}
+
+{% block "contentRight" %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <ul class="login_ul">
+            {{ login_form.as_ul }}
+        </ul>
+        <input type="submit" value="登录">
+    </form>
+{#    {{ myform }}#}
+{#    {{ myform.as_table }}#}
+{#    {{ myform.as_ul }}#}
+
+注册信息：{{ show_data }}
+
+{% endblock %}

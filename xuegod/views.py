@@ -373,8 +373,8 @@ def app_list(request):
     for app in app_list:
         # app_info_dict = {} # 无序字典
         app_info_dict = collections.OrderedDict()  # 有序字典, 需要导入 collections
-
-        app_unix_time = os.stat(os.path.join(app_path, app)).st_ctime
+        # os.stat().st_ctime st_atime (访问时间), st_mtime (修改时间), st_ctime（搜索创建时间）
+        app_unix_time = os.stat(os.path.join(app_path, app)).st_mtime
         app_create_time = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(app_unix_time))
 
         app_size = os.stat(os.path.join(app_path, app)).st_size
