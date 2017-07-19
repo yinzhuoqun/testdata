@@ -31,7 +31,7 @@ def page_not_found(request):
 
 
 def server_error(request):
-    return render_to_response("404.html")
+    return render_to_response("500.html")
 
 
 def create(request):
@@ -485,7 +485,8 @@ def app_list(request):
                         file_size = "%.2fKB" % (file_size / 1024)
                     if file.name.endswith('.apk') and dd_send == "True":
                         at_moblies = []
-                        if file.name.find("chuangshang") + file.name.find("l99") > -2:
+                        if file.name.lower().find("chuangshang") + file.name.lower().find(
+                                "l99") + file.name.lower().find("bed") > -3:
                             # 选择网页添加 @的人
                             at_names_select_enable = request.POST.getlist("at_names_select_button", [])
                             # print(at_names_select_enable, type(at_names_select_enable))
