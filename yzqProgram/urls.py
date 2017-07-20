@@ -37,7 +37,7 @@ router.register(r'users', api.UserViewSet)
 router.register(r'blogs', api.BlogViewSet)
 
 urlpatterns = [
-                  url(r'^admin/', include(admin.site.urls)),
+                  url(r'^joyoo/', include(admin.site.urls)),
                   url(r'^index/', index),
                   url(r'^$', index),
 

@@ -8,7 +8,7 @@
 <body>
 <form method='post' action='' enctype="multipart/form-data" id="myForm">
     {% csrf_token %}
-    <input type="number" name='myInput' placeholder="输入查询的马甲账号"/>
+    <input type="number" min="1000" name='myInput' placeholder="输入查询的马甲账号"/>
     <input type="submit" name='myFind' value="查询" onclick="">
 </form>
 <table cellpadding="4">
@@ -49,6 +49,8 @@
                             ♀👧
                         {% endif %}
                         {{ account.account }}
+                        {{ account.name }}
+                         <br>
                     {% endfor %}
                 </td>
             </tr>

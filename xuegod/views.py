@@ -476,8 +476,8 @@ def app_list(request):
                         dd_send = request.POST['dd_send']  # 是否发送钉钉群消息
                     else:
                         dd_send = "False"  # 是否发送钉钉群消息
-                    # ip = get_ip(request)
-                    url_request = request.get_host()
+                    # ip = get_ip(request)  # 请求IP
+                    url_request = request.get_host()  # 服务器地址
                     file_size = file.size
                     if file_size > 1024 * 1024:
                         file_size = "%.2fMB" % (file_size / 1024 / 1024)
@@ -1002,31 +1002,44 @@ def vest_info(request):
     # print(b.position)
     # e = VestAccount.objects.get(account="140578508")
     # print(e.id_set.get())
-    if request.get_host() in settings.IP_LOCAL:
+    # print(request.get_host())  # 服务器地址 + 端口
+    if request.get_host().split(":")[0] in settings.IP_LOCAL:
         vest_info = VestInfo.objects.filter()
     if request.method == "POST" and request.POST:
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
         url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
         find_id = request.POST.get("myInput", None)
-        # print(request.POST)
+        print(request.POST)
         if find_id:
-            result = VestAccount.objects.filter(account__contains=find_id)  # 字段名__查询内容
-            if result.exists():
-                find_id = [x["account"] for x in result.values()]
-                find_result = []
-                for uid in find_id:
-                    owner = VestAccount.objects.get(account=uid).id_set.first()
-                    args = "{%22type%22:%22search%22,%22rows%22:20,%22start%22:%220%22,%22keyword%22:%22long_no:" \
-                           + uid + "%20OR%20name:\%22\%22%22}"
-                    url = find_api + args
-                    headers = get_ticket(url_ticket_out, "139828156", "q1234567")
-                    req_api = requests.get(url, headers=headers).json()
-                    if req_api["code"] == 1000:
-                        find_result.append({'uid': uid, 'owner': owner, 'name': req_api['data']['users'][0]["name"],
-                                            'gender': req_api['data']['users'][0]["gender"]})
-                    else:
-                        find_result.append({'uid': uid, 'owner': owner})
+            if find_id == "1000":
+                if request.get_host().split(":")[0] not in settings.IP_LOCAL:
+                    vest_info = VestInfo.objects.filter()
             else:
-                find_result = [{'uid': '马甲库未收录'}]
+                result = VestAccount.objects.filter(account__contains=find_id)  # 字段名__查询内容
+                if result.exists():
+                    find_id = [x["account"] for x in result.values()]
+                    find_result = []
+                    for uid in find_id:
+                        # owner = VestAccount.objects.get(account=uid).id_set.first()
+                        name = VestAccount.objects.get(account=uid)
+                        owner = name.id_set.first()
+                        args = "{%22type%22:%22search%22,%22rows%22:20,%22start%22:%220%22,%22keyword%22:%22long_no:" \
+                               + uid + "%20OR%20name:\%22\%22%22}"
+                        url = find_api + args
+                        headers = get_ticket(url_ticket_out, "139828156", "q1234567")
+                        req_api = requests.get(url, headers=headers).json()
+                        if req_api["code"] == 1000:
+                            user_name =  req_api['data']['users'][0]["name"]
+                            find_result.append({'uid': uid, 'owner': owner, 'name': user_name,
+                                                'gender': req_api['data']['users'][0]["gender"]})
+                            name.name = user_name
+                            user_name_sql = VestAccount.objects.filter(account=uid).values("name")[0]["name"]
+                            # print(user_name, user_name_sql)
+                            if user_name != user_name_sql:
+                                name.save(update_fields=["name"])
+                        else:
+                            find_result.append({'uid': uid, 'owner': owner})
+                else:
+                    find_result = [{'uid': '马甲库未收录'}]
 
     return render(request, "vest_info.html", locals())

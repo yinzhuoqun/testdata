@@ -104,8 +104,10 @@
                 <ul>
                     {{ token }}
                     <input type="hidden" name="postToken" value={{ token }}>
-                    <li><input type='file' name='file'/></li>
-                    <li><input type="button" style="width: 69px" onclick="myFc()" value="清空选择"/></li>
+                    <li><input type='file' id="choice_file" name='file' /></li>
+{#                    multiple="multiple" 多文件#}
+                    <li><input type="button" id="clear_choice_file" style="width: 69px" onclick="resetFile()"
+                               value="清空选择"/></li>
                     {% if form_dd_show == True %}
                         <li><select name="dd_send" id="dd_send" onchange="dd_button()">
                             <option value="True" selected="selected">发送</option>
@@ -195,7 +197,7 @@
         }
     }
 
-     var url_nickname_select_button = document.getElementsByClassName("url_nickname_select_button");
+    var url_nickname_select_button = document.getElementsByClassName("url_nickname_select_button");
     function url_nickname_select_button_onclick() {
         var url_nickname_select_text_name = document.getElementsByClassName("url_nickname_select_text");
         for (var i = 0; i < url_nickname_select_text_name.length; i++) {
@@ -227,7 +229,11 @@
             lis[i].style.backgroundColor = "#F5F5F5";
         }
     }
-    {##}
+
+    function resetFile() {
+        var file = document.getElementById('choice_file');
+        file.outerHTML = file.outerHTML;
+    }
     {#    //添加鼠标移入和移出事件#}
     {#    var color =null;#}
     {#    lis[i].onmouseover=function () {#}
