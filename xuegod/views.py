@@ -311,13 +311,16 @@ def ip_location(query_ip):
     url = 'http://saip.market.alicloudapi.com/ip?ip=%s' % query_ip
     headers = {'Authorization': 'APPCODE %s' % appcode}
     location_info = requests.get(url, headers=headers).json()
-    if location_info["showapi_res_body"]["ret_code"] == 0:
-        location = '%s %s %s %s' % (location_info["showapi_res_body"]["country"],
-                                    location_info["showapi_res_body"]["region"],
-                                    location_info["showapi_res_body"]["city"],
-                                    location_info["showapi_res_body"]["isp"])
-    else:
-        location = "局域网或未知区域"
+    try:
+        if location_info["showapi_res_body"]["ret_code"] == 0:
+            location = '%s %s %s %s' % (location_info["showapi_res_body"]["country"],
+                                        location_info["showapi_res_body"]["region"],
+                                        location_info["showapi_res_body"]["city"],
+                                        location_info["showapi_res_body"]["isp"])
+        else:
+            location = "局域网或未知区域"
+    except Exception as e:
+        location = "IP 地址归属地识别失败"
 
     return location
 
