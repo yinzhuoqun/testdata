@@ -1007,7 +1007,7 @@ def vest_info(request):
     # print(e.id_set.get())
     # print(request.get_host())  # 服务器地址 + 端口
     if request.get_host().split(":")[0] in settings.IP_LOCAL:
-        vest_info = VestInfo.objects.filter()
+        vest_info = VestInfo.objects.filter(show_status=True).order_by("position")
     if request.method == "POST" and request.POST:
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
         url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
@@ -1016,9 +1016,9 @@ def vest_info(request):
         if find_id:
             if find_id == "1000":
                 if request.get_host().split(":")[0] not in settings.IP_LOCAL:
-                    vest_info = VestInfo.objects.filter()
+                    vest_info = VestInfo.objects.filter(show_status=True)
             else:
-                result = VestAccount.objects.filter(account__contains=find_id)  # 字段名__查询内容
+                result = VestAccount.objects.filter(account__contains=find_id)  # 字段名__模糊查询内容
                 if result.exists():
                     find_id = [x["account"] for x in result.values()]
                     find_result = []
@@ -1032,7 +1032,7 @@ def vest_info(request):
                         headers = get_ticket(url_ticket_out, "139828156", "q1234567")
                         req_api = requests.get(url, headers=headers).json()
                         if req_api["code"] == 1000:
-                            user_name =  req_api['data']['users'][0]["name"]
+                            user_name = req_api['data']['users'][0]["name"]
                             find_result.append({'uid': uid, 'owner': owner, 'name': user_name,
                                                 'gender': req_api['data']['users'][0]["gender"]})
                             name.name = user_name
@@ -1046,3 +1046,29 @@ def vest_info(request):
                     find_result = [{'uid': '马甲库未收录'}]
 
     return render(request, "vest_info.html", locals())
+
+
+def vest_api(request):
+    vest_info = VestInfo.objects.all()
+    try:
+        vests = []
+        for x in vest_info:
+            for y in x.id_info.all():
+                # print(y.account)
+                vests.append(y.account)
+        result = {
+            "code": 1000,
+            "msg": "获取马甲账号列表成功",
+            "vests": sorted(vests),
+            "exception": None,
+        }
+
+    except Exception as e:
+        result = {
+            "code": 1004,
+            "msg": "获取马甲账号列表失败",
+            "vests": None,
+            "exception": e,
+        }
+
+    return JsonResponse(result)

@@ -72,6 +72,7 @@ urlpatterns = [
                   url(r'^ud/', device_unlock),
                   url(r'^gc/', register_code),
                   url(r'^vest/', vest_info),
+                  url(r'^vest_id/', vest_api),
 
                   url(r'^ip/', user_ip),
 
