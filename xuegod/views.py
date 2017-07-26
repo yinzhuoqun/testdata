@@ -1012,7 +1012,7 @@ def vest_info(request):
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
         url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
         find_id = request.POST.get("myInput", None)
-        print(request.POST)
+        # print(request.POST)
         if find_id:
             if find_id == "1000":
                 if request.get_host().split(":")[0] not in settings.IP_LOCAL:
@@ -1033,13 +1033,18 @@ def vest_info(request):
                         req_api = requests.get(url, headers=headers).json()
                         if req_api["code"] == 1000:
                             user_name = req_api['data']['users'][0]["name"]
+                            user_gender = req_api['data']['users'][0]["gender"]
                             find_result.append({'uid': uid, 'owner': owner, 'name': user_name,
-                                                'gender': req_api['data']['users'][0]["gender"]})
+                                                'gender': user_gender})
                             name.name = user_name
+                            name.gender = user_gender
                             user_name_sql = VestAccount.objects.filter(account=uid).values("name")[0]["name"]
+                            user_gender_sql = VestAccount.objects.filter(account=uid).values("gender")[0]["gender"]
                             # print(user_name, user_name_sql)
                             if user_name != user_name_sql:
                                 name.save(update_fields=["name"])
+                            if user_gender != user_gender_sql:
+                                name.save(update_fields=["gender"])
                         else:
                             find_result.append({'uid': uid, 'owner': owner})
                 else:
