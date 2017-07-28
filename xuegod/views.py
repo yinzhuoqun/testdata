@@ -700,6 +700,13 @@ def resume(request):
         phone_mobile = info[0].phone
     else:
         phone_mobile = "18679600250"
+
+    cuurent_date = time.localtime(time.time())  # 获取当前时间
+    year_time = cuurent_date.tm_year
+    age = year_time - 1990  # 年龄
+
+    work_experience = year_time - 2011  # 工作经验时长
+
     return render(request, 'resume_yzq.html', locals())
 
 

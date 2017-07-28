@@ -1,4 +1,4 @@
-{% block "style" %}
+{#{% block "style" %}#}
     <title>{{ title }}</title>
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <style>
@@ -84,11 +84,12 @@
         #para {
             line-height: 24px;
             background: #f7f7f7;
-            padding: 10px
+            padding: 10px;
         }
 
         .copy {
-            line-height: 32px
+            line-height: 32px;
+            color: #1ab7ea;
         }
 
         #msg {
@@ -142,10 +143,9 @@
         });
     </script>
 
-    </head>
-{% endblock %}
+{#{% endblock %}#}
 
-{% block "contentRight" %}
+{#{% block "contentRight" %}#}
     <div class="box">
         <form action="" method="post" class="myform">
             {% csrf_token %}
@@ -159,12 +159,12 @@
             {% if get_user_info.ipinfo.code == 1000 %}
                 {#                                <div class="ticket"><b>Ticket </b><br>{{ get_user_info.ticket }}</div>#}
 
-{#                                <textarea id="mytext">{{ get_user_info.ticket }}</textarea><br/>#}
+                {#                                <textarea id="mytext">{{ get_user_info.ticket }}</textarea><br/>#}
                 {#                <a href="#" id="copy_input" class="copy">复制内容</a>#}
 
                 <p id="para">{{ get_user_info.ticket }}</p>
                 <a href="#" id="copy_p" class="copy">Copy Ticket</a>
-{#                <button class="btn" data-clipboard-action="copy" data-clipboard-target="#para">Copy Ticket to clipboard</button>#}
+                {#                <button class="btn" data-clipboard-action="copy" data-clipboard-target="#para">Copy Ticket to clipboard</button>#}
 
                 <p></p>
 
@@ -217,4 +217,4 @@
             console.log(e);
         });
     </script>
-{% endblock %}
+{#{% endblock %}#}
