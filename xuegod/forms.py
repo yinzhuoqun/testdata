@@ -46,8 +46,10 @@ class Ticket(forms.Form):
         ('in', '内网'),
         ("out", "外网"),
     )
-    ticket_style = forms.CharField(max_length=32, label='获取模式',
-                                   widget=forms.Select(choices=ticket_type, attrs={'class': 'form-control'}))
+    # initial 是 Select 的默认值，即 Radio 的 checked，写 choice 的 value 值
+    ticket_style = forms.CharField(max_length=32, label='获取模式', initial="in",
+                                   widget=forms.RadioSelect(choices=ticket_type, attrs={'class': 'form-control'}))
+
     user_name = forms.CharField(max_length=32, label='用户账号',
                                 widget=forms.TextInput(attrs={'class': 'form-control'}), help_text="龙号")
     user_password = forms.CharField(max_length=32, label='登陆密码',

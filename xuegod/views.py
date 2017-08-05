@@ -864,10 +864,18 @@ def show_ticket(request):
                 get_user_info = {}
                 get_user_info["ipinfo"] = requests.post(url_login_in, headers=headers, data=data_ticket).json()
                 if get_user_info["ipinfo"]["code"] == 1000:
-                    try:
+                    import urllib
+                    url_result = urllib.parse.urlparse(url_ticket_in1)
+                    if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
                         get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
-                    except Exception as e:
-                        get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
+                    else:
+                        url_result = urllib.parse.urlparse(url_ticket_in2)
+                        if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
+                            get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
+                        else:
+                            get_user_info["ticket"] = "内网服务器未开启"
+
+
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
                     api_dev_charm = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=1' % \
                                     get_user_info["account_id"]
