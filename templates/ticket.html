@@ -1,175 +1,177 @@
 {#{% block "style" %}#}
-    <title>{{ title }}</title>
-    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
-    <style>
-        .box {
-            position: relative;
-            margin: 0 auto;
-            float: left;
-        }
+<title>{{ title }}</title>
+<meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+<style>
+    .box {
+        position: relative;
+        margin: 0 auto;
+        float: left;
+    }
 
-        .myform {
-            padding-left: -50px;
-        {#                 float: left;#}{#                 position: absolute;#}
-        }
+    .myform {
+        padding-left: -50px;
+    {#                 float: left;#}{#                 position: absolute;#}
+    }
 
-        .box1 {
-            margin-left: 20px;
-            margin-top: 5px;
-            position: absolute;
-        }
+    .box1 {
+        margin-left: 20px;
+        margin-top: 5px;
+        position: absolute;
+    }
 
-        .ticket_ul label {
-            font-size: 18px;
-            color: goldenrod;
-        }
+    .ticket_ul label {
+        font-size: 18px;
+        color: goldenrod;
+    }
 
-        .myform {
-            margin-left: -20px;
-        }
+    .myform {
+        margin-left: -20px;
+    }
 
-        ul {
-            list-style: none;
-            margin-left: 0px;
-        }
+    ul {
+        list-style: none;
+        margin-left: 0px;
+    }
 
-        .errorlist {
-            color: red;
-            font-size: xx-small;
-        }
+    .errorlist {
+        color: red;
+        font-size: xx-small;
+    }
 
-        .get_ticket {
-            margin-left: 120px;
-            height: 30px;
-            width: 173px;
+    .get_ticket {
+        margin-left: 120px;
+        height: 30px;
+        width: 173px;
 
-        }
+    }
 
-        .user_info, .ticket {
-            word-wrap: break-word;
-            word-break: break-all;
-        }
+    .user_info, .ticket {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
 
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
 
-        .copy-tips {
-            position: fixed;
-            z-index: 999;
-            bottom: 50%;
-            left: 50%;
-            margin: 0 0 -20px -80px;
-            background-color: rgba(0, 0, 0, 0.2);
-            filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#30000000, endColorstr=#30000000);
-            padding: 6px;
-        }
+    .copy-tips {
+        position: fixed;
+        z-index: 999;
+        bottom: 50%;
+        left: 50%;
+        margin: 0 0 -20px -80px;
+        background-color: rgba(0, 0, 0, 0.2);
+        filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#30000000, endColorstr=#30000000);
+        padding: 6px;
+    }
 
-        .copy-tips-wrap {
-            padding: 10px 20px;
-            text-align: center;
-            border: 1px solid #F4D9A6;
-            background-color: #FFFDEE;
-            font-size: 14px;
-        }
+    .copy-tips-wrap {
+        padding: 10px 20px;
+        text-align: center;
+        border: 1px solid #F4D9A6;
+        background-color: #FFFDEE;
+        font-size: 14px;
+    }
 
-        textarea {
-            width: 100%;
-            height: 80px;
-            border: 1px solid #ddd;
-            color: #666
-        }
+    textarea {
+        width: 100%;
+        height: 80px;
+        border: 1px solid #ddd;
+        color: #666
+    }
 
-        #para {
-            line-height: 24px;
-            background: #f7f7f7;
-            padding: 10px;
-        }
+    #para {
+        line-height: 24px;
+        background: #f7f7f7;
+        padding: 10px;
+    }
 
-        .copy {
-            line-height: 32px;
-            color: #1ab7ea;
-        }
+    .copy {
+        line-height: 32px;
+        color: #1ab7ea;
+    }
 
-        #msg {
-            margin-left: 10px;
-            color: green;
-            border: 1px solid #3c3;
-            background: url(/static/images/checkmark.png) no-repeat 2px 3px;
-            padding: 3px 6px 3px 20px
-        }
-    </style>
-    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
-    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.zclip.min.js"></script>
-    <script src="/static/js/clipboard.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script>
+    #msg {
+        margin-left: 10px;
+        color: green;
+        border: 1px solid #3c3;
+        background: url(/static/images/checkmark.png) no-repeat 2px 3px;
+        padding: 3px 6px 3px 20px
+    }
+</style>
+<link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+<script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.zclip.min.js"></script>
+<script src="/static/js/clipboard.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
 
-        function foo(o) {
-            o.size = o.placeholder.length;
-            for (var i = 0; i < o.placeholder.length; i++)
-                if (o.placeholder.charCodeAt(i) > 256) o.size++;
-        }
+    function foo(o) {
+        o.size = o.placeholder.length;
+        for (var i = 0; i < o.placeholder.length; i++)
+            if (o.placeholder.charCodeAt(i) > 256) o.size++;
+    }
 
-    </script>
-    <script type="text/javascript">
-        $(function () {
-            $('#copy_input').zclip({
-                path: '/static/js/ZeroClipboard.swf',
-                copy: function () {
-                    return $('#mytext').val();
-                },
-                afterCopy: function () {
-                    $("<span id='msg'/>").insertAfter($('#copy_input')).text('复制成功').fadeOut(2000);
-                }
-            });
-            $("#copy_p").zclip({
-                path: '/static/js/ZeroClipboard.swf',
-                copy: $('#para').text(),
-                afterCopy: function () {
-                    $("#para").css("background-color", '#cff');
-                    $("<span id='msg'/>").insertAfter($('#copy_p')).text('复制成功').fadeOut(2000);
-                }
-            });
-            $('#mytext').focus(function () {
-                var txt = $(this).val();
-                if (txt == '请输入内容') {
-                    $(this).val('');
-                }
-            });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#copy_input').zclip({
+            path: '/static/js/ZeroClipboard.swf',
+            copy: function () {
+                return $('#mytext').val();
+            },
+            afterCopy: function () {
+                $("<span id='msg'/>").insertAfter($('#copy_input')).text('复制成功').fadeOut(2000);
+            }
         });
-    </script>
+        $("#copy_p").zclip({
+            path: '/static/js/ZeroClipboard.swf',
+            copy: $('#para').text(),
+            afterCopy: function () {
+                $("#para").css("background-color", '#cff');
+                $("<span id='msg'/>").insertAfter($('#copy_p')).text('复制成功').fadeOut(2000);
+            }
+        });
+        $('#mytext').focus(function () {
+            var txt = $(this).val();
+            if (txt == '请输入内容') {
+                $(this).val('');
+            }
+        });
+    });
+</script>
 
 {#{% endblock %}#}
 
 {#{% block "contentRight" %}#}
-    <div class="box">
-        <form action="" method="post" class="myform">
-            {% csrf_token %}
-            <ul class="ticket_ul">
-                {{ ticket_form.as_ul }}
-            </ul>
-            <input class="get_ticket" type="submit" value="获取">
-        </form>
-        <hr>
-        <div class="box1">
-            {% if get_user_info.ipinfo.code == 1000 %}
-                {#                                <div class="ticket"><b>Ticket </b><br>{{ get_user_info.ticket }}</div>#}
+<div class="box">
+    <form action="" method="post" class="myform">
+        {% csrf_token %}
+        <ul class="ticket_ul">
+            {{ ticket_form.as_ul }}
+        </ul>
+        <input class="get_ticket" type="submit" value="获取">
+    </form>
+    <hr>
+    <div class="box1">
+        {% if get_user_info.ipinfo.code == 1000 %}
+            {#                                <div class="ticket"><b>Ticket </b><br>{{ get_user_info.ticket }}</div>#}
 
-                {#                                <textarea id="mytext">{{ get_user_info.ticket }}</textarea><br/>#}
-                {#                <a href="#" id="copy_input" class="copy">复制内容</a>#}
+            {#                                <textarea id="mytext">{{ get_user_info.ticket }}</textarea><br/>#}
+            {#                <a href="#" id="copy_input" class="copy">复制内容</a>#}
 
-                <p id="para">{{ get_user_info.ticket }}</p>
-                <a href="#" id="copy_p" class="copy">Copy Ticket</a>
-                {#                <button class="btn" data-clipboard-action="copy" data-clipboard-target="#para">Copy Ticket to clipboard</button>#}
+            <p id="para">{{ get_user_info.ticket }}</p>
+            <a href="#" id="copy_p" class="copy">Copy Ticket</a>
+            {#                <button class="btn" data-clipboard-action="copy" data-clipboard-target="#para">Copy Ticket to clipboard</button>#}
 
-                <p></p>
+            <p></p>
 
-                <div class="ticket"><b>Account ID</b> <br>{{ get_user_info.account_id }}</div>
-                <p></p>
+            <div class="ticket"><b>Account ID</b> <br>{{ get_user_info.account_id }}</div>
+            <p></p>
+
+            {% if get_user_info.charm_level %}
                 <div class="charm"><b>魅力值信息</b><br>魅力值: {{ get_user_info.charm_values }},
                     等级: {{ get_user_info.charm_level }}</div>
                 <p></p>
@@ -180,41 +182,42 @@
                     等级: {{ get_user_info.vip_level }}
                 </div>
                 <p></p>
-                <FORM METHOD=GET ACTION="http://www.ip138.com:8080/search.asp" name="mobileform" target="_blank">
-                    <tr>
-                        <td align="center"><b>{{ phone }}</b> 归属地<br><input type="text" name="mobile"
-                                                                            size="16"
-                                                                            placeholder="{{ location }}"
-                                                                            onclick="foo(this)">
-                            <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="mobile">
-                        </td>
-                    </tr>
-                </FORM>
-                <P></P>
             {% endif %}
-            <div class="user_info"><b>登陆信息</b><br>
-                <pre id="result"><code>{{ get_user_info.ipinfo }}</code></pre>
-            </div>
-            <p></p>
+            <FORM METHOD=GET ACTION="http://www.ip138.com:8080/search.asp" name="mobileform" target="_blank">
+                <tr>
+                    <td align="center"><b>{{ phone }}</b> 归属地<br><input type="text" name="mobile"
+                                                                        size="16"
+                                                                        placeholder="{{ location }}"
+                                                                        onclick="foo(this)">
+                        <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="mobile">
+                    </td>
+                </tr>
+            </FORM>
+            <P></P>
+        {% endif %}
+        <div class="user_info"><b>登陆信息</b><br>
+            <pre id="result"><code>{{ get_user_info.ipinfo }}</code></pre>
         </div>
+        <p></p>
     </div>
-    <script type="text/javascript">
-        {#        var ResJson = document.getElementById("result").innerText#}
-        {#        var ResJson = $("#result").html();#}
-        {#        JSON.stringify(ResJson, null, 2);    // 缩进4个空格#}
-        var ResJson = $("#result").text(JSON.stringify(ResJson, null, 2));
+</div>
+<script type="text/javascript">
+    {#        var ResJson = document.getElementById("result").innerText#}
+    {#        var ResJson = $("#result").html();#}
+    {#        JSON.stringify(ResJson, null, 2);    // 缩进4个空格#}
+    var ResJson = $("#result").text(JSON.stringify(ResJson, null, 2));
 
-    </script>
+</script>
 
-    <script>
-        var clipboard = new Clipboard('.btn');
+<script>
+    var clipboard = new Clipboard('.btn');
 
-        clipboard.on('success', function (e) {
-            console.log(e);
-        });
+    clipboard.on('success', function (e) {
+        console.log(e);
+    });
 
-        clipboard.on('error', function (e) {
-            console.log(e);
-        });
-    </script>
+    clipboard.on('error', function (e) {
+        console.log(e);
+    });
+</script>
 {#{% endblock %}#}

@@ -827,7 +827,8 @@ def show_ticket(request):
     url_ticket_in2 = r'http://192.168.2.175:8080/account/basic/ticket'  # 内网
     # url_ticket_out = r'http://192.168.199.126:8080/account/basic/ticket'  # 外网 公司
     url_ticket_out = r'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
-    url_login_in = r"http://192.168.2.171:8080/account/basic/login"
+    url_login_in1 = r"http://192.168.2.171:8080/account/basic/login"
+    url_login_in2 = r"http://192.168.2.175:8080/account/basic/login"
     url_login_out = r"https://apinyx.chuangshangapp.com/account/basic/login"
 
     headers = {
@@ -862,21 +863,35 @@ def show_ticket(request):
             }
             if ticket_style == "in":
                 get_user_info = {}
-                get_user_info["ipinfo"] = requests.post(url_login_in, headers=headers, data=data_ticket).json()
-                if get_user_info["ipinfo"]["code"] == 1000:
-                    import urllib
-                    url_result = urllib.parse.urlparse(url_ticket_in1)
+                import urllib
+                url_result = urllib.parse.urlparse(url_ticket_in1)
+                if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
+                    get_user_info["ipinfo"] = requests.post(url_login_in1, headers=headers, data=data_ticket).json()
+                    get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
+                else:
+                    url_result = urllib.parse.urlparse(url_ticket_in2)
                     if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
-                        get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
+                        get_user_info["ipinfo"] = requests.post(url_login_in2, headers=headers, data=data_ticket).json()
+                        get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
                     else:
-                        url_result = urllib.parse.urlparse(url_ticket_in2)
-                        if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
-                            get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
-                        else:
-                            get_user_info["ticket"] = "内网服务器未开启"
+                        get_user_info["ticket"] = "内网服务器未开启"
+                # print(get_user_info["ticket"])
 
+                if get_user_info["ipinfo"]["code"] == 1000:
+                    # import urllib
+                    # url_result = urllib.parse.urlparse(url_ticket_in1)
+                    # if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
+                    #     get_user_info["ticket"] = get_ticket(url_ticket_in1, userid, password)["ticket"]
+                    # else:
+                    #     url_result = urllib.parse.urlparse(url_ticket_in2)
+                    #     if requests.get(url_result.scheme + "://" + url_result.netloc).status_code == 200:
+                    #         get_user_info["ticket"] = get_ticket(url_ticket_in2, userid, password)["ticket"]
+                    #     else:
+                    #         get_user_info["ticket"] = "内网服务器未开启"
 
                     get_user_info["account_id"] = get_user_info["ipinfo"]["data"]["user"]["account_id"]
+                    # print(get_user_info["account_id"])
+
                     api_dev_charm = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=1' % \
                                     get_user_info["account_id"]
                     api_dev_wealth = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=2' % \
@@ -884,18 +899,21 @@ def show_ticket(request):
                     api_dev_vip = 'https://devapi.chuangshangapp.com/account/info/rank/info?target_id=%s&rank_type=3' % \
                                   get_user_info["account_id"]
 
-                    get_user_info['charm_info'] = requests.get(api_dev_charm, headers=headers).json()
-                    if get_user_info['charm_info']['code'] == 1000:
-                        get_user_info['charm_values'] = get_user_info['charm_info']['data']['current_num']
-                        get_user_info['charm_level'] = get_user_info['charm_info']['data']['current_level']
-                    get_user_info['wealth_info'] = requests.get(api_dev_wealth).json()
-                    if get_user_info['wealth_info']['code'] == 1000:
-                        get_user_info['wealth_values'] = get_user_info['wealth_info']['data']['current_num']
-                        get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
-                    get_user_info['vip_info'] = requests.get(api_dev_vip).json()
-                    if get_user_info['vip_info']['code'] == 1000:
-                        get_user_info['vip_values'] = get_user_info['vip_info']['data']['current_num']
-                        get_user_info['vip_level'] = get_user_info['vip_info']['data']['current_level']
+                    charm_info = requests.get(api_dev_charm, headers=headers, timeout=5)
+                    if charm_info.status_code == 200:
+                        # get_user_info['charm_info'] = requests.get(api_dev_charm, headers=headers).json()
+                        get_user_info['charm_info'] = charm_info.json()
+                        if get_user_info['charm_info']['code'] == 1000:
+                            get_user_info['charm_values'] = get_user_info['charm_info']['data']['current_num']
+                            get_user_info['charm_level'] = get_user_info['charm_info']['data']['current_level']
+                        get_user_info['wealth_info'] = requests.get(api_dev_wealth).json()
+                        if get_user_info['wealth_info']['code'] == 1000:
+                            get_user_info['wealth_values'] = get_user_info['wealth_info']['data']['current_num']
+                            get_user_info['wealth_level'] = get_user_info['wealth_info']['data']['current_level']
+                        get_user_info['vip_info'] = requests.get(api_dev_vip).json()
+                        if get_user_info['vip_info']['code'] == 1000:
+                            get_user_info['vip_values'] = get_user_info['vip_info']['data']['current_num']
+                            get_user_info['vip_level'] = get_user_info['vip_info']['data']['current_level']
 
             else:
                 get_user_info = {}

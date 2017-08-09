@@ -282,7 +282,7 @@ class VestAccount(models.Model):
             self.gender = "男"
         else:
             self.gender = "女"
-        return "%s %s" % (self.account, self.gender)
+        return "%s %s %s" % (self.account, self.gender, self.name)
 
 class VestInfo(models.Model):
     owner = models.CharField(max_length=128, verbose_name="姓名")
