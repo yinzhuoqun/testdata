@@ -19,6 +19,7 @@ from testfly.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 # from django.conf.urls import handler404, handler500
+from django.contrib.auth import views as auth_views  # 密码重置
 
 from testfly import api
 from rest_framework import routers
@@ -37,45 +38,49 @@ router.register(r'users', api.UserViewSet)
 router.register(r'blogs', api.BlogViewSet)
 
 urlpatterns = [
-                  url(r'^joyoo/', include(admin.site.urls)),
-                  url(r'^index/', index),
-                  url(r'^$', index),
+                url(r'^joyoo/', include(admin.site.urls)),
+                url(r'^index/', index),
+                url(r'^$', index),
 
-                  url(r'^page/(\d{1,2})', new_page),
+                url(r'^page/(\d{1,2})', new_page),
 
-                  url(r'^login/', login),
-                  url(r'^id/', testid),
-                  url(r'^sid/', show_testid),
-                  url(r'^aid/', alter_testid),
-                  url(r'^test_change_env/', test_change_env),
+                url(r'^login/', login),
+                url(r'^id/', testid),
+                url(r'^sid/', show_testid),
+                url(r'^aid/', alter_testid),
+                url(r'^test_change_env/', test_change_env),
 
-                  url(r'^app/', app_list),
+                url(r'^app/', app_list),
 
-                  url(r'^report/', include('testfly.urls', namespace="testfly")),
-                  url(r'^', include(router.urls)),
+                url(r'^report/', include('testfly.urls', namespace="testfly")),
+                url(r'^', include(router.urls)),
 
-                  url(r'^testreport/', test_report),
-                  url(r'^testreport/(Android|iOS)', test_report_platform),
-                  url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
+                url(r'^testreport/', test_report),
+                url(r'^testreport/(Android|iOS)', test_report_platform),
+                url(r'^testreport/(Android|iOS)/(\d.\d.\d)', test_report_platform_version),
 
-                  url(r'^polls/', include('polls.urls', namespace="polls")),
+                url(r'^polls/', include('polls.urls', namespace="polls")),
 
-                  url(r'^resume/', resume),
+                url(r'^resume/', resume),
 
-                  # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+                # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
-                  url(r'^qqbot/', qqbot_start),
+                url(r'^qqbot/', qqbot_start),
 
-                  url(r'^tk/', show_ticket),
-                  url(r'^appinfo/', app_info),
-                  url(r'^sapp/', show_appinfo),
-                  url(r'^ud/', device_unlock),
-                  url(r'^gc/', register_code),
-                  url(r'^vest/', vest_info),
-                  url(r'^vest_id/', vest_api),
+                url(r'^tk/', show_ticket),
+                url(r'^appinfo/', app_info),
+                url(r'^sapp/', show_appinfo),
+                url(r'^ud/', device_unlock),
+                url(r'^gc/', register_code),
+                url(r'^vest/', vest_info),
+                url(r'^vest_id/', vest_api),
 
-                  url(r'^ip/', user_ip),
+                url(r'^ip/', user_ip),
 
+                url(r'^joyoo/password_reset/$', auth_views.password_reset, name='admin_password_reset'),
+                url(r'^joyoo/password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
+                url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
+                url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 导入setting、static 是为 media 用

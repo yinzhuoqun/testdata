@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
-
-# from django.utils.html import format_html
+from django.utils.html import format_html  # Django 将默认转义HTML输出
 # from django import forms
 
 
@@ -146,6 +144,7 @@ class TestParticipants(models.Model):
         verbose_name_plural = "测试参与人员列表"
 
     # # app_label = "测试报告"
+    # 从Django1.7以后不再使用app_label，修改app相关需要使用AppConfig
 
     def __str__(self):
         return self.test_participant
@@ -181,6 +180,18 @@ class Resume(models.Model):
     def __str__(self):
         return "%s" % self.name
 
+    def colored_phone_status(self):
+        return self.phone_status == "ON" or self.phone_status == "1"
+    colored_phone_status.boolean = True
+    colored_phone_status.short_description = "必定使用"
+
+    def colored_phone_status_select(self):
+        return self.phone_status_select == "ON" or self.phone_status_select == "1"
+
+    colored_phone_status_select.boolean = True
+    colored_phone_status_select.short_description = "上传使用"
+
+
 
 class HomePage(models.Model):
     url_status_choice = (
@@ -200,12 +211,45 @@ class HomePage(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     alter_time = models.DateTimeField(auto_now=True, verbose_name='最近修改时间')
 
-    class Meta:
-        verbose_name = "网址信息"
-        verbose_name_plural = "网址信息列表"
+    def colored_url_status(self):
+        # if self.url_status == "ON" or self.url_status == "1":
+        #     color_code = "green"
+        # else:
+        #     color_code = "red"
+        # return format_html('<span style="color:{};">{}</span>',
+        #                    color_code,
+        #                    self.url_status)
+
+        return self.url_status == 'ON' or self.url_status == '1'
+
+    colored_url_status.boolean = True  # 变成布尔值
+    # Django 将默认转义HTML输出。如果你不希望转义方法的输出，可以给方法一个allow_tags 属性，其值为True。
+    colored_url_status.allow_tags = True
+    # colored_url_status.admin_order_field = 'url_status'  # 在Admin 中按照按colored_first_name 排序时依据first_name 字段
+    colored_url_status.short_description = "网页显示状态"  # 新字段的显示的名称
+
+    def colored_url_name(self):
+        if self.url_status == "ON" or self.url_status == "1":
+            color_code = "green"
+        else:
+            color_code = "red"
+        return format_html('<span style="color:{}">{}</span>',
+                           color_code,
+                           self.url_name
+                           )
+    colored_url_name.short_description = "显示名称"  # 新字段的显示的名称
+
+    def colored_url_status_use(self):
+        return self.url_status_use == "1"
+    colored_url_status_use.boolean = True
+    colored_url_status_use.short_description = "钉钉使用状态"
 
     def __str__(self):
         return "%s" % self.url_name
+
+    class Meta:
+        verbose_name = "网址信息"
+        verbose_name_plural = "网址信息列表"
 
 
 class IndexType(models.Model):

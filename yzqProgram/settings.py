@@ -170,21 +170,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-# 其它存放静态文件的文件夹，可以用来存放项目中公用的静态文件，里面不能包含 STATIC_ROOT
+
 # 因为在运行 python manage.py collectstatic 的时候，
 # STATICFILES_DIRS 中的文件夹中的静态文件会被复制到 STATIC_ROOT 中
 # 把这些文件放到一起是为了用 nginx、apache 等部署的时候更方便
-# STATIC_ROOT = os.path.join(BASE_DIR, 'xuegod/static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static_all')
+
 
 # 静态文件的优先级是默认先找共用的，再找app下的
-
-
-
 # 给静态文件变量赋值，告诉Django，静态文件在哪里
-# 如果不想用 STATICFILES_DIRS 可以不用，都放在 app 里的 static 中也可以
+# STATIC_URL：设置的static file的起始url，这个只可以在template里面引用到。如果不喜欢static可以更改。
 STATIC_URL = '/static/'
+
+
+# STATICFILES_DIRS 除了各个app的static目录以外还需要管理的静态文件位置
+# 其它存放静态文件的文件夹，可以用来存放项目中公用的静态文件，里面不能包含 STATIC_ROOT
+# 如果不想用 STATICFILES_DIRS 可以不用，都放在 app 里的 static 中也可以
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static').replace('\\', '/'),
+    os.path.join(BASE_DIR, 'testfly/static').replace('\\', '/'),
+
 ]
 
 # upload folder
@@ -199,3 +204,35 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+# 样式？
+# TINYMCE_DEFAULT_CONFIG = {
+# 'theme': "advanced", # default value
+# 'relative_urls': False, # default value
+# 'plugins': 'table,spellchecker,paste,searchreplace',
+# 'theme_advanced_buttons1': 'bold,italic,underline,bullist,numlist,link,unlink,styleselect,fontselect,fontsizeselect',
+# 'width': '100%',
+# 'height': 300,
+# 'paste_text_sticky': True,
+# 'paste_text_sticky_default': True,
+# 'valid_styles': 'font-weight,font-style,text-decoration',
+# 'fontsize_formats': "8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 20pt 24pt 36pt",
+# 'font_formats': "Andale Mono=andale mono,times;" +
+#     "Arial=arial,helvetica,sans-serif;" +
+#     "Arial Black=arial black,avant garde;" +
+#     "Book Antiqua=book antiqua,palatino;" +
+#     "Comic Sans MS=comic sans ms,sans-serif;" +
+#     "Courier New=courier new,courier;" +
+#     "Georgia=georgia,palatino;" +
+#     "Helvetica=helvetica;" +
+#     "Impact=impact,chicago;" +
+#     "Symbol=symbol;" +
+#     "Tahoma=tahoma,arial,helvetica,sans-serif;" +
+#     "Terminal=terminal,monaco;" +
+#     "Times New Roman=times new roman,times;" +
+#     "Trebuchet MS=trebuchet ms,geneva;" +
+#     "Verdana=verdana,geneva;" +
+#     "Webdings=webdings;" +
+#     "Wingdings=wingdings,zapf dingbats",}
+# TINYMCE_SPELLCHECKER = True
+# TINYMCE_COMPRESSOR = True

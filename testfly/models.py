@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.html import format_html  # Django 将默认转义HTML输出
 
 # Create your models here.
 
@@ -151,6 +151,27 @@ class TestDevice(models.Model):
     class Meta:
         verbose_name = "设备借用信息"
         verbose_name_plural = "设备借用信息列表"
+
+    def colored_device_show_status(self):
+        return self.device_show_status == "1"
+
+    colored_device_show_status.boolean = True
+    colored_device_show_status.short_description = "是否显示到网页"
+
+    def img_device_platfrom(self):
+        if self.device_platfrom == "1":
+            img_path = "/static/images/Android_16px.png"
+            self.device_platfrom = "Android"
+        elif self.device_platfrom == "2" :
+            img_path = "/static/images/Apple_16px.png"
+            self.device_platfrom = "iOS"
+        else:
+            img_path = "/static/images/heart_16px.png"
+            self.device_platfrom = "other"
+        return format_html('<span><img src="{}"/> {}</span>',
+                           img_path,
+                           self.device_platfrom)
+    img_device_platfrom.short_description = "系统平台"
 
     def __str__(self):
         return "%s|%s" % (self.use_name, self.device_name)
