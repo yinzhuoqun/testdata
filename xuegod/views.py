@@ -27,11 +27,11 @@ from ipware.ip import get_ip
 # import random
 
 def page_not_found(request):
-    return render_to_response("404.html")
+    return render_to_response("404_1.html")
 
 
 def server_error(request):
-    return render_to_response("500.html")
+    return render_to_response("500_2.html")
 
 
 def create(request):

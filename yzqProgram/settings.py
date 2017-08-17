@@ -92,25 +92,32 @@ import json
 
 
 def json_load():
-    pw_name = "alimysqlpw"
+    # pw_name = "alimysqlpw"
     # print(os.getcwd())
     with open(os.path.join(os.getcwd(), "alimysql.pw"), 'r') as f:
         # 如果是 Apache web服务器 需要把 .pw 文件放置在 Apache ServerRoot 指向的目录下
         pw_info = json.load(f)
+        return pw_info
 
-        if pw_name in pw_info.keys():
-            alimysqlpw = pw_info[pw_name]  # 导出变量值
+        # if pw_name in pw_info.keys():
+        #     alimysqlpw = pw_info[pw_name]  # 导出变量值
+        #     return alimysqlpw
+        # else:
+        #     # print("%s don't exists" % pw_info)
+        #     return None
 
-            return alimysqlpw
-        else:
-            print("%s don't exists" % pw_info)
+# from txt get password
+all_pw = json_load()
+if all_pw:
+    if "alimysqlpw" in all_pw.keys():
+        alimysqlpw = all_pw["alimysqlpw"]
+    else:
+        alimysqlpw = None
+    if "qqemailpw" in all_pw.keys():
+        qqemailpw = all_pw["qqemailpw"]
+    else:
+        qqemailpw = None
 
-            return None
-
-
-# 阿狸 mysql password
-if json_load():
-    alimysqlpw = json_load().encode()
 
 DATABASES = {
 
@@ -236,3 +243,21 @@ REST_FRAMEWORK = {
 #     "Wingdings=wingdings,zapf dingbats",}
 # TINYMCE_SPELLCHECKER = True
 # TINYMCE_COMPRESSOR = True
+
+
+
+# 邮件配置
+EMAIL_HOST = 'smtp.qq.com'  # SMTP地址
+# qq 普通邮箱发送邮件服务器：smtp.qq.com，使用SSL，端口号587
+# qq 企业邮箱 端口号25，SMTP协议默认端口是25
+EMAIL_PORT = 587  # SMTP端口
+EMAIL_HOST_USER = 'testauto@qq.com'  # 自己的邮箱
+EMAIL_HOST_PASSWORD = qqemailpw  # 我的邮箱密码
+EMAIL_SUBJECT_PREFIX = 'TestData'  # 为邮件Subject-line前缀,默认是'[django]'
+EMAIL_USE_TLS = True  # 与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false。与SSL是互相排斥的。
+# EMAIL_USE_SSL = True  # 与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
+
+# 管理员站点
+# https://docs.djangoproject.com/en/1.11/ref/settings/
+# 电子邮件的“From：”标头将是SERVER_EMAIL设置的值。
+SERVER_EMAIL = 'testauto@qq.com'  # The email address that error messages come from, such as those sent to ADMINS and MANAGERS.

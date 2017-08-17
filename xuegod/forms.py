@@ -71,7 +71,7 @@ class DeviceId(forms.Form):
     def __init__(self, *args, **kwargs):
         super(DeviceId, self).__init__(*args, **kwargs)
         # print(TestDevice.objects.filter(pk=30).values_list('device_machine_code', 'device_name'))
-        self.fields['device_id'].widget.choices = TestDevice.objects.exclude(device_machine_code=None).values_list('device_machine_code',
+        self.fields['device_id'].widget.choices = TestDevice.objects.exclude(device_machine_code="").values_list('device_machine_code',
                                                                                                'device_name')
 
 
