@@ -158,6 +158,7 @@ class Resume(models.Model):
 
     name = models.CharField(unique=True, max_length=48, verbose_name="用户名称")
     phone = models.CharField(max_length=32, verbose_name="手机号码")
+    email = models.EmailField(max_length=128, null=True, blank=True, verbose_name="邮箱")
     ip = models.GenericIPAddressField(null=True, blank=True, verbose_name="IP")
     phone_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
     phone_status = models.CharField(max_length=32, choices=phone_status_choice, default="0FF", verbose_name="必定使用",

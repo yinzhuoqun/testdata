@@ -184,10 +184,11 @@ class ResumeAdmin(admin.ModelAdmin):
     phone_status_select_on.short_description = "批量置为上传使用 "
     phone_status_select_off.short_description = "批量置为上传不使用 "
 
+    readonly_fields = []  # 只读字段
     list_display = (
-        'id', 'name', 'phone', 'ip', 'colored_phone_status', 'colored_phone_status_select', 'phone_order', 'note', 'alter_time')  # 展示的列
+        'id', 'name', 'phone', 'email', 'ip', 'colored_phone_status', 'colored_phone_status_select', 'phone_order', 'note', 'alter_time')  # 展示的列
     list_display_links = (
-        'id', 'name', 'phone', 'ip', 'colored_phone_status', 'colored_phone_status_select', 'note', 'phone_order')  # 可以点击的链接
+        'id', 'name', 'phone', 'ip', 'email', 'colored_phone_status', 'colored_phone_status_select', 'note', 'phone_order')  # 可以点击的链接
     list_filter = ['name', 'ip']  # 过滤
     search_fields = ['phone', 'ip']  # 搜索
     actions = [phone_status_off, phone_status_on, phone_status_select_off, phone_status_select_on]

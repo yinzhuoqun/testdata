@@ -695,11 +695,13 @@ def test_report(request):
 
 
 def resume(request):
-    info = Resume.objects.filter(name="yinzhuoqun")
+    info = Resume.objects.filter(name="尹卓群")
     if info:
         phone_mobile = info[0].phone
+        email = info[0].email
     else:
         phone_mobile = "18679600250"
+        email = "yinzhuoqun@vip.qq.com"
 
     cuurent_date = time.localtime(time.time())  # 获取当前时间
     year_time = cuurent_date.tm_year
