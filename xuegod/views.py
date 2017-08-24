@@ -694,6 +694,11 @@ def test_report(request):
     return render(request, 'test_report.html', locals())
 
 
+def dd_notice(msg):
+    mygroup_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=45776b0caa3979d86cbb758d7aaede3d2c62940bdd04bcfbe96b607a9348f34e"
+    return dd_text_post(mygroup_url_ddbot, msg, atMoblies=["18679600250"],
+                        atAll="false")
+
 def resume(request):
     info = Resume.objects.filter(name="尹卓群")
     if info:
@@ -706,9 +711,9 @@ def resume(request):
     cuurent_date = time.localtime(time.time())  # 获取当前时间
     year_time = cuurent_date.tm_year
     age = year_time - 1990  # 年龄
-
     work_experience = year_time - 2011  # 工作经验时长
-
+    ip = get_ip(request)
+    dd_notice("%s[%s] visit resume_yzq.html" % (ip, ip_location(ip)))
     return render(request, 'resume_yzq.html', locals())
 
 
@@ -1025,7 +1030,7 @@ def user_ip(request):
     title = "IP | TestData"
     mygroup_url_ddbot = "https://oapi.dingtalk.com/robot/send?access_token=45776b0caa3979d86cbb758d7aaede3d2c62940bdd04bcfbe96b607a9348f34e"
     ip = get_ip(request)
-    dd_text_post(mygroup_url_ddbot, ip, atMoblies=["18679600250"],
+    dd_text_post(mygroup_url_ddbot, "IP：%s" % ip, atMoblies=["18679600250"],
                  atAll="false")
     return render(request, "ip.html", locals())
 
