@@ -21,8 +21,12 @@ from django.conf.urls.static import static
 # from django.conf.urls import handler404, handler500
 from django.contrib.auth import views as auth_views  # 密码重置
 
+
 from testfly import api
 from rest_framework import routers
+
+from django.views.generic.base import RedirectView  # favicon.ico
+favicon_view = RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)
 
 # 定制站点头部和标题
 admin.site.site_title = settings.ADMIN_SITE_TITLE  # 站点标题
@@ -41,6 +45,7 @@ urlpatterns = [
                 url(r'^joyoo/', include(admin.site.urls)),
                 url(r'^index/', index),
                 url(r'^$', index),
+                url(r'^favicon\.ico$', favicon_view),
 
                 url(r'^page/(\d{1,2})', new_page),
 
