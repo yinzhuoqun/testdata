@@ -346,3 +346,11 @@ class VestInfo(models.Model):
 
     def __str__(self):
         return "%s" % self.owner
+
+    def id_infos(self):
+        vestinfo = VestInfo.objects.get(id=self.pk)
+        accountinfos = ""
+        for accountinfo in vestinfo.id_info.filter():
+            accountinfos += str(accountinfo) + "；"
+        return accountinfos
+    id_infos.short_description = "马甲账号"

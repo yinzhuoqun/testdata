@@ -252,7 +252,7 @@ class VestInfoAdmin(admin.ModelAdmin):
     search_fields = ['owner']
     filter_horizontal = ('id_info',)  # ManyToMany多对多字段编辑更方便，左右形式
     # filter_vertical = ('id_info',)  #  # ManyToMany多对多字段编辑更方便，上下形式
-    list_display = list_display_links = ('id', 'owner', 'position', 'order', 'show_status', 'create_time')
+    list_display = list_display_links = ('id','owner', 'position',  'id_infos', 'order', 'show_status', 'create_time')
 
 
 class VestAccountAdmin(admin.ModelAdmin):

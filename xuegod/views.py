@@ -47,7 +47,6 @@ def index(request):
     # u.save(using='mysql')  # using='mysql'settings database alias (name)
     # u.save(using='alimysql')  # using='mysql'settings database alias (name)
     # print(locals())
-
     urls = HomePage.objects.filter(url_status="1")
     # for info in urls:
     #
