@@ -13,8 +13,11 @@ from xuegod.models import *
 # 不修改Django源码让admin中的Model列表按注册顺序显示
 from django.contrib import admin
 from django.utils.text import capfirst
-from django.utils.datastructures import SortedDict
 
+# RemovedInDjango19Warning: SortedDict is deprecated and will be removed in Django 1.9.
+# SortedDict is deprecated as of Django 1.7 and will be removed in Django 1.9. Use ​collections.OrderedDict instead. Available in Python 2.7 and 3.1+.
+# from django.utils.datastructures import SortedDict
+import collections
 
 def find_model_index(name):
     count = 0
@@ -37,7 +40,9 @@ def index_decorator(func):
 
 
 # RemovedInDjango19Warning: SortedDict is deprecated and will be removed in Django 1.9.
-registry = SortedDict()
+# registry = SortedDict()
+
+registry = collections.OrderedDict()
 registry.update(admin.site._registry)
 admin.site._registry = registry
 admin.site.index = index_decorator(admin.site.index)

@@ -129,17 +129,17 @@ class TestDevice(models.Model):
     device_order = models.IntegerField(default=0, verbose_name="序号", help_text="值越小，同分类中越靠前显示")
     device_name = models.CharField(max_length=128, verbose_name="设备名称", help_text="设备的中文名称")
     device_screen_size = models.CharField(max_length=48, blank=True, null=True, verbose_name="屏幕尺寸",
-                                          help_text="单位：英寸，如：5.5")
+                                          help_text="单位：英寸，如：5.5")  # FroeignKey
     device_screen_resolution = models.CharField(max_length=48, blank=True, null=True, verbose_name="分辨率",
-                                                help_text="单位：像素，如：1920*1080")
+                                                help_text="单位：像素，如：1920*1080")  # FroeignKey
     device_platfrom = models.CharField(max_length=48, choices=device_platfrom_choice, default="Android",
-                                       verbose_name="系统平台")
+                                       verbose_name="系统平台")  # FroeignKey
     device_platfrom_version = models.CharField(max_length=48, blank=True, null=True, verbose_name="系统版本",
-                                               help_text="如：4.3")
+                                               help_text="如：4.3")  # FroeignKey
     device_machine_code = models.CharField(max_length=128, blank=True, null=True, verbose_name="机器码",
-                                           help_text="如有两个MEID，选最上面的")
+                                           help_text="如有两个MEID，选最上面的")  # OnoToOne
     use_name = models.CharField(max_length=128, blank=True, null=True, verbose_name="领用人员",
-                                help_text="如：张三")
+                                help_text="如：张三")  # FroeignKey
     use_time = models.DateTimeField(blank=True, null=True, verbose_name='领用日期')
     return_time = models.DateTimeField(blank=True, null=True, verbose_name='归还日期')
     add_time = models.DateTimeField(auto_now_add=True, verbose_name="添加日期")
