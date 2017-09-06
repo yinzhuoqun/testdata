@@ -789,7 +789,7 @@ def app_info(request):
 
 
 def show_appinfo(request):
-    return render(request, "appinfo.html", locals())
+    return render(request, "appinfo1.html", locals())
 
 
 def qqbot_start(request):

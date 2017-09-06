@@ -17,9 +17,9 @@
             <td>{{ info.owner }}</td>
             <td>{{ info.uid }}</td>
             <td>{% if info.gender == 1 %}
-                ♂
+                <span style="color: #2094ea">♂</span>
             {% elif info.gender == 0 %}
-                ♀
+                <span style="color: #c71947">♀</span>
             {% endif %}
             </td>
             <td>{{ info.name }}</td>
@@ -44,9 +44,9 @@
                 <td>
                     {% for account in info.id_info.all %}
                         {% if account.gender == "1" %}
-                            ♂👳
+                            <span style="color: #2094ea">♂</span>👳
                         {% else %}
-                            ♀👧
+                            <span style="color: #c71947">♀</span>👧
                         {% endif %}
                         {{ account.account }}
                         {{ account.name }}

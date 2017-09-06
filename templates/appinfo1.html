@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>APP详情</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .app-container{
+            position: relative;
+        }
+        .blur-img{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            -webkit-filter: blur(10px); /* Chrome, Opera */
+            -moz-filter: blur(10px);
+            -ms-filter: blur(10px);
+            filter: blur(10px);
+        }
+        .app-info{
+            overflow: hidden;
+            padding: 10px;
+            border-bottom: 1px solid #dedad5;
+        }
+        .app-icon{
+            float: left;
+            width: 70px;
+            height: 70px;
+        }
+        .app-icon>img{
+            width: 100%;
+        }
+        .app-des{
+            float: left;
+            display: flex;
+            justify-content: space-around;
+            width: calc(100% - 70px);
+            padding-top: 5px;
+        }
+        .des-item>p{
+            font-size: 16px;
+            line-height: 30px;
+        }
+        .app-gallery{
+            display: flex;
+            justify-content: space-between;
+            width: 98%;
+            overflow-x: scroll;
+            margin: 10px auto;
+        }
+        .app-gallery>img{
+            display: block;
+            height: 200px;
+            margin-right: 10px;
+        }
+        .app-detail{
+            padding: 10px;
+        }
+        .app-detail>div{
+            margin-bottom: 10px;
+        }
+        .btn{
+            display: inline-block;
+            width: 120px;
+            padding: 8px 2px;
+            text-align: center;
+            text-decoration: none;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            color: white;
+            background: #FF929F;
+        }
+        .update-info{
+            margin-left: 2em;
+        }
+
+        /*当屏幕宽度大于700px时，启用新的样式*/
+        @media screen and (min-width:700px){
+            .wrapper{
+                width: 700px;
+                margin: 0 auto;
+                border: 1px solid #f2dede;
+            }
+            .app-gallery>img{
+                height: 270px;
+            }
+            .app-detail>div{
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="app-container">
+            <div class="app-info">
+                <div class="app-icon">
+                    <img id="logo" src="#" alt="logo">
+                </div>
+                <div class="app-des">
+                    <div class="des-item">
+                        <p class="app-name"></p>
+                        <p class="app-size"></p>
+                    </div>
+                    <div class="des-item">
+                        <p class="app-version">版本: <span></span></p>
+                        <p class="app-update">更新: <span></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="app-gallery"></div>
+            <div class="app-detail">
+                <div class="download">
+                    <span>下载: </span>
+                    <a href="#" class="btn btn-download">点击下载</a>
+                </div>
+                <div class="href">
+                    <span>渠道: </span>
+                    <a href="#" class="btn btn-href">点击跳转</a>
+                </div>
+                <div class="update">
+                    <span>更新: </span>
+                    <div class="update-info">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script>
+        $(function(){
+            function getInfo(){
+                $.ajax({
+                    url: '/appinfo/',
+                    type: 'get',
+                    success: function(res){
+                        console.log(res);
+                        if(res.status_code === 1000){
+                            var obj = res.data;
+                            var str = "";
+                            /*设置logo*/
+                            $("#logo").attr("src",obj.apk_icon_url);
+                            /*设置下载链接*/
+                            $(".btn-download").attr("href",obj.apk_url);
+                            /*设置渠道链接*/
+                            $(".btn-href").attr("href",obj.apk_channel_url);
+                            /*app名字*/
+                            $(".app-name").html(obj.apk_name);
+                            /*设置更新描述*/
+                            $(".update-info").html(obj.apk_update_readme);
+                            /*设置版本信息*/
+                            $(".app-version>span").html(obj.apk_version);
+                            /*app大小*/
+                            $(".app-size").html(obj.apk_size);
+                            /*更新时间*/
+                            $(".app-update>span").html(obj.apk_updatetime);
+                            /*更新描述*/
+                            $(".update-info").html(obj.apk_update_readme);
+                            /*设置预览图*/
+                            obj.apk_imgs.forEach(function(item){
+                                str += '<img src='+item+'>';
+                            });
+                            $(".app-gallery").html(str);
+                        }
+                    },
+                    error: function(e){
+                        alert(e);
+                    }
+                });
+            }
+            getInfo();
+        });
+    </script>
+</body>
+</html>

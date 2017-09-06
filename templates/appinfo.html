@@ -17,11 +17,12 @@
 
         .box {
 {#            position: relative;#}
-            float: left;
+{#            float: left;#}
             width: 100%;
             word-wrap: break-word; /*允许浏览器在单词内进行断句*/
             word-break: normal; /*正常断句，标明怎么样进行单词内的断句*/
             overflow: hidden; /*hidden超出隐藏，auto滚动条*/
+{#            padding: 10px;#}
         {#            text-align: center;#}
 {#            margin: 0 auto;#}
         {#            margin-left:50%;#}{#            position: relative;#}
@@ -73,25 +74,31 @@
         }
 
         .readme {
-            position: absolute;
-            margin-top: 140px;
-            float: left;
+{#            position: absolute;#}
+            margin-top: 140px ;
+{#            float: left;#}
             text-align: left;
+{#            min-height:200px;#}
+
         {#            margin-left: 14px;#}
         }
         .img_text,.imgs{
             position: absolute;
-            margin-top: 250px;
-            float: left;
+{#            margin-top: 250px;#}
+{#            float: left;#}
             text-align: left;
+            min-height:200px;
         }
         .imgs{
-            margin-top: 275px;
+{#            margin-top: 275px;#}
+            margin: 20px 0 0 0;
+            min-height:200px;
+
         }
         img {
             max-width: 100%;
-            height: auto;
-            width: auto;
+{#            height: auto;#}
+{#            width: auto;#}
             padding-top: 5px;
         }
         .apk_url,.channel_url,.readme,.img_text{
@@ -107,7 +114,6 @@
     <div class="icon">
         <img src="" alt="" id="icon">
     </div>
-
     <div class="name"></div>
     <div class="size"></div>
     <div class="version"></div>
@@ -139,11 +145,14 @@
                 $.each(data.data.apk_update_readme, function (i, item) {
                     $("#readme").append("&nbsp;&nbsp;&nbsp;&nbsp;" + item + "<br>")
                 });
+                var str = "";
                 $.each(data.data.apk_imgs, function (i, item) {
-                     $(".imgs").html( "<img src="+ item + ">");
+                    str += "<img src="+ item + ">";
+{#                     $(".imgs").html( "<img src="+ item + ">");#}
 
 {#                    $("#img").append().attr("src",item)#}
                 });
+                $(".imgs").html(str);
 
             }
         },
