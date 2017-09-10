@@ -9,7 +9,6 @@ from django.forms import widgets
 from django.apps import AppConfig
 from xuegod.models import *
 
-
 # 不修改Django源码让admin中的Model列表按注册顺序显示
 from django.contrib import admin
 from django.utils.text import capfirst
@@ -18,6 +17,7 @@ from django.utils.text import capfirst
 # SortedDict is deprecated as of Django 1.7 and will be removed in Django 1.9. Use ​collections.OrderedDict instead. Available in Python 2.7 and 3.1+.
 # from django.utils.datastructures import SortedDict
 import collections
+
 
 def find_model_index(name):
     count = 0
@@ -47,6 +47,7 @@ registry.update(admin.site._registry)
 admin.site._registry = registry
 admin.site.index = index_decorator(admin.site.index)
 admin.site.app_index = index_decorator(admin.site.app_index)
+
 
 # 不修改Django源码让admin中的Model列表按注册顺序显示
 
@@ -191,9 +192,11 @@ class ResumeAdmin(admin.ModelAdmin):
 
     readonly_fields = []  # 只读字段
     list_display = (
-        'id', 'name', 'phone', 'email', 'ip', 'colored_phone_status', 'colored_phone_status_select', 'phone_order', 'note', 'alter_time')  # 展示的列
+        'id', 'name', 'phone', 'email', 'ip', 'colored_phone_status', 'colored_phone_status_select', 'phone_order',
+        'note', 'alter_time')  # 展示的列
     list_display_links = (
-        'id', 'name', 'phone', 'ip', 'email', 'colored_phone_status', 'colored_phone_status_select', 'note', 'phone_order')  # 可以点击的链接
+        'id', 'name', 'phone', 'ip', 'email', 'colored_phone_status', 'colored_phone_status_select', 'note',
+        'phone_order')  # 可以点击的链接
     list_filter = ['name', 'ip']  # 过滤
     search_fields = ['phone', 'ip']  # 搜索
     actions = [phone_status_off, phone_status_on, phone_status_select_off, phone_status_select_on]
@@ -257,7 +260,7 @@ class VestInfoAdmin(admin.ModelAdmin):
     search_fields = ['owner']
     filter_horizontal = ('id_info',)  # ManyToMany多对多字段编辑更方便，左右形式
     # filter_vertical = ('id_info',)  #  # ManyToMany多对多字段编辑更方便，上下形式
-    list_display = list_display_links = ('id','owner', 'position',  'id_infos', 'order', 'show_status', 'create_time')
+    list_display = list_display_links = ('id', 'owner', 'position', 'id_infos', 'order', 'show_status', 'create_time')
 
 
 class VestAccountAdmin(admin.ModelAdmin):
