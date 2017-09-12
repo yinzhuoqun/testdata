@@ -104,50 +104,55 @@
                 <ul>
                     {{ token }}
                     <input type="hidden" name="postToken" value={{ token }}>
-                    <li><input type='file' id="choice_file" name='file' /></li>
-{#                    multiple="multiple" 多文件#}
+                    <li><input type='file' id="choice_file" name='file'/></li>
+                    {#                    multiple="multiple" 多文件#}
                     <li><input type="button" id="clear_choice_file" style="width: 69px" onclick="resetFile()"
                                value="清空选择"/></li>
                     {% if form_dd_show == True %}
-                        <li><select name="dd_send" id="dd_send" onchange="dd_button()">
-                            <option value="True" selected="selected">发送</option>
-                            <option value="False">不发送</option>
-                        </select> <span style="color: #8c8c8c;font-size:15px;">测试包链接到钉钉群:</span>
-                            {% for group in url_ddbots_use %}
-                                <span style="color: #0d6aad;font-size:15px;">{{ group.url_nickname }}</span>
-                            {% endfor %}
+                        {% if url_ddbots_use or url_ddbots_select %}
+                            <li><select name="dd_send" id="dd_send" onchange="dd_button()">
+                                <option value="True" selected="selected">发送</option>
+                                <option value="False">不发送</option>
+                            </select> <span style="color: #8c8c8c;font-size:15px;">测试包链接到钉钉群:</span>
+                                {% for group in url_ddbots_use %}
+                                    <span style="color: #0d6aad;font-size:15px;">{{ group.url_nickname }}</span>
+                                {% endfor %}
 
-                            {% for group in url_ddbots_select %}
-                                {#                                {{ group.url_nickname }},#}
-                                <input type="checkbox" value="{{ group.url_nickname }}" id="{{ group.url_nickname }}"
-                                       class="url_nickname_select_button" name="url_nickname_select_button"
-                                       onclick="url_nickname_select_button_onclick()">
-                                <label for="{{ group.url_nickname }}">
+                                {% for group in url_ddbots_select %}
+                                    {#                                {{ group.url_nickname }},#}
+                                    <input type="checkbox" value="{{ group.url_nickname }}"
+                                           id="{{ group.url_nickname }}"
+                                           class="url_nickname_select_button" name="url_nickname_select_button"
+                                           onclick="url_nickname_select_button_onclick()">
+                                    <label for="{{ group.url_nickname }}">
                                     <span class="url_nickname_select_text"
                                           id="url_nickname_select_text"
                                           style="color: #8c8c8c;font-size:15px;">{{ group.url_nickname }}</span></label>
 
-                            {% endfor %}
-                        </li>
-                        <div id="dd_content">
-                            <li><span style="color: #0d6aad">@:</span>
-                                {% for name in at_names %}
-                                    <span style="color: #0d6aad;font-size:15px;">{{ name.name }}</span>
                                 {% endfor %}
-                                {% for name in at_names_select %}
-                                    <input type="checkbox" value="{{ name.name }}" id="{{ name.name }}"
-                                           class="at_names_select_button" name="at_names_select_button"
-                                           onclick="at_names_select_button_onclick()">
-                                    {#                                    <span name="at_names_select_text" style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span>#}
-                                    <label for="{{ name.name }}"><span class="at_names_select_text"
-                                                                       id="at_names_select_text"
-                                                                       style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span></label>
-                                {% endfor %}
+                            </li>
 
-                            </li>
-                            <li><input type='text' name='msg_updata' class="msg_updata" placeholder="更新内容 发送到钉钉群，选填"/>
-                            </li>
-                        </div>
+                            <div id="dd_content">
+                                <li><span style="color: #0d6aad">@:</span>
+                                    {% for name in at_names %}
+                                        <span style="color: #0d6aad;font-size:15px;">{{ name.name }}</span>
+                                    {% endfor %}
+                                    {% for name in at_names_select %}
+                                        <input type="checkbox" value="{{ name.name }}" id="{{ name.name }}"
+                                               class="at_names_select_button" name="at_names_select_button"
+                                               onclick="at_names_select_button_onclick()">
+                                        {#                                    <span name="at_names_select_text" style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span>#}
+                                        <label for="{{ name.name }}"><span class="at_names_select_text"
+                                                                           id="at_names_select_text"
+                                                                           style="color: #8c8c8c;font-size:15px;">{{ name.name }}</span></label>
+                                    {% endfor %}
+
+                                </li>
+                                <li><input type='text' name='msg_updata' class="msg_updata"
+                                           placeholder="更新内容 发送到钉钉群，选填"/>
+                                </li>
+                            </div>
+                        {% endif %}
                     {% endif %}
                     <li><input type='submit' id="sub" style="width: 69px" value='上传文件'/>
                         {#                <span class="upErrMes">{{ uploadfile_msg }}</span></li>#}

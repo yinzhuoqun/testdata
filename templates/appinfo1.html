@@ -135,7 +135,8 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+{#    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>#}
+    <script src="/static/js/jquery-1.8.2.min.js"></script>
     <script>
         $(function(){
             function getInfo(){
@@ -173,7 +174,8 @@
                         }
                     },
                     error: function(e){
-                        alert(e);
+{#                        alert(e);#}
+                        console.log("error")
                     }
                 });
             }

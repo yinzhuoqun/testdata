@@ -338,6 +338,7 @@ def app_list(request):
     # ip_local = []  # test
     form_dd_show = True  #
     url_ddbots_use = [{'url_nickname': ''}]
+    url_ddbots_use = []
     if socket.gethostbyname(socket.gethostname()) not in ip_local:
         show_path = r'media/upload'
         app_path = img_save_path = os.path.join(os.getcwd(), show_path).replace('\\', '/')
@@ -698,6 +699,7 @@ def dd_notice(msg):
     return dd_text_post(mygroup_url_ddbot, msg, atMoblies=["18679600250"],
                         atAll="false")
 
+
 def resume(request):
     info = Resume.objects.filter(name="尹卓群")
     if info:
@@ -1047,6 +1049,20 @@ def vest_info(request):
     # print(request.get_host())  # 服务器地址 + 端口
     if request.get_host().split(":")[0] in settings.IP_LOCAL:
         vest_info = VestInfo.objects.filter(show_status=True).order_by("position")
+
+        # vest_info_release = requests.get("http://192.168.199.126:8080/inner/vest/list").json()
+        # if vest_info_release["code"] == 1000:
+        #     vest_info_longs = [info["long_no"] for info in vest_info_release["data"]["users"]]
+        #     # print(vest_info_longs)
+        #
+        # vest_info_develop = requests.get("http://192.168.66.55/vest_id").json()
+        # if vest_info_develop["code"] == 1000:
+        #     vest_info_longs_develop = vest_info_develop["vests"]
+        #     # print(vest_info_longs_develop)
+        # vest_info_longs_diff = set(vest_info_longs).difference(set(vest_info_longs_develop))
+        # # print(len(vest_info_longs) - len(vest_info_longs_develop))
+        # print(vest_info_longs_diff)
+
     if request.method == "POST" and request.POST:
         find_api = "https://apinyx.chuangshangapp.com/account/info/search/user?query="
         url_ticket_out = 'https://apinyx.chuangshangapp.com/account/basic/ticket'  # 外网
