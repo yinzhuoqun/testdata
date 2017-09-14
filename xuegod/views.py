@@ -1132,3 +1132,7 @@ def vest_api(request):
         }
 
     return JsonResponse(result)
+
+
+def mytime(request):
+    return  render(request, "time.html", locals())

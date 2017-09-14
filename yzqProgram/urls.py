@@ -81,6 +81,7 @@ urlpatterns = [
                 url(r'^vest_id/', vest_api),
 
                 url(r'^ip/', user_ip),
+                url(r'^time/', mytime),
 
                 # url(r'^joyoo/password_reset/$', auth_views.password_reset, name='admin_password_reset'),
                 # url(r'^joyoo/password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
