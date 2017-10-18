@@ -28,12 +28,12 @@ SECRET_KEY = 'jq!8zvuxk2e*xs-^m*%txw**sj8abk-o0)n%33_ow0wy5$3fn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # nginx 、Apache 处理静态网页
-# DEBUG = True  # django 自己处理静态网页
+DEBUG = True  # django 自己处理静态网页
 
-IP_LOCAL = ["192.168.66.55", "169.254.111.198"]  # 字母要大写才能被 django.conf 载入
+IP_LOCAL = ["192.168.66.55", "10.0.0.20", "169.254.111.198", ]  # 字母要大写才能被 django.conf 载入
 if socket.gethostbyname(socket.gethostname()) in IP_LOCAL:
     ALLOWED_HOSTS = [
-        "192.168.66.55", "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"]
+        "0.0.0.0", "localhost", "127.0.0.1", "testauto.iask.in"] + IP_LOCAL
 else:
     ALLOWED_HOSTS = ['python3.cc', 'testauto.site']
 
@@ -106,6 +106,7 @@ def json_load():
         #     # print("%s don't exists" % pw_info)
         #     return None
 
+
 # from txt get password
 all_pw = json_load()
 if all_pw:
@@ -117,7 +118,6 @@ if all_pw:
         qqemailpw = all_pw["qqemailpw"]
     else:
         qqemailpw = None
-
 
 DATABASES = {
 
@@ -189,7 +189,6 @@ USE_TZ = True
 # STATIC_URL：设置的static file的起始url，这个只可以在template里面引用到。如果不喜欢static可以更改。
 STATIC_URL = '/static/'
 
-
 # STATICFILES_DIRS 除了各个app的static目录以外还需要管理的静态文件位置
 # 其它存放静态文件的文件夹，可以用来存放项目中公用的静态文件，里面不能包含 STATIC_ROOT
 # 如果不想用 STATICFILES_DIRS 可以不用，都放在 app 里的 static 中也可以
@@ -202,7 +201,6 @@ STATICFILES_DIRS = [
 # upload folder
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
