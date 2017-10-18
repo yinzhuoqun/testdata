@@ -701,20 +701,21 @@ def dd_notice(msg):
 
 
 def resume(request):
-    info = Resume.objects.filter(name="尹卓群")
+    info = Resume.objects.filter(name="尹卓群").first()
     if info:
-        phone_mobile = info[0].phone
-        email = info[0].email
+        phone_mobile = info.phone
+        email = info.email
     else:
         phone_mobile = "18679600250"
         email = "yinzhuoqun@vip.qq.com"
 
+    positon_status = ["我目前已离职，可快速到岗", "我目前正在职，正考虑换个新环境"]
     cuurent_date = time.localtime(time.time())  # 获取当前时间
     year_time = cuurent_date.tm_year
     age = year_time - 1990  # 年龄
     work_experience = year_time - 2011  # 工作经验时长
     ip = get_ip(request)
-    dd_notice("%s[%s] visit resume_yzq.html" % (ip, ip_location(ip)))
+    dd_notice("%s[%s] visit %s" % (ip, ip_location(ip), request.get_raw_uri()))
     return render(request, 'resume_yzq.html', locals())
 
 
@@ -1135,4 +1136,4 @@ def vest_api(request):
 
 
 def mytime(request):
-    return  render(request, "time.html", locals())
+    return render(request, "time.html", locals())
