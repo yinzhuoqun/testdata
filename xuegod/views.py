@@ -714,8 +714,9 @@ def resume(request):
     year_time = cuurent_date.tm_year
     age = year_time - 1990  # 年龄
     work_experience = year_time - 2011  # 工作经验时长
+
     ip = get_ip(request)
-    dd_notice("%s[%s] visit %s" % (ip, ip_location(ip), request.get_raw_uri()))
+    dd_notice("%s[%s] visit %s" % (ip, ip_location(ip), request.path))
     return render(request, 'resume_yzq.html', locals())
 
 
